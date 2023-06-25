@@ -1,0 +1,2 @@
+
+export { Monopoly } from './Monopoly';
