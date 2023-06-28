@@ -1,46 +1,19 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
-import { Client } from '../services/p2p';
+import { usePeer } from '../services/p2p';
 import { Layout } from '../components';
 
 export const Player = () => {
 
+  const { connect, connection, disconnect, sendData } = usePeer();
+
   const [hostIDInput, setHostIDInput] = useState('');
   const [clientName, setClientName] = useState('');
 
-  const [peer, setPeer] = useState<Client>();
-  const [connected, setConnected] = useState<boolean>(false);
-
-  const connect = (id: string) => {
-    if (!id) return;
-
-    console.log(id, peer, connected);
-    if (peer && !connected) {
-      peer.connect(id, clientName);
-      setConnected(true);
-    }
-  };
-
-  const disconnect = () => {
-    if (peer) {
-      peer.disconnect();
-      setConnected(false);
-    }
-  };
-
-  useEffect(() => {
-    if (!peer) {
-      setPeer(new Client({
-        onOpen: (connID) => console.log(connID),
-        onConnection: (connection) => console.log(connection),
-        onClose: () => console.log('closed')
-      }));
-    }
-  }, [peer]);
 
   return <Layout>
     <h1>Client</h1>
-    {!connected ? (
+    {!connection ? (
       <div>
         <div style={{ textAlign: 'left' }}>
           <label>
@@ -68,13 +41,14 @@ export const Player = () => {
         <button
           style={{ marginTop: 20 }}
           disabled={clientName.length < 3}
-          onClick={() => hostIDInput && connect(hostIDInput)}
+          onClick={() => hostIDInput && connect(hostIDInput, clientName)}
         >
           Connect
         </button>
       </div>
     ) : (
       <div>
+        <button onClick={() => sendData('move', { places: 1 })}>Data!</button>
         <button onClick={disconnect}>Disconnect</button>
       </div>
     )}

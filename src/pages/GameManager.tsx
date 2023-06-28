@@ -1,50 +1,60 @@
 import { useEffect, useState } from 'react';
 import { DataConnection } from 'peerjs';
 
-import { Host } from '../services/p2p';
+import { createCallback, createDataCallback, usePeer } from '../services/p2p';
 import { Layout } from '../components';
 import { Game } from '../game';
+import { useAppDispatch, useAppSelector } from '../game/store/hooks';
+import { actions, selectors } from '../game/store';
 
 export const GameManager = () => {
-
-  const [host, setHost] = useState<Host>();
-
-  const [connected, setConnected] = useState(false);
-  const [hostID, setHostID] = useState<string>();
   const [connections, setConnections] = useState<DataConnection[]>([]);
   const [gameActive, setGameActive] = useState(false);
 
-  const onOpen = (connID: string) => {
-    const lastChunk = connID.split('-').slice(-1).join('');
-    setConnected(true);
-    setHostID(lastChunk);
-  };
+  const dispatch = useAppDispatch();
+  const gameID = useAppSelector(selectors.game.selectActiveGameID);
+  const players = useAppSelector(selectors.player.selectPlayers);
 
-  const onConnection = (connection: DataConnection, remove = false) => {
+  console.log(gameID, players);
+
+  useEffect(() => {
+    if (gameID) {
+      dispatch(actions.location.newGame(gameID));
+      connections.forEach(conn => {
+        dispatch(actions.player.addPlayer({ name: conn.label, gameID }));
+      });
+    }
+  }, [gameID]);
+
+  useEffect(() => {
+    if (gameActive && !gameID) {
+      dispatch(actions.game.newGame());
+    }
+  }, [gameActive]);
+
+  const onConnection = (data: { connection: DataConnection }) => {
     setConnections((connections) => {
-      if (remove) {
-        return connections.filter(conn => conn.connectionId !== connection.connectionId);
+      if (!data.connection.open) {
+        return connections.filter(conn => conn.connectionId !== data.connection.connectionId);
       }
-      return [...connections, connection];
+      return [...connections, data.connection];
     });
   };
 
-  const closeGame = () => setGameActive(false);
+  const hostCB = createCallback('host', 'open', (data) => { console.log('host cb open:', data); });
+  const childOpenCB = createCallback('child', 'open', onConnection);
+  const childCloseCB = createCallback('child', 'close', onConnection);
+  const clientCB = createCallback('client', 'open', (data) => { console.log('client cb open:', data); });
 
-  useEffect(() => {
-    if (!connected) {
-      setHost(new Host({
-        onOpen,
-        onConnection,
-        onClose: () => console.log('closed')
-      }));
-      setConnected(true);
-    }
-  }, [connected]);
+  const dataCB = createDataCallback('child', 'move', (data) => { console.log('PLACES EVERYONE!!', data.places); });
+
+  const { code } = usePeer([hostCB, childOpenCB, childCloseCB, clientCB, dataCB]);
+
+  const closeGame = () => setGameActive(false);
 
   return <Layout>
     <h1>Host</h1>
-    <p>ID: {hostID}</p>
+    <p>ID: {code}</p>
     
     {connections.length > 0 && (!gameActive) ? (
       <div>
@@ -56,7 +66,7 @@ export const GameManager = () => {
         </ul>
       </div>
     ) : (
-      gameActive && host && <Game close={closeGame} host={host} />
+      gameActive && <Game close={closeGame} />
     )}
   </Layout>;
 };

@@ -1,11 +1,9 @@
 import { FC } from 'react';
-import { Host } from '../services/p2p';
 
 import styles from './Game.module.css';
 import { Monopoly } from './monopoly';
 
 type Props = {
-  host: Host;
   close: () => void;
 }
 

@@ -1,8 +1,11 @@
 
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import './App.css';
-import { GameManager, Player } from './pages';
+import { Provider } from 'react-redux';
+
+import { store } from './game/store';
+import { GameManager, Player, Test } from './pages';
 import { Layout } from './components/Layout';
+import './App.css';
 
 const router = createBrowserRouter([
   {
@@ -17,11 +20,17 @@ const router = createBrowserRouter([
     path: '/player',
     Component: Player
   },
+  {
+    path: '/test',
+    Component: Test
+  },
 ]);
 
 function App() {
   return (
-    <RouterProvider router={router} />
+    <Provider store={store}>
+      <RouterProvider router={router} />
+    </Provider>
   );
 }
 
