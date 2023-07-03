@@ -4,6 +4,7 @@ import { v4 } from 'uuid';
 
 import { selectors as gameSelectors } from './game';
 import { RootState } from '../store';
+import { getLocationByDistance } from '../../components/map/data/helpers';
 
 export type PlayerData = {
   id: string;
@@ -11,6 +12,8 @@ export type PlayerData = {
   created: number;
   name: string;
   money: number;
+  location: string;
+  icon?: 'car' | 'iron' | 'snake';
   propertyIDs: string[];
 }
 
@@ -32,6 +35,9 @@ export const playerSlice = createSlice({
   name: 'players',
   initialState,
   reducers: {
+    sync: (_, action: PayloadAction<PlayerState>) => {
+      return action.payload;
+    },
     addPlayer: (state, action: PayloadAction<{ name: string, gameID: string }>) => {
       const { name, gameID } = action.payload;
 
@@ -41,6 +47,7 @@ export const playerSlice = createSlice({
         created: Date.now(),
         name,
         money: 1500,
+        location: 'GO',
         propertyIDs: []
       };
 
@@ -51,6 +58,12 @@ export const playerSlice = createSlice({
     setPlayer: (state, action: PayloadAction<string>) => {
       const playerID = action.payload;
       state.activePlayerID = playerID;
+    },
+    movePlayer: (state, action: PayloadAction<{ playerID: string, steps: number}>) => {
+      const { playerID, steps } = action.payload;
+
+      const player = state.items[playerID];
+      state.items[playerID].location = getLocationByDistance(player.location, steps);
     }
   },
 });
@@ -66,7 +79,8 @@ export const selectors = {
 
     const playerIDs = playersByGame[gameID] || [];
     return playerIDs.map(id => playerItems[id]);
-  })
+  }),
+  selectActivePlayerID: (state: RootState) => state.players.activePlayerID
 };
 
 export default playerSlice.reducer;

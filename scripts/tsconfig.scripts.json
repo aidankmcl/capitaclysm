@@ -1,0 +1,19 @@
+{
+  "extends": "../tsconfig.json",
+  // compilerOptions will be inherited
+  // you may need to set "include" here relative to the "test" directory
+  "compilerOptions": {
+    "lib": ["es2021"],
+    "module": "CommonJS",
+    "target": "es2021",
+    "strict": false,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "moduleResolution": "Bundler",
+    "noEmit": true,
+    "allowImportingTsExtensions": true,
+    "allowSyntheticDefaultImports": true,
+  },
+  "include": ["./*", "../src"]
+}

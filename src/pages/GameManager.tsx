@@ -46,7 +46,7 @@ export const GameManager = () => {
   const childCloseCB = createCallback('child', 'close', onConnection);
   const clientCB = createCallback('client', 'open', (data) => { console.log('client cb open:', data); });
 
-  const dataCB = createDataCallback('child', 'move', (data) => { console.log('PLACES EVERYONE!!', data.places); });
+  const dataCB = createDataCallback('child', 'move', (data) => { console.log('PLACES EVERYONE!!', data.steps); });
 
   const { code } = usePeer([hostCB, childOpenCB, childCloseCB, clientCB, dataCB]);
 

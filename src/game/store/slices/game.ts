@@ -26,6 +26,9 @@ export const gameSlice = createSlice({
   name: 'game',
   initialState,
   reducers: {
+    sync: (_, action: PayloadAction<GameState>) => {
+      return action.payload;
+    },
     newGame: (state) => {
       const game: GameData = {
         id: v4(),
@@ -49,9 +52,9 @@ export const gameSlice = createSlice({
     addPlayers: (state, action: PayloadAction<string[]>) => {
       if (!state.activeGameID) return;
 
-      const newPlayers = action.payload;
+      const newPlayerIDs = action.payload;
       const oldPlayers = state.items[state.activeGameID].playerIDs;
-      state.items[state.activeGameID].playerIDs = oldPlayers.filter(id => !(id in newPlayers)).concat(newPlayers);
+      state.items[state.activeGameID].playerIDs = oldPlayers.filter(id => !(id in newPlayerIDs)).concat(newPlayerIDs);
     },
   },
 });

@@ -2,25 +2,38 @@
   "name": "capitaclysm",
   "private": true,
   "version": "0.0.0",
-  "type": "module",
   "scripts": {
+    "check": "tsc --noEmit",
     "dev": "vite",
     "build": "tsc && vite build",
     "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "lint-fix": "eslint src --ext ts,tsx --fix",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "update-routes": "ts-node --project ./scripts/tsconfig.scripts.json --esm ./scripts/generateRoutes.ts"
   },
   "dependencies": {
+    "@flaticon/flaticon-uicons": "^2.2.0",
+    "@mapbox/polyline": "^1.2.0",
     "@reduxjs/toolkit": "^1.9.5",
+    "axios": "^1.4.0",
+    "leaflet": "^1.9.4",
+    "leaflet-routing-machine": "^3.2.12",
+    "path": "^0.12.7",
     "peerjs": "^1.4.7",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-leaflet": "^4.2.1",
     "react-redux": "^8.1.1",
     "react-router-dom": "^6.14.0",
     "store": "^2.0.12",
-    "uuid": "^9.0.0"
+    "url": "^0.11.1",
+    "uuid": "^9.0.0",
+    "vite-plugin-node-polyfills": "^0.9.0",
+    "vite-plugin-svgr": "^3.2.0"
   },
   "devDependencies": {
+    "@types/leaflet": "^1.9.3",
+    "@types/node": "^20.3.3",
     "@types/react": "^18.0.37",
     "@types/react-dom": "^18.0.11",
     "@types/store": "^2.0.2",
@@ -31,7 +44,8 @@
     "eslint": "^8.38.0",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.3.4",
-    "typescript": "^5.0.2",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.1.6",
     "vite": "^4.3.9"
   }
 }

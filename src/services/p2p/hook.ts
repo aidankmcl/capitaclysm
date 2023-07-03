@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 
 import { generateCode, getConnectionID } from './utils';
 import { CallbackObject, addCallbacks, sendConnectionEvent, sendData as sendDataEvent } from './events';
+import { RootState, SYNC_EVENT_NAME } from '~/store';
 
 
 const code = generateCode();
@@ -14,6 +15,11 @@ peer.on('open', (connectionID) => {
   peer.on('connection', (connection) => {
     connection.on('open', () => {
       sendConnectionEvent('child', 'open', { connection });
+
+      window.addEventListener(SYNC_EVENT_NAME, (evt) => {
+        const customEvent = evt as CustomEvent<RootState>;
+        connection.send({ action: SYNC_EVENT_NAME, data: customEvent.detail });
+      });
     });
   
     connection.on('data', (data) => {
@@ -58,7 +64,7 @@ const connect = (peer: Peer, hostCode: string, name: string) => {
   return connection;
 };
 
-type DropFirst<T extends unknown[]> = T extends [any, ...infer U] ? U : never
+type DropFirst<T extends unknown[]> = T extends [unknown, ...infer U] ? U : never
 type SendDataWithoutConnectionInput = (...args: DropFirst<Parameters<typeof sendDataEvent>>) => void;
 
 type UsePeerResult = {
@@ -74,7 +80,7 @@ export const usePeer: (callbacks?: CallbackObject[]) => UsePeerResult = (callbac
   const [connection, setConnection] = useState<DataConnection>();
 
   useEffect(() => {
-    addCallbacks(callbacks || []);
+    if (callbacks && callbacks.length) addCallbacks(callbacks);
   }, []);
 
   const connectToHost = (hostCode: string, name: string) => {
@@ -87,7 +93,7 @@ export const usePeer: (callbacks?: CallbackObject[]) => UsePeerResult = (callbac
     if (!connection) return;
 
     sendDataEvent(connection, action, data);
-  }
+  };
 
   const disconnectFromHost = () => {
     if (!connection || !connection.reliable) return;

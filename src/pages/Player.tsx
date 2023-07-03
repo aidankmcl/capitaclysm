@@ -1,17 +1,36 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+
+import { actions, selectors, useAppDispatch, useAppSelector } from '~/store';
 
 import { usePeer } from '../services/p2p';
 import { Layout } from '../components';
+import { ClientP2PListener } from '~/store';
 
 export const Player = () => {
+  const dispatch = useAppDispatch();
+
+  const players = useAppSelector(selectors.player.selectPlayers);
+  const activePlayerID = useAppSelector(selectors.player.selectActivePlayerID);
 
   const { connect, connection, disconnect, sendData } = usePeer();
 
   const [hostIDInput, setHostIDInput] = useState('');
   const [clientName, setClientName] = useState('');
 
+  useEffect(() => {
+    if (connection && players.length) {
+      dispatch(actions.player.setPlayer(players[0].id));
+    }
+  }, [connection, players]);
+
+  const sendMove = () => activePlayerID && sendData('move', {
+    playerID: activePlayerID,
+    steps: Math.ceil(Math.random() * 12)
+  });
+
 
   return <Layout>
+    <ClientP2PListener />
     <h1>Client</h1>
     {!connection ? (
       <div>
@@ -48,7 +67,8 @@ export const Player = () => {
       </div>
     ) : (
       <div>
-        <button onClick={() => sendData('move', { places: 1 })}>Data!</button>
+        {activePlayerID && <h2>{activePlayerID}</h2>}
+        <button onClick={sendMove}>Data!</button>
         <button onClick={disconnect}>Disconnect</button>
       </div>
     )}

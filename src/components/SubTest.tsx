@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { usePeer } from '../services/p2p';
+import { usePeer } from '~/services/p2p';
 
 export const SubTest = (props: { hostCode: string, name: string }) => {
   const { hostCode, name } = props;
@@ -7,9 +7,9 @@ export const SubTest = (props: { hostCode: string, name: string }) => {
 
   useEffect(() => {
     if (hostCode && name) {
-      connect(hostCode, name)
+      connect(hostCode, name);
     }
-  }, [hostCode, name])
+  }, [hostCode, name, connect]);
 
   return <div>
     {code}

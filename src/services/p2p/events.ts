@@ -1,8 +1,9 @@
 import { DataConnection } from 'peerjs';
+import { RootState, SYNC_EVENT_NAME } from '~/store';
 
 type ConnectionToggleEvent = { connectionID: string };
 type ConnectionEvent = { connection: DataConnection };
-type DataEvent = any; // Typed data events handled separately below
+type DataEvent = unknown; // Typed data events handled separately below
 type ErrorEvent = { err: Error };
 type IceStateEvent = { iceChange: RTCIceConnectionState };
 
@@ -69,7 +70,8 @@ export const createCallback = <
 
 // Data callback handling
 type DataPayloads = {
-  move: { places: number }
+  move: { playerID: string, steps: number },
+  [SYNC_EVENT_NAME]: RootState
 }
 
 export const sendData = <

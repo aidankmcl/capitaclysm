@@ -5,6 +5,17 @@
     "lib": ["ES2020", "DOM", "DOM.Iterable"],
     "module": "ESNext",
     "skipLibCheck": true,
+    "baseUrl": ".",
+    "paths": {
+      // Want exports to come from top level
+      "~/components": ["src/components"],
+      "~/game": ["src/game"],
+      "~/pages": ["src/pages"],
+      "~/store": ["src/game/store"],
+      // Want to allow narrowing via folder
+      "~/assets/*": ["src/assets/*"],
+      "~/services/*": ["src/services/*"],
+    },
 
     /* Bundler mode */
     "moduleResolution": "bundler",

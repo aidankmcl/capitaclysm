@@ -3,6 +3,7 @@ import { configureStore } from '@reduxjs/toolkit';
 import gamesReducer from './slices/game';
 import locationReducer from './slices/location';
 import playerReducer from './slices/player';
+import { syncPeers } from './middleware/syncPeers';
 
 export const store = configureStore({
   reducer: {
@@ -10,6 +11,7 @@ export const store = configureStore({
     locations: locationReducer,
     players: playerReducer
   },
+  middleware: [syncPeers]
 });
 
 // Infer the `RootState` and `AppDispatch` types from the store itself

@@ -1,0 +1,32 @@
+.marker {
+  /* --property-color variable supplied by code */
+  background: var(--property-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-size: 14px;
+  position: relative;
+  left: -1em;
+  width: 2.5em;
+  height: 2.5em;
+  border-radius: 100px;
+  transition: all 200ms ease-in;
+  box-shadow: 0px 0px 20px 0px var(--property-color);
+}
+
+.marker:hover, .marker:active, .marker.selected {
+  width: 3em;
+  height: 3em;
+  left: -1.25em;
+  margin-top: -0.25em;
+  box-shadow: 0px 0px 30px 0px var(--property-color);
+}
+
+.markerIcon {
+  color: white;
+  fill: white;
+  display: inline-block;
+  font-size: 1em;
+  margin-top: 0.15em;
+}

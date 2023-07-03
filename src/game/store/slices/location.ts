@@ -3,7 +3,7 @@ import { v4 } from 'uuid';
 
 import type { RootState } from '../store';
 
-import { LocationType, locations } from '../../monopoly/data';
+import { Location, locations } from '../../components/map/data/locations';
 
 type Owner = {
   playerID: string;
@@ -13,7 +13,7 @@ type Owner = {
 type LocationData = {
   id: string;
   gameID: string;
-  type: LocationType['type'];
+  type: Location['type'];
   locationIndex: number; // index in `locations` fixed list
   created: number;
   name: string;
@@ -39,6 +39,9 @@ export const locationSlice = createSlice({
   name: 'locations',
   initialState,
   reducers: {
+    sync: (_, action: PayloadAction<LocationState>) => {
+      return action.payload;
+    },
     newGame: (state, action: PayloadAction<string>) => {
       const gameID = action.payload;
 

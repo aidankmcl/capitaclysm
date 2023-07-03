@@ -1,0 +1,13 @@
+.leaflet-container {
+  height: 100%;
+  width: 100%;
+}
+
+.leaflet-marker-icon {
+  background: none !important;
+  border: none !important;
+}
+
+.leaflet-default-icon-path {
+  background-image: url(https://unpkg.com/leaflet@1.8.0/dist/images/marker-icon.png);
+}

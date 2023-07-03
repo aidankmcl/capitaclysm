@@ -1,18 +1,25 @@
 
-type GameEvent = {
+type LocationType = 'event' | 'property' | 'railroad' | 'utility';
+export type IconKey = 'go' | 'community' | 'chance' | 'jail' | 'go-to-jail' | 'free-parking' | 'city-tax' | 'luxury-tax' | 'property' | 'railroad' | 'water-utility' | 'electric-utility';
+
+export type Coordinate = [number, number]; // lat, lon
+
+type Base = {
   name: string;
-  type: 'event';
+  type: LocationType;
   description: string;
+  icon: IconKey;
+  position: Coordinate,
   color: string;
   value?: number;
 }
 
-type Property = {
-  name: string;
+type GameEvent = Base & {
+  type: 'event';
+}
+
+type Property = Base & {
   type: 'property';
-  description: string;
-  color: string;
-  value: number;
   group: number;
   baseRent: number;
   rent1: number;
@@ -22,30 +29,43 @@ type Property = {
   rent5: number;
 }
 
-type SpecialProperty = {
-  name: string;
-  type: 'special-property';
-  description: string;
-  color: string;
-  value: number;
+type Railroad = Base & {
+  type: 'railroad';
   group: number;
+  rent1: number;
+  rent2: number;
+  rent3: number;
+  rent4: number;
 }
 
-export type LocationType = GameEvent | Property | SpecialProperty;
+type Utility = Base & {
+  type: 'utility';
+  group: number;
+  rent1Multiplier: number;
+  rent2Multiplier: number;
+}
+
+export type Location = GameEvent | Property | Railroad | Utility;
+
+const group8Color = '#FFDC2E';
 
 // type SquareType
-export const locations: LocationType[] = [
+export const locations: Location[] = [
   {
     name: 'GO',
     type: 'event',
+    icon: 'go',
     description: 'COLLECT $200 SALARY AS YOU PASS.',
-    color: '#FFFFFF',
-    value: 200
+    position: [32.84144389358572, -96.69918712829472],
+    color: '#000',
+    value: -200
   },
   {
     name: 'Mediterranean Avenue',
     type: 'property',
+    icon: 'property',
     description: '$60',
+    position: [32.854, -96.67554017421492],
     color: '#8B4513',
     value: 60,
     group: 3,
@@ -59,13 +79,17 @@ export const locations: LocationType[] = [
   {
     name: 'Community Chest',
     type: 'event',
+    icon: 'community',
     description: 'FOLLOW INSTRUCTIONS ON TOP CARD',
-    color: '#FFFFFF'
+    position: [32.847, -96.676],
+    color: '#5821A6'
   },
   {
     name: 'Baltic Avenue',
     type: 'property',
+    icon: 'property',
     description: '$60',
+    position: [32.8342353158061, -96.67589630906136],
     color: '#8B4513',
     value: 60,
     group: 3,
@@ -79,22 +103,32 @@ export const locations: LocationType[] = [
   {
     name: 'City Tax',
     type: 'event',
+    icon: 'city-tax',
     description: 'Pay $200',
-    color: '#FFFFFF',
-    value: -200
+    position: [32.8197146779401, -96.68190549422076],
+    color: '#EA302A',
+    value: 200
   },
   {
     name: 'Reading Railroad',
-    type: 'special-property',
+    type: 'railroad',
+    icon: 'railroad',
     description: '$200',
-    color: '#FFFFFF',
+    position: [32.816, -96.70527772865958],
+    color: '#FEBB15',
     value: 200,
-    group: 1
+    group: 1,
+    rent1: 25,
+    rent2: 50,
+    rent3: 100,
+    rent4: 200
   },
   {
     name: 'Oriental Avenue',
     type: 'property',
+    icon: 'property',
     description: '$100',
+    position: [32.79998679963467, -96.70943545364756],
     color: '#87CEEB',
     value: 100,
     group: 4,
@@ -108,13 +142,17 @@ export const locations: LocationType[] = [
   {
     name: 'Chance',
     type: 'event',
+    icon: 'chance',
     description: 'FOLLOW INSTRUCTIONS ON TOP CARD',
-    color: '#FFFFFF'
+    position: [32.80337103208447, -96.69669926169684],
+    color: '#5821A6'
   },
   {
     name: 'Vermont Avenue',
     type: 'property',
+    icon: 'property',
     description: '$100',
+    position: [32.79062796772461, -96.69155248779917],
     color: '#87CEEB',
     value: 100,
     group: 4,
@@ -128,7 +166,9 @@ export const locations: LocationType[] = [
   {
     name: 'Connecticut Avenue',
     type: 'property',
+    icon: 'property',
     description: '$120',
+    position: [32.787360907269246, -96.71693609039536],
     color: '#87CEEB',
     value: 120,
     group: 4,
@@ -140,16 +180,20 @@ export const locations: LocationType[] = [
     rent5: 600
   },
   {
-    name: 'Just Visiting',
+    name: 'Jail',
     type: 'event',
+    icon: 'jail',
     description: '',
-    color: '#FFFFFF',
+    position: [32.785955998819034, -96.74443270663782],
+    color: '#fff',
     value: 0
   },
   {
     name: 'St. Charles Place',
     type: 'property',
+    icon: 'property',
     description: '$140',
+    position: [32.78965792415137, -96.75373272858596],
     color: '#FF0080',
     value: 140,
     group: 5,
@@ -162,16 +206,22 @@ export const locations: LocationType[] = [
   },
   {
     name: 'Electric Company',
-    type: 'special-property',
+    type: 'utility',
+    icon: 'electric-utility',
     description: '$150',
-    color: '#FFFFFF',
+    position: [32.779585676182165, -96.75137571786499],
+    color: '#000',
     value: 150,
-    group: 2
+    group: 2,
+    rent1Multiplier: 4,
+    rent2Multiplier: 10
   },
   {
     name: 'States Avenue',
     type: 'property',
+    icon: 'property',
     description: '$140',
+    position: [32.7730402256438, -96.74751520156862],
     color: '#FF0080',
     value: 140,
     group: 5,
@@ -185,7 +235,9 @@ export const locations: LocationType[] = [
   {
     name: 'Virginia Avenue',
     type: 'property',
+    icon: 'property',
     description: '$160',
+    position: [32.76611297599828, -96.75077226158022],
     color: '#FF0080',
     value: 160,
     group: 5,
@@ -198,16 +250,24 @@ export const locations: LocationType[] = [
   },
   {
     name: 'Pennsylvania Railroad',
-    type: 'special-property',
+    type: 'railroad',
+    icon: 'railroad',
     description: '$200',
-    color: '#FFFFFF',
+    position: [32.7665, -96.72032307199436],
+    color: '#FEBB15',
     value: 200,
-    group: 1
+    group: 1,
+    rent1: 25,
+    rent2: 50,
+    rent3: 100,
+    rent4: 200
   },
   {
     name: 'St. James Place',
     type: 'property',
+    icon: 'property',
     description: '$180',
+    position: [32.764341255536436, -96.70045759672442],
     color: '#FFA500',
     value: 180,
     group: 6,
@@ -221,13 +281,17 @@ export const locations: LocationType[] = [
   {
     name: 'Community Chest',
     type: 'event',
+    icon: 'community',
     description: 'FOLLOW INSTRUCTIONS ON TOP CARD',
-    color: '#FFFFFF'
+    position: [32.77224637102328, -96.69977188110353],
+    color: '#5821A6'
   },
   {
     name: 'Tennessee Avenue',
     type: 'property',
+    icon: 'property',
     description: '$180',
+    position: [32.767797905945464, -96.68343983514943],
     color: '#FFA500',
     value: 180,
     group: 6,
@@ -241,7 +305,9 @@ export const locations: LocationType[] = [
   {
     name: 'New York Avenue',
     type: 'property',
+    icon: 'property',
     description: '$200',
+    position: [32.74948074018299, -96.6859062884929],
     color: '#FFA500',
     value: 200,
     group: 6,
@@ -255,13 +321,17 @@ export const locations: LocationType[] = [
   {
     name: 'Free Parking',
     type: 'event',
+    icon: 'free-parking',
     description: '',
-    color: '#FFFFFF'
+    position: [32.7535312131756, -96.74254849744091],
+    color: '#5821A6'
   },
   {
     name: 'Kentucky Avenue',
     type: 'property',
+    icon: 'property',
     description: '$220',
+    position: [32.75804323503459, -96.77458458825143],
     color: '#FF0000',
     value: 220,
     group: 7,
@@ -275,13 +345,17 @@ export const locations: LocationType[] = [
   {
     name: 'Chance',
     type: 'event',
+    icon: 'chance',
     description: 'FOLLOW INSTRUCTIONS ON TOP CARD',
-    color: '#FFFFFF'
+    position: [32.74656857378066, -96.78905725479127],
+    color: '#5821A6'
   },
   {
     name: 'Indiana Avenue',
     type: 'property',
+    icon: 'property',
     description: '$220',
+    position: [32.75236883270208, -96.80112088987319],
     color: '#FF0000',
     value: 220,
     group: 7,
@@ -295,7 +369,9 @@ export const locations: LocationType[] = [
   {
     name: 'Illinois Avenue',
     type: 'property',
+    icon: 'property',
     description: '$240',
+    position: [32.75305697976702, -96.816360176947],
     color: '#FF0000',
     value: 240,
     group: 7,
@@ -308,17 +384,25 @@ export const locations: LocationType[] = [
   },
   {
     name: 'B&O Railroad',
-    type: 'special-property',
+    type: 'railroad',
+    icon: 'railroad',
     description: '$200',
-    color: '#FFFFFF',
+    position: [32.78130311007206, -96.76614046096803],
+    color: '#FEBB15',
     value: 200,
-    group: 1
+    group: 1,
+    rent1: 25,
+    rent2: 50,
+    rent3: 100,
+    rent4: 200
   },
   {
     name: 'Atlantic Avenue',
     type: 'property',
+    icon: 'property',
     description: '$260',
-    color: '#FFFF00',
+    position: [32.79281213735871, -96.76146268844606],
+    color: group8Color,
     value: 260,
     group: 8,
     baseRent: 22,
@@ -331,8 +415,10 @@ export const locations: LocationType[] = [
   {
     name: 'Ventnor Avenue',
     type: 'property',
+    icon: 'property',
     description: '$260',
-    color: '#FFFF00',
+    position: [32.8034539563083, -96.74270868301393],
+    color: group8Color,
     value: 260,
     group: 8,
     baseRent: 22,
@@ -344,17 +430,23 @@ export const locations: LocationType[] = [
   },
   {
     name: 'Water Works',
-    type: 'special-property',
+    type: 'utility',
+    icon: 'water-utility',
     description: '$150',
-    color: '#FFFFFF',
+    position: [32.814142872620586, -96.72736587122796],
+    color: '#000',
     value: 150,
-    group: 2
+    group: 2,
+    rent1Multiplier: 4,
+    rent2Multiplier: 10
   },
   {
     name: 'Marvin Gardens',
     type: 'property',
+    icon: 'property',
     description: '$280',
-    color: '#FFFF00',
+    position: [32.813605114382774, -96.74336428512862],
+    color: group8Color,
     value: 280,
     group: 8,
     baseRent: 24,
@@ -367,13 +459,17 @@ export const locations: LocationType[] = [
   {
     name: 'Go to Jail',
     type: 'event',
+    icon: 'go-to-jail',
     description: 'Go directly to Jail. Do not pass GO. Do not collect $200.',
-    color: '#FFFFFF'
+    position: [32.79157451341802, -96.80478127449553],
+    color: '#FFF'
   },
   {
     name: 'Pacific Avenue',
     type: 'property',
+    icon: 'property',
     description: '$300',
+    position: [32.804751505079416, -96.79619984096325],
     color: '#008000',
     value: 300,
     group: 9,
@@ -387,7 +483,9 @@ export const locations: LocationType[] = [
   {
     name: 'North Carolina Avenue',
     type: 'property',
+    icon: 'property',
     description: '$300',
+    position: [32.822907339606004, -96.79485946478111],
     color: '#008000',
     value: 300,
     group: 9,
@@ -401,13 +499,17 @@ export const locations: LocationType[] = [
   {
     name: 'Community Chest',
     type: 'event',
+    icon: 'community',
     description: 'FOLLOW INSTRUCTIONS ON TOP CARD',
-    color: '#FFFFFF'
+    position: [32.81828249290803, -96.811180114746],
+    color: '#5821A6'
   },
   {
     name: 'Pennsylvania Avenue',
     type: 'property',
+    icon: 'property',
     description: '$320',
+    position: [32.849371700881, -96.79345905835048],
     color: '#008000',
     value: 320,
     group: 9,
@@ -420,22 +522,32 @@ export const locations: LocationType[] = [
   },
   {
     name: 'Short Line',
-    type: 'special-property',
+    type: 'railroad',
+    icon: 'railroad',
     description: '$200',
-    color: '#FFFFFF',
+    position: [32.838209837369476, -96.77497617125411],
+    color: '#FEBB15',
     value: 200,
-    group: 1
+    group: 1,
+    rent1: 25,
+    rent2: 50,
+    rent3: 100,
+    rent4: 200
   },
   {
     name: 'Chance',
     type: 'event',
+    icon: 'chance',
     description: 'FOLLOW INSTRUCTIONS ON TOP CARD',
-    color: '#FFFFFF'
+    position: [32.82381296521746, -96.76995954456181],
+    color: '#5821A6'
   },
   {
     name: 'Park Place',
     type: 'property',
+    icon: 'property',
     description: '$350',
+    position: [32.83437380179909, -96.7273735094769],
     color: '#0000FF',
     value: 350,
     group: 10,
@@ -449,13 +561,18 @@ export const locations: LocationType[] = [
   {
     name: 'LUXURY TAX',
     type: 'event',
+    icon: 'luxury-tax',
     description: 'Pay $100',
-    color: '#FFFFFF'
+    position: [32.840616479149965, -96.73493895327103],
+    color: '#EA302A',
+    value: 100
   },
   {
     name: 'Boardwalk',
     type: 'property',
+    icon: 'property',
     description: '$400',
+    position: [32.849584882579656, -96.73064190777116],
     color: '#0000FF',
     value: 400,
     group: 10,
