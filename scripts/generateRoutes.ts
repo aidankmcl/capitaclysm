@@ -126,9 +126,6 @@ const main = async () => {
 }
 
 main()
-  .then(() => {
-    console.log('success');
-  })
   .catch((err) => {
     console.error('failed to pull routing information:', err);
   })

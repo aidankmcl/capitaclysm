@@ -62,7 +62,6 @@ export const createCallback = <
     eventType,
     callback: (evt: Event) => {
       const customEvt = evt as CustomEvent;
-      console.log(`${origin}: ${eventType as string}: ${customEvt.detail}`);
       callback(customEvt.detail);
     }
   };
@@ -89,7 +88,7 @@ type MessageData<A extends keyof DataPayloads = keyof DataPayloads, D extends Da
 export const createDataCallback = <
   A extends keyof DataPayloads,
   O extends keyof EventData = 'child' | 'client'
->(origin: O, action: A, callback: (data: DataPayloads[A]) => void): CallbackObject => {
+>(origin: O, _: A, callback: (data: DataPayloads[A]) => void): CallbackObject => {
   const eventType = 'data' as keyof EventData[keyof EventData];
 
   return {
@@ -97,8 +96,6 @@ export const createDataCallback = <
     eventType,
     callback: (evt: Event) => {
       const customEvent = evt as CustomEvent<MessageData<A>>;
-      
-      if (customEvent.detail.action !== SYNC_EVENT_NAME) console.log(`${origin}: data: ${action}: ${JSON.stringify(customEvent.detail)}`);
       callback(customEvent.detail.data);
     }
   };

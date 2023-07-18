@@ -14,13 +14,13 @@ export const Route: FC<Props> = () => {
   let color = DEFAULT_GRAY; // Default gray
   return waypointData.lines.map((line, i) => {
     const positions = line.points.map(point => new L.LatLng(point[0], point[1]));
-    const nextSpot = waypointData.lines[i + 1];
-    const leapFrogSpot = waypointData.lines[i + 2];
+    const nextSpot = waypointData.lines[(i + 1) % waypointData.lines.length];
+    const leapFrogSpot = waypointData.lines[(i + 2) % waypointData.lines.length];
 
     if (line.type === 'property') {
-      if (nextSpot && nextSpot.type !== 'property') {
+      if (nextSpot.type !== 'property') {
         color = leapFrogSpot && leapFrogSpot.type === 'property' && leapFrogSpot.color === line.color ? line.color : DEFAULT_GRAY;
-      } else if (nextSpot) {
+      } else {
         color = line.color;
       }
     }

@@ -85,7 +85,6 @@ export const playerSlice = createSlice({
       const { playerID, steps } = action.payload;
 
       const player = state.items[playerID]; 
-      console.log('moving player', player.locationIndex, steps, locations.length);
       state.items[playerID].locationIndex = ((player.locationIndex + steps) % locations.length);
     },
     endTurn: (state) => {
