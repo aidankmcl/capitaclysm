@@ -1,8 +1,10 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 import { v4 } from 'uuid';
 
-import type { RootState } from '../store';
+import { RootState } from '~/store';
 
+import { actions as gameActions } from './game';
+import { actions as shared } from './sharedActions';
 import { Location, locations } from '../../components/map/data/locations';
 
 type Owner = {
@@ -12,11 +14,10 @@ type Owner = {
 
 type LocationData = {
   id: string;
-  gameID: string;
+  name: string;
   type: Location['type'];
   locationIndex: number; // index in `locations` fixed list
   created: number;
-  name: string;
   description: string;
   rent?: number;
   price?: number;
@@ -26,45 +27,40 @@ type LocationData = {
 // Define a type for the slice state
 interface LocationState {
   items: Record<string, LocationData>;
-  locationsByGame: Record<string, string[]>;
 }
 
 // Define the initial state using that type
 const initialState: LocationState = {
   items: {},
-  locationsByGame: {}
 };
 
 export const locationSlice = createSlice({
   name: 'locations',
   initialState,
-  reducers: {
-    sync: (_, action: PayloadAction<LocationState>) => {
-      return action.payload;
-    },
-    newGame: (state, action: PayloadAction<string>) => {
-      const gameID = action.payload;
-
-      locations.forEach((location, i) => {
-        const locationData: LocationData = {
-          id: v4(),
-          gameID,
-          type: location.type,
-          locationIndex: i,
-          created: Date.now(),
-          name: location.name,
-          description: location.description,
-          rent: location.type === 'property' ? location.baseRent : location.value || 0,
-          price: location.value || 0,
-          owners: []
-        };
-
-        state.items[locationData.id] = locationData;
-        state.locationsByGame[gameID] = state.locationsByGame[gameID] || [];
-        if (!state.locationsByGame[gameID].includes(locationData.id)) state.locationsByGame[gameID].push(locationData.id);
+  extraReducers: (builder) => {
+    builder
+      .addCase(shared.syncState, (_, action) => {
+        return action.payload.locations;
+      })
+      .addCase(gameActions.newGame, (state) => {
+        locations.forEach((location, i) => {
+          const locationData: LocationData = {
+            id: v4(),
+            type: location.type,
+            locationIndex: i,
+            created: Date.now(),
+            name: location.name,
+            description: location.description,
+            rent: location.type === 'property' ? location.baseRent : location.value || 0,
+            price: location.value || 0,
+            owners: []
+          };
+  
+          state.items[locationData.id] = locationData;
+        });
       });
-    },
   },
+  reducers: {},
 });
 
 export const actions = locationSlice.actions;
@@ -76,7 +72,13 @@ export const selectors = {
   
     return owner.propertyIDs.map(id => state.locations.items[id]);
   },
-  selectCurrentPlayerProperties: (state: RootState) => {
+  selectClientPlayerProperties: (state: RootState) => {
+    const playerID = state.players.clientPlayerID;
+    if (!playerID) return [];
+  
+    return selectors.selectOwnedProperties(state, playerID);
+  },
+  selectActivePlayerProperties: (state: RootState) => {
     const playerID = state.players.activePlayerID;
     if (!playerID) return [];
   

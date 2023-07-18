@@ -28,7 +28,11 @@ type Line = {
 }
 
 type Data = {
-  lines: Line[]
+  lines: Line[];
+  bounds: {
+    topLeft: Coordinate;
+    bottomRight: Coordinate;
+  }
 }
 
 const getDistance = (lat1, lon1, lat2, lon2, precision=4) => {
@@ -58,7 +62,17 @@ type MatchData = {
 const organizeData = (coords: Coordinate[]): Data => {
   const bestMatches: { [K: string]: MatchData } = {};
 
+  let minLat = Infinity;
+  let maxLat = -Infinity;
+  let minLon = Infinity;
+  let maxLon = -Infinity;
+
   coords.forEach(([lat, lon]) => {
+    if (lat < minLat) minLat = lat;
+    if (lat > maxLat) maxLat = lat;
+    if (lon < minLon) minLon = lon;
+    if (lon > maxLon) maxLon = lon;
+
     locations.forEach(({ name, position: [locLat, locLon], color, type }) => {
       const dist = getDistance(locLat, locLon, lat, lon);
       const data = { dist, coord: [lat, lon], original: [locLat, locLon], color, type, name } as MatchData;
@@ -92,7 +106,14 @@ const organizeData = (coords: Coordinate[]): Data => {
     return acc;
   }, [] as Line[]);
 
-  return { lines };
+  return {
+    lines,
+    bounds: {
+      // Note: whether min or max is location based, this assumes West of Prime Meridian and North of Equator (US is there)
+      topLeft: [maxLat, minLon],
+      bottomRight: [minLat, maxLon]
+    }
+  };
 }
 
 const main = async () => {

@@ -1,0 +1,31 @@
+.container {
+  padding: var(--padL);
+
+  display: grid;
+  height: 100%;
+  box-sizing: border-box;
+  grid-template-columns: minmax(50%, calc(100vh - calc(var(--padL) * 2))) minmax(300px, 1fr);
+  grid-template-rows: min-content 1fr;
+  grid-template-areas: 
+    "map manage"
+    "map content"
+    "map content";
+}
+
+.mapSection {
+  grid-area: map;
+}
+
+.manageSection, .contentSection {
+  padding: var(--padL);
+  margin-left: var(--padM);
+}
+
+.manageSection {
+  grid-area: manage;
+  margin-bottom: var(--padM);
+}
+
+.contentSection {
+  grid-area: content;
+}

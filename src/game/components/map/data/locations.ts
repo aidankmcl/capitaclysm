@@ -49,7 +49,6 @@ export type Location = GameEvent | Property | Railroad | Utility;
 
 const group8Color = '#FFDC2E';
 
-// type SquareType
 export const locations: Location[] = [
   {
     name: 'GO',
@@ -584,3 +583,10 @@ export const locations: Location[] = [
     rent5: 2000
   },
 ];
+
+type LocationsByName = { [K: string]: Location };
+
+export const locationsByName: { [K: string]: Location } = locations.reduce((acc, next) => {
+  acc[next.name] = next;
+  return acc;
+}, {} as LocationsByName);

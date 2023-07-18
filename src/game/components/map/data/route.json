@@ -14363,5 +14363,15 @@
       "type": "property",
       "name": "Boardwalk"
     }
-  ]
+  ],
+  "bounds": {
+    "topLeft": [
+      32.855061,
+      -96.816657
+    ],
+    "bottomRight": [
+      32.74631,
+      -96.671627
+    ]
+  }
 }

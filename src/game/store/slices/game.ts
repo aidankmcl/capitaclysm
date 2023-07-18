@@ -1,69 +1,61 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { v4 } from 'uuid';
 
-import type { RootState } from '../store';
+import { actions as shared } from './sharedActions';
+import { actions as playerActions } from './player';
 
-type GameData = {
-  id: string;
-  created: number;
-  playerIDs: string[];
-  propertyIDs: string[];
-}
 
 // Define a type for the slice state
 interface GameState {
-  items: Record<string, GameData>;
-  activeGameID: string | undefined;
+  id: string | undefined;
+  gameActive: boolean;
+  created: number | undefined;
+  turn: number;
+  clientIsHost: boolean;
 }
 
 // Define the initial state using that type
 const initialState: GameState = {
-  items: {},
-  activeGameID: undefined
+  id: undefined,
+  gameActive: false,
+  created: undefined,
+  turn: 0,
+  clientIsHost: false
 };
 
 export const gameSlice = createSlice({
   name: 'game',
   initialState,
+  extraReducers: (builder) => {
+    builder
+      .addCase(shared.syncState, (state, action) => {
+        return {
+          ...action.payload.games,
+          clientIsHost: state.clientIsHost
+        };
+      })
+      .addCase(playerActions.endTurn, (state) => {
+        state.turn++;
+      });
+  },
   reducers: {
-    sync: (_, action: PayloadAction<GameState>) => {
-      return action.payload;
+    setHost: (state, action: PayloadAction<boolean>) => {
+      state.clientIsHost = action.payload;
     },
     newGame: (state) => {
-      const game: GameData = {
+      return {
         id: v4(),
+        gameActive: true,
         created: Date.now(),
-        playerIDs: [],
-        propertyIDs: []
+        turn: 0,
+        clientIsHost: state.clientIsHost
       };
-
-      state.items[game.id] = game;
-      state.activeGameID = game.id;
-    },
-    deleteGame: (state, action: PayloadAction<string>) => {
-      const gameID = action.payload;
-      delete state.items[gameID];
-
-      if (gameID === state.activeGameID) {
-        state.activeGameID = undefined;
-      }
-    },
-    // Use the PayloadAction type to declare the contents of `action.payload`
-    addPlayers: (state, action: PayloadAction<string[]>) => {
-      if (!state.activeGameID) return;
-
-      const newPlayerIDs = action.payload;
-      const oldPlayers = state.items[state.activeGameID].playerIDs;
-      state.items[state.activeGameID].playerIDs = oldPlayers.filter(id => !(id in newPlayerIDs)).concat(newPlayerIDs);
     },
   },
 });
 
 export const actions = gameSlice.actions;
 
-export const selectors = {
-  selectGame: (state: RootState) => state.games.activeGameID ? state.games.items[state.games.activeGameID] : undefined,
-  selectActiveGameID: (state: RootState) => state.games.activeGameID
-};
+export const selectors = {};
 
 export default gameSlice.reducer;

@@ -98,7 +98,7 @@ export const createDataCallback = <
     callback: (evt: Event) => {
       const customEvent = evt as CustomEvent<MessageData<A>>;
       
-      console.log(`${origin}: data: ${action}: ${JSON.stringify(customEvent.detail)}`);
+      if (customEvent.detail.action !== SYNC_EVENT_NAME) console.log(`${origin}: data: ${action}: ${JSON.stringify(customEvent.detail)}`);
       callback(customEvent.detail.data);
     }
   };

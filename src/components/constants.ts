@@ -4,7 +4,8 @@ export const colors = {
   lightGreen: '#BFDBAE',
   green: '#8FBC72',
   white: '#EEEEEE',
-  beige: '#D7BAAA'
+  beige: '#D7BAAA',
+  gray: '#666666'
 };
 
 export const spacing = {

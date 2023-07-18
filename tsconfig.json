@@ -8,13 +8,14 @@
     "baseUrl": ".",
     "paths": {
       // Want exports to come from top level
-      "~/components": ["src/components"],
-      "~/game": ["src/game"],
-      "~/pages": ["src/pages"],
-      "~/store": ["src/game/store"],
+      "~/components": ["./src/components"],
+      "~/game": ["./src/game"],
+      "~/pages": ["./src/pages"],
+      "~/store": ["./src/game/store"],
+      "~/data/map": ["./src/game/components/map/data"],
       // Want to allow narrowing via folder
-      "~/assets/*": ["src/assets/*"],
-      "~/services/*": ["src/services/*"],
+      "~/assets/*": ["./src/assets/*"],
+      "~/services/*": ["./src/services/*"],
     },
 
     /* Bundler mode */

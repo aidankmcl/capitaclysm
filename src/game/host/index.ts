@@ -1,2 +1,2 @@
 
-export { HostView as Monopoly } from './HostView';
+export { HostView } from './HostView';

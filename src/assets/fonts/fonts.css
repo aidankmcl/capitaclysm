@@ -1,0 +1,17 @@
+@font-face {
+  font-family: "Kabel";
+  src: local("Kabel"), url("./kabel/bold.woff2");
+  font-weight: bold;
+}
+
+@font-face {
+  font-family: "Kabel";
+  src: local("Kabel"), url("./kabel/normal.woff2");
+  font-weight: normal;
+}
+
+@font-face {
+  font-family: "Kabel";
+  src: local("Kabel"), url("./kabel/bolder.woff2");
+  font-weight: 500;
+}

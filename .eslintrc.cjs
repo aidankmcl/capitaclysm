@@ -17,6 +17,7 @@ module.exports = {
     'semi': [2, 'always'],
     'quotes': [2, 'single'],
     'jsx-quotes': [2, 'prefer-double'],
-    'warnOnUnsupportedTypeScriptVersion': 0
+    'warnOnUnsupportedTypeScriptVersion': 0,
+    "@typescript-eslint/no-unused-vars": ["warn", { "ignoreRestSiblings": true }]
   },
 }

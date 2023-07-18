@@ -20,6 +20,7 @@ export default defineConfig({
       '~/store': resolve(__dirname, './src/game/store'),
       '~/pages': resolve(__dirname, './src/pages'),
       '~/services': resolve(__dirname, './src/services'),
+      "~/data/map": resolve(__dirname, './src/game/components/map/data'),
     }
   },
   plugins: [viteSvgr(), react(), nodePolyfills({ protocolImports: true })],

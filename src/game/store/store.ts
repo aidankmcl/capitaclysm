@@ -3,13 +3,16 @@ import { configureStore } from '@reduxjs/toolkit';
 import gamesReducer from './slices/game';
 import locationReducer from './slices/location';
 import playerReducer from './slices/player';
+import savesReducer from './slices/saves';
+
 import { syncPeers } from './middleware/syncPeers';
 
 export const store = configureStore({
   reducer: {
     games: gamesReducer,
     locations: locationReducer,
-    players: playerReducer
+    players: playerReducer,
+    saves: savesReducer
   },
   middleware: [syncPeers]
 });

@@ -2,7 +2,7 @@ import { FC } from 'react';
 import L, { Map } from 'leaflet';
 import { Polyline } from 'react-leaflet';
 
-import waypointData from '../data/route.json';
+import { waypointData } from '~/data/map';
 
 type Props = {
   map: Map
@@ -24,6 +24,6 @@ export const Route: FC<Props> = () => {
         color = line.color;
       }
     }
-    return <Polyline key={i} positions={positions} color={color} weight={15} opacity={0.8} />;
+    return <Polyline key={i} positions={positions} color={color} weight={10} opacity={0.8} />;
   });
 };

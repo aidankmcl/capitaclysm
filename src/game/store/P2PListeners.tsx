@@ -1,28 +1,35 @@
+
 import { createDataCallback, usePeer } from '~/services/p2p';
 import { actions, useAppDispatch } from '.';
+import { useOnce } from '~/components';
 
 export const HostP2PListener = () => {
   const dispatch = useAppDispatch();
+  const { addCallbacks } = usePeer();
 
   const moveCB = createDataCallback('child', 'move', (data) => {
     dispatch(actions.player.movePlayer(data));
   });
 
-  usePeer([moveCB]);
-
+  useOnce(() => {
+    dispatch(actions.game.setHost(true));
+    addCallbacks([moveCB]);
+  }, [dispatch, addCallbacks]);
+  
   return <></>;
 };
 
 export const ClientP2PListener = () => {
   const dispatch = useAppDispatch();
+  const { addCallbacks } = usePeer();
 
   const syncCB = createDataCallback('client', 'redux-sync-peers', (data) => {
-    dispatch(actions.game.sync(data.games));
-    dispatch(actions.location.sync(data.locations));
-    dispatch(actions.player.sync(data.players));
+    dispatch(actions.shared.syncState(data));
   });
 
-  usePeer([syncCB]);
+  useOnce(() => {
+    addCallbacks([syncCB]);
+  }, [addCallbacks]);
 
   return <></>;
 };
