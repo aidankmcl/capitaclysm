@@ -1,5 +1,6 @@
 
 import { FC, CSSProperties } from 'react';
+import { colors } from '~/components';
 
 import { PlayerData } from '~/store';
 
@@ -7,6 +8,8 @@ type Props = {
   player: PlayerData;
   fontSize?: number;
   center?: boolean;
+  activePlayerID?: string;
+  style?: CSSProperties;
 }
 
 const avatarSizeEm = 2.5;
@@ -30,13 +33,15 @@ const stylesCenteredContainer: CSSProperties = {
 
 // Not using Joy UI because custom Map markers don't work with them correctly
 export const Avatar: FC<Props> = (props) => {
-  const { player, fontSize, center } = props;
+  const { player, fontSize, center, activePlayerID } = props;
   return (
     <div style={{
       ...stylesContainer,
       fontSize,
       backgroundImage: props.player.color,
-      ...(center ? stylesCenteredContainer : {})
+      boxShadow: activePlayerID === props.player.id ? `0px 0px 10px 3px ${colors.green}` : '',
+      ...(center ? stylesCenteredContainer : {}),
+      ...props.style
     }}>
       <span style={{ fontWeight: 'bold' }}>{player.name.charAt(0).toUpperCase()}</span>
     </div>

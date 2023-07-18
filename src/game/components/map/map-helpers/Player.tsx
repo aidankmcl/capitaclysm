@@ -5,6 +5,7 @@ import { PlayerData } from '~/store';
 import { Coordinate } from '../data/locations';
 import { getCoordsFromLocationIndex, getWaypointsBetweenLocations } from '../data/helpers';
 import { PlayerMarker } from './Markers/PlayerMarker';
+import { useOnce } from '~/components';
 
 
 type PlayerProps = {
@@ -16,9 +17,13 @@ export const Player: FC<PlayerProps> = (props) => {
 
   const prevLocation = useRef(props.player.locationIndex);
   
-  const [currentPos, setCurrentPos] = useState<Coordinate>(getCoordsFromLocationIndex(props.player.locationIndex));
+  const [currentPos, setCurrentPos] = useState<Coordinate>();
   const [targetLocation, setTargetLocation] = useState<number>();
   const [remainingWaypoints, setRemainingWaypoints] = useState<Coordinate[]>([]);
+
+  useOnce(() => {
+    if (!currentPos) setCurrentPos(getCoordsFromLocationIndex(props.player.locationIndex))
+  }, [props.player.locationIndex])
 
   useEffect(() => {
     setTargetLocation(props.player.locationIndex);
@@ -33,15 +38,21 @@ export const Player: FC<PlayerProps> = (props) => {
       setCurrentPos(remainingWaypoints[0]);
       setTimeout(() => {
         setRemainingWaypoints((waypoints) => waypoints.slice(1));
-      }, 20);
-    } else if (targetLocation) {
-      prevLocation.current = targetLocation;
-      setTargetLocation(undefined);
+      }, 10);
+
+      if (remainingWaypoints.length === 1 && targetLocation !== undefined) {
+        prevLocation.current = targetLocation;
+        setTargetLocation(undefined);
+      }
     }
   }, [remainingWaypoints, targetLocation]);
 
   return currentPos ? (
-    <PlayerMarker position={currentPos} player={props.player} zoom={props.zoom} />
+    <PlayerMarker
+      position={currentPos}
+      player={props.player}
+      zoom={props.zoom}
+    />
   ) : <></>;
 };
 

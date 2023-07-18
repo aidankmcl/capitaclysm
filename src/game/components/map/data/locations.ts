@@ -252,7 +252,7 @@ export const locations: Location[] = [
     type: 'railroad',
     icon: 'railroad',
     description: '$200',
-    position: [32.7665, -96.72032307199436],
+    position: [32.765, -96.72032307199436],
     color: '#FEBB15',
     value: 200,
     group: 1,

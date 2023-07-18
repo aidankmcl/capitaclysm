@@ -12,14 +12,13 @@ const addPeerListeners = (peer: Peer) => {
     sendConnectionEvent('host', 'open', { connectionID });
   
     peer.on('connection', (connection) => {
-      connection.on('open', () => {
-        sendConnectionEvent('child', 'open', { connection });
-  
+      connection.on('open', () => {  
         window.addEventListener(SYNC_EVENT_NAME, (evt) => {
           const customEvent = evt as CustomEvent<RootState>;
-          console.log(connectionID, connection);
           connection.send({ action: SYNC_EVENT_NAME, data: customEvent.detail });
         });
+
+        sendConnectionEvent('child', 'open', { connection });
       });
     
       connection.on('data', (data) => {
@@ -75,6 +74,7 @@ type PeerControls = {
   disconnect: () => void,
   sendData: SendDataWithoutConnectionInput,
   addCallbacks: typeof addCallbacks,
+  setHost: (isHost: boolean) => void
 }
 
 export const PeerContext = createContext<PeerControls>({
@@ -83,13 +83,15 @@ export const PeerContext = createContext<PeerControls>({
   connection: undefined,
   disconnect: () => null,
   sendData: () => null,
-  addCallbacks
+  addCallbacks,
+  setHost: () => null,
 });
 
 
 export const PeerProvider: FC<PropsWithChildren> = (props) => {
   const [code, setCode] = useState<string>();
   const [peer, setPeer] = useState<Peer>();
+  const [isHost, setHost] = useState(false);
 
   useOnce(() => {
     if (!code) {
@@ -99,7 +101,7 @@ export const PeerProvider: FC<PropsWithChildren> = (props) => {
       setCode(code);
       setPeer(peer);
     }
-  });
+  }, [code]);
 
   const [connection, setConnection] = useState<DataConnection>();
 
@@ -111,9 +113,11 @@ export const PeerProvider: FC<PropsWithChildren> = (props) => {
   };
 
   const sendData: SendDataWithoutConnectionInput = (action, data) => {
-    if (!connection) return;
-
-    sendDataEvent(connection, action, data);
+    if (isHost) {
+      sendConnectionEvent('child', 'data', { action, data });
+    } else if (connection) {
+      sendDataEvent(connection, action, data);
+    }
   };
 
   const disconnectFromHost = () => {
@@ -131,7 +135,8 @@ export const PeerProvider: FC<PropsWithChildren> = (props) => {
         connect: connectToHost,
         disconnect: disconnectFromHost,
         sendData,
-        addCallbacks
+        addCallbacks,
+        setHost
       }}
     >
       {props.children}

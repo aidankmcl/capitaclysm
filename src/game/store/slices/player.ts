@@ -65,6 +65,7 @@ export const playerSlice = createSlice({
 
       state.items[player.id] = player;
       if (!state.playerIDs.includes(player.id)) state.playerIDs.push(player.id);
+      if (!state.activePlayerID) state.activePlayerID = player.id;
     },
     togglePlayer: (state, action: PayloadAction<{ connectionID: string, active: boolean }>) => {
       const { connectionID, active } = action.payload;
@@ -76,11 +77,16 @@ export const playerSlice = createSlice({
       const playerID = action.payload;
       state.clientPlayerID = playerID;
     },
+    setActivePlayer: (state, action: PayloadAction<string>) => {
+      const playerID = action.payload;
+      state.activePlayerID = playerID;
+    },
     movePlayer: (state, action: PayloadAction<{ playerID: string, steps: number}>) => {
       const { playerID, steps } = action.payload;
 
       const player = state.items[playerID]; 
-      state.items[playerID].locationIndex = ((player.locationIndex + steps) % locations.length) - 1;
+      console.log('moving player', player.locationIndex, steps, locations.length);
+      state.items[playerID].locationIndex = ((player.locationIndex + steps) % locations.length);
     },
     endTurn: (state) => {
       const currentActivePlayerID = state.activePlayerID;

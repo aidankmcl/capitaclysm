@@ -19,8 +19,9 @@ export const ClientView = () => {
   const clientPlayerID = useAppSelector(selectors.player.selectClientPlayerID);
 
   useEffect(() => {
-    if (connection && players.length) {
-      dispatch(actions.player.setClientPlayer(players[0].id));
+    if (connection && players.length && !clientPlayerID) {
+      const myPlayer = players.find(player => player.name === connection.label);
+      if (myPlayer) dispatch(actions.player.setClientPlayer(myPlayer.id));
     }
   }, [connection, players, dispatch]);
 

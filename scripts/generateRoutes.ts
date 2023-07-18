@@ -73,16 +73,16 @@ const organizeData = (coords: Coordinate[]): Data => {
     if (lon < minLon) minLon = lon;
     if (lon > maxLon) maxLon = lon;
 
-    locations.forEach(({ name, position: [locLat, locLon], color, type }) => {
+    locations.forEach(({ name, position: [locLat, locLon], color, type }, i) => {
       const dist = getDistance(locLat, locLon, lat, lon);
       const data = { dist, coord: [lat, lon], original: [locLat, locLon], color, type, name } as MatchData;
 
-      if (!bestMatches[name]) {
-        bestMatches[name] = data;
+      if (!bestMatches[i]) {
+        bestMatches[i] = data;
       }
 
-      if (dist < bestMatches[name].dist) {
-        bestMatches[name] = data;
+      if (dist < bestMatches[i].dist) {
+        bestMatches[i] = data;
       }
     })
   });

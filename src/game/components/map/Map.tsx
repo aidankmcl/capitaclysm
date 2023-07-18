@@ -16,9 +16,13 @@ import { getPaddedBounds } from './map-helpers/utils';
 
 const paddedBounds = getPaddedBounds(waypointData.bounds.topLeft, waypointData.bounds.bottomRight);
 
-export const Map: FC = () => {
+const PlayerMarkers = (props: { zoom: number }) => {
+  const players = useAppSelector(selectors.player.selectPlayers);
 
-  const players = useAppSelector(selectors.player.selectPlayers);  
+  return players.map((player, i) => <Player key={i} player={player} zoom={props.zoom} />)
+}
+
+export const Map: FC = () => {
   const [map, setMap] = useState<LeafletMap | null>(null);
   const [zoom, setZoom] = useState(DEFAULT_ZOOM);
   const [minZoom, setMinZoom] = useState<number>();
@@ -66,7 +70,7 @@ export const Map: FC = () => {
           />
 
           <LayerGroup>
-            {players.map((player, i) => <Player key={i} player={player} zoom={zoom} />)}
+            <PlayerMarkers zoom={zoom} />
           </LayerGroup>
 
           <LayerGroup>
