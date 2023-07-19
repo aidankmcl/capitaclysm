@@ -8,6 +8,7 @@ type Props = PropsWithChildren<{
   disabled?: boolean;
   style?: JoyProps['variant'];
   onClick?: JoyProps['onClick'];
+  size?: JoyProps['size'];
   sx?: JoyProps['sx'];
 }>
 
@@ -17,6 +18,7 @@ export const Button: FC<Props> = (props) => {
       variant={props.style}
       disabled={props.disabled}
       onClick={props.onClick}
+      size={props.size}
       sx={props.sx}
     >
       {props.children}
