@@ -25,7 +25,7 @@ export const Input: FC<Props> = (props) => {
       placeholder={props.placeholder}
       startDecorator={props.label && (<>
         <label htmlFor={id}>
-          <Typography level="body2" sx={{ mr: 1, textTransform: 'uppercase' }}>{props.label}</Typography>
+          <Typography level="body4" sx={{ mr: 1 }}>{props.label}</Typography>
         </label>
         <Divider orientation="vertical" />
       </>)}

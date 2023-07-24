@@ -1,16 +1,17 @@
 
-import { FC } from "react";
+import { FC } from 'react';
+import { Typography } from '@mui/joy';
 
-import { PlayerList } from "../players";
-import { selectors, useAppSelector } from "~/store";
-import { Tabs } from "~/components";
-import { Typography } from "@mui/joy";
-import { MoveControls } from "./move";
+import { selectors, useAppSelector } from '~/store';
+import { Tabs } from '~/components';
+
+import { PlayerList } from './players';
+import { Move } from './move';
+import { PropertiesList } from './properties';
 
 export const Controls: FC = () => {
-  const players = useAppSelector(selectors.player.selectPlayers);
-  const activePlayerID = useAppSelector(selectors.player.selectActivePlayerID);
-  const clientPlayerID = useAppSelector(selectors.player.selectClientPlayerID);
+  const activePlayerID = useAppSelector(selectors.players.selectActivePlayerID);
+  const clientPlayerID = useAppSelector(selectors.players.selectClientPlayerID);
 
   return <Tabs 
     tabLabels={[
@@ -20,8 +21,9 @@ export const Controls: FC = () => {
       <Typography>Gambling</Typography>
     ]}
     tabContents={[
-      <MoveControls players={players} activePlayerID={activePlayerID} clientPlayerID={clientPlayerID} />,
-      <PlayerList players={players} activePlayerID={activePlayerID} />
+      <Move activePlayerID={activePlayerID} clientPlayerID={clientPlayerID} />,
+      <PlayerList activePlayerID={activePlayerID} />,
+      <PropertiesList />
     ]}
-  />
-}
+  />;
+};

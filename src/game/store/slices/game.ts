@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { v4 } from 'uuid';
 
 import { actions as shared } from './sharedActions';
-import { actions as playerActions } from './player';
+import { actions as playerActions } from './players';
 
 
 // Define a type for the slice state
@@ -30,7 +30,7 @@ export const gameSlice = createSlice({
     builder
       .addCase(shared.syncState, (state, action) => {
         return {
-          ...action.payload.games,
+          ...action.payload.game,
           clientIsHost: state.clientIsHost
         };
       })
@@ -55,7 +55,5 @@ export const gameSlice = createSlice({
 });
 
 export const actions = gameSlice.actions;
-
-export const selectors = {};
 
 export default gameSlice.reducer;

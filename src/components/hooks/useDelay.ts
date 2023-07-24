@@ -3,7 +3,7 @@ import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
 
 type ReturnType = [boolean, Dispatch<SetStateAction<boolean>>];
 
-export const useDelay = (duration: number, delay: number = 200): ReturnType => {
+export const useDelay = (duration: number, delay = 200): ReturnType => {
   const [internalStatus, setInternalStatus] = useState(false);
   const [userStatus, setUserStatus] = useState(false);
 
@@ -27,7 +27,7 @@ export const useDelay = (duration: number, delay: number = 200): ReturnType => {
       setInternalStatus(false);
       setUserStatus(false);
     }, duration);
-  }, [internalStatus])
+  }, [internalStatus]);
 
   return [internalStatus, setUserStatus];
 };

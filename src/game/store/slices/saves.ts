@@ -23,7 +23,7 @@ export const savesSlice = createSlice({
     builder
       .addCase(shared.save, (state, action) => {
         const { saves, ...rest } = action.payload;
-        const gameID = rest.games.id;
+        const gameID = rest.game.id;
 
         if (!gameID) return;
         state.items[gameID] = rest;
@@ -38,7 +38,5 @@ export const savesSlice = createSlice({
 });
 
 export const actions = savesSlice.actions;
-
-export const selectors = {};
 
 export default savesSlice.reducer;

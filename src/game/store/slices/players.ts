@@ -1,10 +1,10 @@
 
-import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import { RootState } from '~/store';
-import { actions as shared } from './sharedActions';
 import { generateRadialBackground } from '~/components';
 
+import { actions as sharedActions } from './sharedActions';
+import { actions as dealActions } from './deals';
 import { locations } from '../../components/map/data/locations';
 
 export type PlayerData = {
@@ -16,7 +16,7 @@ export type PlayerData = {
   color: string;
   locationIndex: number;
   icon: 'car' | 'iron' | 'snake';
-  propertyIDs: string[];
+  ownedPropertyIndices: number[];
 }
 
 // Define a type for the slice state
@@ -35,16 +35,30 @@ const initialState: PlayerState = {
   clientPlayerID: undefined
 };
 
+const rollDice = (numDice = 2): number => new Array(numDice)
+  .fill(0)
+  .reduce((acc) => acc + Math.ceil(Math.random() * 6), 0);
+
 export const playerSlice = createSlice({
   name: 'players',
   initialState,
   extraReducers: (builder) => {
     builder
-      .addCase(shared.syncState, (state, action) => {
+      .addCase(sharedActions.syncState, (state, action) => {
         return {
           ...action.payload.players,
           clientPlayerID: state.clientPlayerID
         };
+      })
+      .addCase(dealActions.close, (state, action) => {
+        const { locationIndex, owners, status } = action.payload;
+        if (status !== 'accepted') return;
+
+        owners.forEach(({ playerID }) => {
+          if (!state.items[playerID].ownedPropertyIndices.includes(locationIndex)) {
+            state.items[playerID].ownedPropertyIndices.push(locationIndex);
+          }
+        });
       });
   },
   reducers: {
@@ -60,7 +74,7 @@ export const playerSlice = createSlice({
         color: generateRadialBackground(),
         money: 1500,
         locationIndex: 0,
-        propertyIDs: []
+        ownedPropertyIndices: []
       };
 
       state.items[player.id] = player;
@@ -81,32 +95,33 @@ export const playerSlice = createSlice({
       const playerID = action.payload;
       state.activePlayerID = playerID;
     },
-    movePlayer: (state, action: PayloadAction<{ playerID: string, steps: number}>) => {
-      const { playerID, steps } = action.payload;
-
-      const player = state.items[playerID]; 
-      state.items[playerID].locationIndex = ((player.locationIndex + steps) % locations.length);
+    movePlayer: {
+      reducer: (state, action: PayloadAction<{ playerID: string, steps: number}>) => {
+        const { playerID, steps } = action.payload;
+  
+        const player = state.items[playerID]; 
+        state.items[playerID].locationIndex = ((player.locationIndex + steps) % locations.length);
+      },
+      prepare: (payload: { playerID: string, steps?: number }) => {
+        const steps = payload.steps || rollDice();
+        return {
+          payload: {
+            ...payload,
+            steps
+          }
+        };
+      }
     },
     endTurn: (state) => {
       const currentActivePlayerID = state.activePlayerID;
       const activePlayerIndex = state.playerIDs.findIndex(playerID => currentActivePlayerID === playerID);
-      const nextPlayerIndex = activePlayerIndex + 1 % state.playerIDs.length;
+      const nextPlayerIndex = (activePlayerIndex + 1) % state.playerIDs.length;
+      console.log('next player?', currentActivePlayerID, activePlayerIndex, nextPlayerIndex, state.playerIDs);
       state.activePlayerID = state.playerIDs[nextPlayerIndex];
     }
   },
 });
 
 export const actions = playerSlice.actions;
-
-const selectPlayerItems = (state: RootState) => state.players.items;
-const selectPlayerIDs = (state: RootState) => state.players.playerIDs;
-
-export const selectors = {
-  selectPlayers: createSelector([selectPlayerItems, selectPlayerIDs], (playerItems, playerIDs) => {
-    return playerIDs.map(id => playerItems[id]);
-  }),
-  selectActivePlayerID: (state: RootState) => state.players.activePlayerID,
-  selectClientPlayerID: (state: RootState) => state.players.clientPlayerID
-};
 
 export default playerSlice.reducer;

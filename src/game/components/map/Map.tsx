@@ -17,10 +17,10 @@ import { getPaddedBounds } from './map-helpers/utils';
 const paddedBounds = getPaddedBounds(waypointData.bounds.topLeft, waypointData.bounds.bottomRight);
 
 const PlayerMarkers = (props: { zoom: number }) => {
-  const players = useAppSelector(selectors.player.selectPlayers);
+  const players = useAppSelector(selectors.players.selectPlayers);
 
-  return players.map((player, i) => <Player key={i} player={player} zoom={props.zoom} />)
-}
+  return players.map((player, i) => <Player key={i} player={player} zoom={props.zoom} />);
+};
 
 export const Map: FC = () => {
   const [map, setMap] = useState<LeafletMap | null>(null);

@@ -22,8 +22,8 @@ export const Player: FC<PlayerProps> = (props) => {
   const [remainingWaypoints, setRemainingWaypoints] = useState<Coordinate[]>([]);
 
   useOnce(() => {
-    if (!currentPos) setCurrentPos(getCoordsFromLocationIndex(props.player.locationIndex))
-  }, [props.player.locationIndex])
+    if (!currentPos) setCurrentPos(getCoordsFromLocationIndex(props.player.locationIndex));
+  }, [props.player.locationIndex]);
 
   useEffect(() => {
     setTargetLocation(props.player.locationIndex);

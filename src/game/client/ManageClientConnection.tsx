@@ -8,7 +8,7 @@ import { Input, Button } from '~/components';
 
 
 export const ManageClientConnection = () => {
-  const clientPlayerID = useAppSelector(selectors.player.selectClientPlayerID);
+  const clientPlayerID = useAppSelector(selectors.players.selectClientPlayerID);
 
   const { connect, connection, disconnect } = usePeer();
 
@@ -36,7 +36,7 @@ export const ManageClientConnection = () => {
       </Stack>
 
       <Button
-        style="solid"
+        variant="solid"
         disabled={clientName.length < 3}
         onClick={() => hostIDInput && connect(hostIDInput, clientName)}
       >

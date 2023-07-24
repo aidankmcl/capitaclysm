@@ -6,7 +6,8 @@ type JoyProps = Parameters<typeof JoyButton>[0];
 
 type Props = PropsWithChildren<{
   disabled?: boolean;
-  style?: JoyProps['variant'];
+  color?: JoyProps['color'];
+  variant?: JoyProps['variant'];
   onClick?: JoyProps['onClick'];
   size?: JoyProps['size'];
   sx?: JoyProps['sx'];
@@ -15,7 +16,8 @@ type Props = PropsWithChildren<{
 export const Button: FC<Props> = (props) => {
   return (
     <JoyButton
-      variant={props.style}
+      color={props.color}
+      variant={props.variant}
       disabled={props.disabled}
       onClick={props.onClick}
       size={props.size}

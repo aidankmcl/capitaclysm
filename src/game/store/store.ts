@@ -1,21 +1,28 @@
 import { configureStore } from '@reduxjs/toolkit';
 
 import gamesReducer from './slices/game';
-import locationReducer from './slices/location';
-import playerReducer from './slices/player';
+import locationReducer from './slices/locations';
+import playerReducer from './slices/players';
 import savesReducer from './slices/saves';
+import notificationsReducer from './slices/notifications';
+import dealsReducer from './slices/deals';
 
-import { syncPeers } from './middleware/syncPeers';
+import { forwardActionsToHost, broadcastStateChange } from './middlewares';
+import { listenerMiddleware } from './listeners';
+
 
 export const store = configureStore({
   reducer: {
-    games: gamesReducer,
+    game: gamesReducer,
     locations: locationReducer,
     players: playerReducer,
-    saves: savesReducer
+    saves: savesReducer,
+    notifications: notificationsReducer,
+    deals: dealsReducer
   },
-  middleware: [syncPeers]
+  middleware: (getDefaultMiddleware) => [forwardActionsToHost, listenerMiddleware.middleware, ...getDefaultMiddleware(), broadcastStateChange]
 });
+
 
 // Infer the `RootState` and `AppDispatch` types from the store itself
 export type RootState = ReturnType<typeof store.getState>;

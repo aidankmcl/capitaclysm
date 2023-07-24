@@ -18,7 +18,7 @@ export const List: FC<Props> = (props) => {
   return <JoyList aria-label={props.title ?? 'list'}>
     {props.items.map((item, i) => (
       <ListItem key={i}>
-        {item.decorator ?? <ListItemDecorator>{item.decorator}</ListItemDecorator>}
+        {item.decorator && <ListItemDecorator>{item.decorator}</ListItemDecorator>}
         <ListItemContent>{item.content}</ListItemContent>
         {props.divider && i < props.items.length - 1 && <ListDivider inset={props.divider} />}
       </ListItem>

@@ -1,39 +1,31 @@
 
 import { FC } from 'react';
 import { useDispatch } from 'react-redux';
-import { Chip, ColorPaletteProp, Stack, Typography, Avatar as JoyAvatar } from '@mui/joy';
+import { Chip, Stack, Typography, Avatar as JoyAvatar } from '@mui/joy';
 
-import { Avatar, List } from '~/components';
-import { PlayerData, actions } from '~/store';
+import { Avatar, List, Money } from '~/components';
+import { actions, selectors, useAppSelector } from '~/store';
 import { locations } from '~/data/map';
 
 type Props = {
-  players: PlayerData[];
   activePlayerID?: string;
 }
 
 export const PlayerList: FC<Props> = (props) => {
-  const { players, activePlayerID } = props;
+  const { activePlayerID } = props;
   
+  const players = useAppSelector(selectors.players.selectPlayers);
   const dispatch = useDispatch();
 
-  return <List items={players.map(player => {
-    const moneyColor: ColorPaletteProp = player.money > 1000
-      ? 'success'
-      : player.money > 500
-        ? 'warning'
-        : 'danger';
-    
+  return <List items={players.map(player => {    
     const location = locations[player.locationIndex];
 
     return {
       decorator: <Avatar style={{ flexShrink: 0 }} player={player} activePlayerID={activePlayerID} />,
       content: (
         <Stack direction="row" spacing={2} sx={{ marginLeft: '15px', alignItems: 'center' }} onClick={() => dispatch(actions.player.setActivePlayer(player.id))}>
-          <Typography fontWeight="bold" level="h6" overflow="hidden" textOverflow="ellipsis" noWrap>{player.name}</Typography>
-          <Chip color={moneyColor} variant="soft" size="lg">
-            <Typography color={moneyColor} fontWeight="bold">${player.money}</Typography>
-          </Chip>
+          <Typography level="h6" overflow="hidden" textOverflow="ellipsis" noWrap>{player.name}</Typography>
+          <Money amount={player.money} size="lg" />
           <Chip 
             variant="outlined"
             color="neutral"

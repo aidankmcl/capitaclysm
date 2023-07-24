@@ -88,7 +88,7 @@ export const Tabs: FC<Props> = (props) => {
             background: 'var(--bg)',
             boxShadow: '0 0 0 100vmax var(--bg)',
             clipPath: 'inset(0 -100vmax)',
-            px: 4,
+            px: 2,
             py: 2,
           })}
         >
@@ -101,4 +101,4 @@ export const Tabs: FC<Props> = (props) => {
       </JoyTabs>
     </Box>
   );
-} 
+}; 

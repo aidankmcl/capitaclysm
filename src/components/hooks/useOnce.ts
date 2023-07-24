@@ -5,7 +5,7 @@ export const useOnce = (func: EffectCallback, deps?: unknown[]) => {
   const cleanupRef = useRef<ReturnType<EffectCallback>>(() => undefined);
 
   useEffect(() => {
-    if (!initRef.current && func && (!deps || deps.every((d) => typeof d !== undefined))) {
+    if (!initRef.current && func && (!deps || deps.every((d) => typeof d !== 'undefined'))) {
       initRef.current = true;
       cleanupRef.current = func();
     }

@@ -1,5 +1,5 @@
 import { DataConnection } from 'peerjs';
-import { RootState, SYNC_EVENT_NAME } from '~/store';
+import { FORWARD_ACTION_EVENT_NAME, RootState, SYNC_EVENT_NAME } from '~/store';
 
 type ConnectionToggleEvent = { connectionID: string };
 type ConnectionEvent = { connection: DataConnection };
@@ -70,7 +70,8 @@ export const createCallback = <
 // Data callback handling
 type DataPayloads = {
   move: { playerID: string, steps: number },
-  [SYNC_EVENT_NAME]: RootState
+  [SYNC_EVENT_NAME]: RootState,
+  [FORWARD_ACTION_EVENT_NAME]: unknown
 }
 
 export const sendData = <

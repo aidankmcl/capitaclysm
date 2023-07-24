@@ -584,9 +584,7 @@ export const locations: Location[] = [
   },
 ];
 
-type LocationsByName = { [K: string]: Location };
+export const getLocationByIndex = (index: number | undefined) => {
+  return index ? locations[index] : undefined;
+};
 
-export const locationsByName: { [K: string]: Location } = locations.reduce((acc, next) => {
-  acc[next.name] = next;
-  return acc;
-}, {} as LocationsByName);

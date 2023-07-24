@@ -17,7 +17,7 @@ type PlayerMarkerProps = {
 }
 
 export const PlayerMarker: FC<PlayerMarkerProps> = (props) => {
-  const activePlayerID = useAppSelector(selectors.player.selectActivePlayerID);
+  const activePlayerID = useAppSelector(selectors.players.selectActivePlayerID);
 
   const fontSize = Math.round(scaleFont(props.zoom) * 0.5);
   const marker = renderToStaticMarkup(<Avatar player={props.player} fontSize={fontSize} center activePlayerID={activePlayerID} />);
