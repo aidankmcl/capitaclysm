@@ -53,16 +53,18 @@ export const dealSlice = createSlice({
 
       state.pending[deal.id] = deal;
     },
-    close: (state, action: PayloadAction<{ id: string, status: PropertyDeal['status'], locationIndex: number, owners: LocationData['owners'] }>) => {
-      const { id, status } = action.payload;
-      const deal = state.pending[id];
+    close: (state, action: PayloadAction<{ id: string, status: PropertyDeal['status'], deal: PropertyDeal, owners: LocationData['owners'] }>) => {
+      const { id, status, deal } = action.payload;
       delete state.pending[id];
-      state.properties.push({
-        ...deal,
-        status
-      });
+      
+      if (deal && status === "accepted") {
+        state.properties.push({
+          ...deal,
+          status
+        });
+      }
     }
-  }
+  },
 });
 
 export const actions = dealSlice.actions;

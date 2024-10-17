@@ -58,13 +58,13 @@ export const locationSlice = createSlice({
         });
       })
       .addCase(dealActions.close, (state, action) => {
-        const { locationIndex, owners } = action.payload;
+        const { deal: { locationIndex }, owners } = action.payload;
 
         state.items[locationIndex] = {
           ...state.items[locationIndex],
           owners
         }
-      })
+      });
   },
   reducers: {},
 });

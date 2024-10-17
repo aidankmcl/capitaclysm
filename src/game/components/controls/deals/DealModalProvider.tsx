@@ -17,7 +17,7 @@ export const DealModalProvider: FC = () => {
 
   const close = (status: PropertyDeal['status']) => {
     const currentOwners = activeDeal.location.owners;
-    const percentage = Math.floor(100 / (currentOwners.length + 1)); // for now make it equal across owners
+    const percentage = 0.01 * Math.floor(100 / (currentOwners.length + 1)); // for now make it equal across owners
 
     const owners = currentOwners.reduce((acc, next) => {
       acc.push({ ...next, percentOwnership: percentage });
@@ -28,7 +28,7 @@ export const DealModalProvider: FC = () => {
       actions.deals.close({
         id: activeDeal.id,
         status,
-        locationIndex: activeDeal.locationIndex,
+        deal: activeDeal,
         owners
       })
     );

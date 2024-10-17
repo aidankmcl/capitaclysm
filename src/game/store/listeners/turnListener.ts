@@ -13,6 +13,8 @@ export const addTurnListener = (startAppListening: AppStartListening) => {
       const { playerID } = action.payload;
       const newLocation = selectors.locations.getPlayerLocation(state, playerID);
       if (!newLocation) return;
+      
+      let offerDeal = false;
 
       switch (newLocation.type) {
         case 'event':
@@ -21,17 +23,38 @@ export const addTurnListener = (startAppListening: AppStartListening) => {
         case 'railroad':
         case 'utility':
         case 'property':
-          if (newLocation.owners.length) {
-            // pay rent
+          if (!newLocation.owners.length) {
+            offerDeal = true;
           } else {
-            listenerApi.dispatch(actions.deals.offer({
-              locationIndex: newLocation.locationIndex,
-              price: newLocation.price,
-              playerID
-            }));
-    
-            await listenerApi.take(actions.deals.close.match);
+            // pay rent
           }
+      }
+
+      if (offerDeal) {
+        listenerApi.dispatch(actions.deals.offer({
+          locationIndex: newLocation.locationIndex,
+          price: newLocation.price,
+          playerID
+        }));
+  
+        const [closeAction] = await listenerApi.take(actions.deals.close.match);
+        const { deal } = closeAction.payload;
+        console.log("test", JSON.stringify(deal, null, 2));
+  
+        if (closeAction.payload.status === "accepted") {
+          console.log("wow", closeAction.payload.owners.length)
+          const otherOwners = closeAction.payload.owners.filter((owner) => owner.playerID !== playerID);
+  
+          if (otherOwners.length) {
+            await Promise.all(otherOwners.map((owner) => {
+              const owed = owner.percentOwnership * (deal.price || 0);
+              console.log(owner.percentOwnership, deal.price, owed);
+              return listenerApi.dispatch(actions.player.sendMoney({ fromPlayerID: playerID, toPlayerID: owner.playerID, delta: owed }))
+            }))
+          } else {
+            await listenerApi.dispatch(actions.player.sendMoney({ fromPlayerID: playerID, toPlayerID: "", delta: deal.price }))
+          }
+        }
       }
 
       listenerApi.dispatch(actions.player.endTurn());

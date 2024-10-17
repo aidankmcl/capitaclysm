@@ -5,7 +5,6 @@ import { actions } from '../slices';
 export const FORWARD_ACTION_EVENT_NAME = 'redux-send-upstream';
 
 const sendEventUpstream = (action: Action) => {
-  console.log('send upstream');
   const customEvt = new CustomEvent(FORWARD_ACTION_EVENT_NAME, { detail: action });
   window.dispatchEvent(customEvt);
 };
@@ -19,7 +18,7 @@ const localActions = [
 
 /** This middleware comes before redux-sagas middleware to forward all action processing to game host */
 export const forwardActionsToHost: Middleware = store => next => (action: Action<unknown>) => {
-  console.group('forward', action.type);
+  console.group('forward', action.type); 
   const originalState = store.getState() as RootState;
   const isHost = originalState.game.clientIsHost;
   let result;

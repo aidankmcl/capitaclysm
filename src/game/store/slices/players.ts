@@ -51,7 +51,7 @@ export const playerSlice = createSlice({
         };
       })
       .addCase(dealActions.close, (state, action) => {
-        const { locationIndex, owners, status } = action.payload;
+        const { deal: { locationIndex }, owners, status } = action.payload;
         if (status !== 'accepted') return;
 
         owners.forEach(({ playerID }) => {
@@ -112,11 +112,30 @@ export const playerSlice = createSlice({
         };
       }
     },
+    sendMoney: (state, action: PayloadAction<{ fromPlayerID: string, toPlayerID: string, delta: number }>) => {
+      const { fromPlayerID, toPlayerID, delta } = action.payload;
+      const fromPlayer = state.items[fromPlayerID];
+      const toPlayer = state.items[toPlayerID];
+      if (fromPlayer) {
+        console.log("from player", fromPlayer.id, fromPlayer.name, fromPlayer.money - delta);
+        state.items[fromPlayer.id] = {
+          ...fromPlayer,
+          money: fromPlayer.money - delta
+        }
+      }
+
+      if (toPlayer) {
+        console.log("to player", toPlayer.id, toPlayer.name, toPlayer.money + delta);
+        state.items[toPlayer.id] = {
+          ...toPlayer,
+          money: toPlayer.money + delta
+        }
+      }
+    },
     endTurn: (state) => {
       const currentActivePlayerID = state.activePlayerID;
       const activePlayerIndex = state.playerIDs.findIndex(playerID => currentActivePlayerID === playerID);
       const nextPlayerIndex = (activePlayerIndex + 1) % state.playerIDs.length;
-      console.log('next player?', currentActivePlayerID, activePlayerIndex, nextPlayerIndex, state.playerIDs);
       state.activePlayerID = state.playerIDs[nextPlayerIndex];
     }
   },

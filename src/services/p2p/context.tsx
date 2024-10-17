@@ -44,7 +44,6 @@ const connect = (peer: Peer, hostCode: string, name: string) => {
   connection.on('open', () => {
     window.addEventListener(FORWARD_ACTION_EVENT_NAME, (evt) => {
       const customEvent = evt as CustomEvent;
-      console.log('sending to host', customEvent.detail);
       connection.send({ action: FORWARD_ACTION_EVENT_NAME, data: customEvent.detail });
     });
     sendConnectionEvent('client', 'open', { connectionID });
