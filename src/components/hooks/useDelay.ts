@@ -17,7 +17,7 @@ export const useDelay = (duration: number, delay = 200): ReturnType => {
     delayTimerRef.current = window.setTimeout(() => {
       setInternalStatus(true);
     }, delay);
-  }, [userStatus]);
+  }, [delay, userStatus]);
 
   useEffect(() => {
     if (!internalStatus) return;
@@ -27,7 +27,7 @@ export const useDelay = (duration: number, delay = 200): ReturnType => {
       setInternalStatus(false);
       setUserStatus(false);
     }, duration);
-  }, [internalStatus]);
+  }, [duration, internalStatus]);
 
   return [internalStatus, setUserStatus];
 };

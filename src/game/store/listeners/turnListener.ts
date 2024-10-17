@@ -14,22 +14,28 @@ export const addTurnListener = (startAppListening: AppStartListening) => {
       const newLocation = selectors.locations.getPlayerLocation(state, playerID);
       if (!newLocation) return;
 
+      const isRent = newLocation.owners.length > 0;
+
       switch (newLocation.type) {
         case 'event':
           // something
           break;
-        case 'railroad':
         case 'utility':
+        case 'railroad':
         case 'property':
-          if (newLocation.owners.length) {
-            // pay rent
-          } else {
+          // Only pay rent if you're not an owner
+          if (!newLocation.owners.find(({ ownerID }) => ownerID === playerID)) {
             listenerApi.dispatch(actions.deals.offer({
               locationIndex: newLocation.locationIndex,
-              price: newLocation.price,
-              playerID
+              price: isRent
+                ? newLocation.type === 'utility'
+                  ? action.payload.steps * newLocation.rentMultiplier
+                  : newLocation.rent || 0
+                : newLocation.price,
+              playerID,
+              isRent
             }));
-    
+      
             await listenerApi.take(actions.deals.close.match);
           }
       }
@@ -59,5 +65,5 @@ export const addTurnListener = (startAppListening: AppStartListening) => {
       // }
     },
   });
-}
+};
 

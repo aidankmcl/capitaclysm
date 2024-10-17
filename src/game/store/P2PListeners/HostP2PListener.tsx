@@ -36,13 +36,13 @@ export const HostP2PListener = () => {
     if (code && hostCheck) {
       addCallbacks([childOpenCB, childCloseCB]);
       dispatch(actions.game.newGame()); // TODO: Remove when there's a button to begin game
-      dispatch(actions.player.addPlayer({ connectionID: code, name: 'Mr. Monopoly' }));
+      dispatch(actions.player.addPlayer({ connectionID: '123', name: 'Mr. Monopoly' }));
     }
   }, [dispatch, addCallbacks, code, hostCheck]);
 
   useEffect(() => {
     if (code && !clientPlayerID) {
-      const hostPlayer = players.find(player => player.id === code);
+      const hostPlayer = players.find(player => player.id === '123');
       if (hostPlayer) dispatch(actions.player.setClientPlayer(hostPlayer.id));
     }
   }, [players, code]);

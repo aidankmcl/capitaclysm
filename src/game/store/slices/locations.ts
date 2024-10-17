@@ -3,24 +3,40 @@ import { createSlice } from '@reduxjs/toolkit';
 import { actions as gameActions } from './game';
 import { actions as dealActions } from './deals';
 import { actions as sharedActions } from './sharedActions';
-import { Location, locations } from '~/data/map';
+import { locations } from '~/data/map';
 
 type Owner = {
-  playerID: string;
+  ownerID: string;
   percentOwnership: number;
 }
 
-export type LocationData = {
+type LocationBase = {
   name: string;
-  type: Location['type'];
   locationIndex: number; // index in `locations` fixed list
   created: number;
   color: string;
   description: string;
-  rent?: number;
-  price: number;
   owners: Owner[];
 }
+
+type Property = LocationBase & {
+  type: 'property' | 'railroad';
+  rent: number;
+  price: number;
+}
+
+type Utility = LocationBase & {
+  type: 'utility';
+  rentMultiplier: number;
+  price: number;
+}
+
+type Event = LocationBase & {
+  type: 'event';
+  pay: number;
+}
+
+export type LocationData = Property | Utility | Event;
 
 // Define a type for the slice state
 interface LocationState {
@@ -42,19 +58,40 @@ export const locationSlice = createSlice({
       })
       .addCase(gameActions.newGame, (state) => {
         locations.forEach((location, i) => {
-          const locationData: LocationData = {
-            type: location.type,
+          const baseData: LocationBase = {
             locationIndex: i,
             created: Date.now(),
             color: location.color,
             name: location.name,
             description: location.description,
-            rent: location.type === 'property' ? location.baseRent : location.value || 0,
-            price: location.value || 0,
-            owners: []
+            owners: location.type !== 'event' ? [{ ownerID: '123', percentOwnership: 100 }] : []
           };
-  
-          state.items.push(locationData);
+
+          switch (location.type) {
+            case 'event':
+              state.items.push({
+                ...baseData,
+                type: location.type,
+                pay: location.value || 0
+              });
+              break;
+            case 'utility':
+              state.items.push({
+                ...baseData,
+                type: location.type,
+                rentMultiplier: location.rent1Multiplier,
+                price: location.value || 0
+              });
+              break;
+            case 'railroad':
+            case 'property':
+              state.items.push({
+                ...baseData,
+                type: location.type,
+                rent: location.type === 'property' ? location.baseRent : location.rent1,
+                price: location.value || 0
+              });
+          }
         });
       })
       .addCase(dealActions.close, (state, action) => {
@@ -63,8 +100,8 @@ export const locationSlice = createSlice({
         state.items[locationIndex] = {
           ...state.items[locationIndex],
           owners
-        }
-      })
+        };
+      });
   },
   reducers: {},
 });

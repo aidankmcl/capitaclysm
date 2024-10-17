@@ -51,12 +51,20 @@ export const playerSlice = createSlice({
         };
       })
       .addCase(dealActions.close, (state, action) => {
-        const { locationIndex, owners, status } = action.payload;
+        const { locationIndex, owners, status, playerID, price, isRent } = action.payload;
         if (status !== 'accepted') return;
 
-        owners.forEach(({ playerID }) => {
-          if (!state.items[playerID].ownedPropertyIndices.includes(locationIndex)) {
-            state.items[playerID].ownedPropertyIndices.push(locationIndex);
+        console.log(state.items[playerID].money, price)
+        state.items[playerID].money -= price;
+
+        owners.forEach(({ ownerID, percentOwnership }) => {
+          console.log(ownerID);
+          if (!state.items[ownerID].ownedPropertyIndices.includes(locationIndex)) {
+            state.items[ownerID].ownedPropertyIndices.push(locationIndex);
+          }
+
+          if (isRent) {
+            state.items[ownerID].money += Math.floor((percentOwnership / 100) * price);
           }
         });
       });

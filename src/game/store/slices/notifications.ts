@@ -21,14 +21,14 @@ const initialState: NotificationsState = {
   list: []
 };
 
-export const notificationssSlice = createSlice({
+export const notificationsSlice = createSlice({
   name: 'notificationss',
   initialState,
   extraReducers: (builder) => {
     builder
       .addCase(sharedActions.syncState, (_, action) => {
         return action.payload.notifications;
-      })
+      });
   },
   reducers: {
     addNotification: (state, action: PayloadAction<Notification>) => {
@@ -37,6 +37,6 @@ export const notificationssSlice = createSlice({
   },
 });
 
-export const actions = notificationssSlice.actions;
+export const actions = notificationsSlice.actions;
 
-export default notificationssSlice.reducer;
+export default notificationsSlice.reducer;

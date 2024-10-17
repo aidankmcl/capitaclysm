@@ -1,0 +1,102 @@
+<!-- <html>
+  <body>
+    <script src="http://code.highcharts.com/highcharts.js"></script>
+
+    <div id="container" style="height: 300px"></div>
+    <div id="drag"></div>
+    <div id="drop"></div>
+
+    <script src="./index.js"></script>
+  </body>
+</html> -->
+
+
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Deterministic Fake Stock Data Chart</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <div id="container"></div>
+  <script src="./index.js"></script>
+
+  <canvas id="stockChart" width="800" height="400"></canvas>
+  <script>
+    // Include the generateFakeStockData function and SeededRandom class here or via a separate script
+
+    // Example parameters
+    const startDate = new Date('2023-01-01T09:30:00Z').getTime();
+    const endDate = new Date('2023-01-31T16:00:00Z').getTime();
+    const stepSize = 60 * 60 * 1000; // 1 hour
+    const seed = 123456;
+
+    // Generate data
+    const fakeStockData = generateFakeStockData({
+      startDate,
+      endDate,
+      stepSize,
+      seed,
+      initialPrice: 150,
+      volatility: 1.5,
+      volumeRange: { min: 200000, max: 600000 },
+    });
+
+    // Prepare data for Chart.js
+    const labels = fakeStockData.map(data => data.date);
+    const closingPrices = fakeStockData.map(data => data.close);
+
+    // Create the chart
+    const ctx = document.getElementById('stockChart').getContext('2d');
+    const stockChart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: labels,
+        datasets: [{
+          label: 'Closing Price',
+          data: closingPrices,
+          borderColor: 'rgba(75, 192, 192, 1)',
+          borderWidth: 2,
+          fill: false,
+          tension: 0.1
+        }]
+      },
+      options: {
+        scales: {
+          x: {
+            display: true,
+            title: {
+              display: true,
+              text: 'Date'
+            },
+            ticks: {
+              maxRotation: 90,
+              minRotation: 45
+            }
+          },
+          y: {
+            display: true,
+            title: {
+              display: true,
+              text: 'Price ($)'
+            }
+          }
+        },
+        plugins: {
+          title: {
+            display: true,
+            text: 'Deterministic Fake Stock Closing Prices'
+          },
+          tooltip: {
+            mode: 'index',
+            intersect: false,
+          }
+        },
+        responsive: true,
+        maintainAspectRatio: false
+      }
+    });
+  </script>
+</body>
+</html>

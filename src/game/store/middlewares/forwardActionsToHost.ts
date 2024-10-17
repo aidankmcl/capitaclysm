@@ -19,7 +19,6 @@ const localActions = [
 
 /** This middleware comes before redux-sagas middleware to forward all action processing to game host */
 export const forwardActionsToHost: Middleware = store => next => (action: Action<unknown>) => {
-  console.group('forward', action.type);
   const originalState = store.getState() as RootState;
   const isHost = originalState.game.clientIsHost;
   let result;
@@ -31,6 +30,5 @@ export const forwardActionsToHost: Middleware = store => next => (action: Action
     sendEventUpstream(action);
   }
 
-  console.groupEnd();
   return result;
 };

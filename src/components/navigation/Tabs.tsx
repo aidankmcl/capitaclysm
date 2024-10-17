@@ -5,6 +5,7 @@ import Box from '@mui/joy/Box';
 import TabList from '@mui/joy/TabList';
 import Tab, { tabClasses } from '@mui/joy/Tab';
 import TabPanel from '@mui/joy/TabPanel';
+import { Divider } from '@mui/joy';
 
 type Props = {
   tabLabels: JSX.Element[];
@@ -28,7 +29,7 @@ export const Tabs: FC<Props> = (props) => {
         aria-label="Pipeline"
         value={index}
         onChange={(_, value) => setIndex(value as number)}
-        sx={{ '--Tabs-gap': '0px' }}
+        sx={{ '--Tabs-gap': '0px', maxHeight: '100%' }}
       >
         <TabList
           variant="plain"
@@ -73,15 +74,7 @@ export const Tabs: FC<Props> = (props) => {
             </Tab>
           ))}
         </TabList>
-        <Box
-          sx={(theme) => ({
-            '--bg': theme.vars.palette.background.level3,
-            height: '1px',
-            background: 'var(--bg)',
-            boxShadow: '0 0 0 100vmax var(--bg)',
-            clipPath: 'inset(0 -100vmax)',
-          })}
-        />
+        <Divider />
         <Box
           sx={(theme) => ({
             '--bg': theme.vars.palette.background.surface,
@@ -90,10 +83,11 @@ export const Tabs: FC<Props> = (props) => {
             clipPath: 'inset(0 -100vmax)',
             px: 2,
             py: 2,
+            overflowY: 'auto'
           })}
         >
           {props.tabContents.map((content, i) => (
-            <TabPanel key={i} value={i}>
+            <TabPanel key={i} value={i} sx={{ overflow: 'auto', maxHeight: '100%' }}>
               {content}
             </TabPanel>
           ))}

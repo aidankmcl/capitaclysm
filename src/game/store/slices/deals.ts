@@ -10,6 +10,7 @@ export type PropertyDeal = {
   created: number;
   locationIndex: number;
   price: number;
+  isRent: boolean;
   playerID: string;
   ownerID?: string;
   status: 'pending' | 'accepted' | 'rejected';
@@ -35,25 +36,26 @@ export const dealSlice = createSlice({
     builder
       .addCase(sharedActions.syncState, (_, action) => {
         return action.payload.deals;
-      })
+      });
   },
   reducers: {
-    offer: (state, action: PayloadAction<{ locationIndex: number, playerID: string, price: number, properties?: LocationData[] }>) => {
-      const { locationIndex, playerID, price, properties } = action.payload;
+    offer: (state, action: PayloadAction<Pick<PropertyDeal, 'locationIndex' | 'playerID' | 'price' | 'properties' | 'isRent'>>) => {
+      const { locationIndex, playerID, price, isRent, properties } = action.payload;
 
       const deal: PropertyDeal = {
         id: v4(),
         created: Date.now(),
         locationIndex,
         price,
+        isRent,
         playerID,
         status: 'pending',
         properties
-      }
+      };
 
       state.pending[deal.id] = deal;
     },
-    close: (state, action: PayloadAction<{ id: string, status: PropertyDeal['status'], locationIndex: number, owners: LocationData['owners'] }>) => {
+    close: (state, action: PayloadAction<Pick<PropertyDeal, 'id' | 'playerID' | 'price' | 'status' | 'isRent' | 'locationIndex'> & { owners: LocationData['owners'] }>) => {
       const { id, status } = action.payload;
       const deal = state.pending[id];
       delete state.pending[id];
