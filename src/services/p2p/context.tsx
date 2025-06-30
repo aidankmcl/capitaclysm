@@ -5,7 +5,7 @@ import { generateCode, getConnectionID } from "./utils";
 import { addCallbacks, sendConnectionEvent, sendData as sendDataEvent } from "./events";
 import { RootState, SYNC_EVENT_NAME, FORWARD_ACTION_EVENT_NAME } from "~/store";
 import { useOnce } from "~/hooks";
-import { isTradeChannel } from "../../game/services/trades";
+import { isTradeChannel } from "../trades/trades";
 
 
 const addPeerListeners = (peer: Peer) => {

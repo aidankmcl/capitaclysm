@@ -14,15 +14,16 @@ export default defineConfig({
   resolve: {
     alias: {
       '~/assets': resolve(__dirname, './src/assets'),
-      '~/ui': resolve(__dirname, './src/ui'),
+      "~/components": resolve(__dirname, "./src/components"),
+      '~/constants': resolve(__dirname, './src/constants'),
+      "~/data": resolve(__dirname, './src/data'),
       '~/game': resolve(__dirname, './src/game'),
-      '~/store': resolve(__dirname, './src/game/store'),
+      '~/hooks': resolve(__dirname, './src/hooks'),
       '~/pages': resolve(__dirname, './src/pages'),
       '~/services': resolve(__dirname, './src/services'),
-      '~/constants': resolve(__dirname, './src/constants'),
+      '~/store': resolve(__dirname, './src/store'),
+      '~/ui': resolve(__dirname, './src/ui'),
       '~/utils': resolve(__dirname, './src/utils'),
-      '~/hooks': resolve(__dirname, './src/hooks'),
-      "~/data/map": resolve(__dirname, './src/game/components/map/data'),
     }
   },
   plugins: [viteSvgr(), react()],

@@ -4,16 +4,17 @@ module.exports = {
   setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
   moduleNameMapper: {
     // Handle module aliases from tsconfig.json
-    '^~/ui$': '<rootDir>/src/ui',
-    '^~/game$': '<rootDir>/src/game',
-    '^~/pages$': '<rootDir>/src/pages',
-    '^~/store$': '<rootDir>/src/game/store',
-    '^~/constants$': '<rootDir>/src/constants',
-    '^~/utils$': '<rootDir>/src/utils',
-    '^~/hooks$': '<rootDir>/src/hooks',
-    '^~/data/map$': '<rootDir>/src/game/components/map/data',
     '^~/assets/(.*)$': '<rootDir>/src/assets/$1',
+    "~/components/(.*)$": "<rootDir>/src/components/$1",
+    "~/constants$": "<rootDir>/src/constants",
+    "~/data$": "<rootDir>/src/data",
+    "~/game$": "<rootDir>/src/game",
+    "~/hooks$": "<rootDir>/src/hooks",
+    "~/pages$": "<rootDir>/src/pages",
     '^~/services/(.*)$': '<rootDir>/src/services/$1',
+    "~/store$": "<rootDir>/src/store",
+    "~/ui$": "<rootDir>/src/ui",
+    "~/utils$": "<rootDir>/src/utils",
 
     // Mock CSS imports
     '\\.css$': 'identity-obj-proxy',

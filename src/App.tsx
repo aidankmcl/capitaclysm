@@ -5,7 +5,7 @@ import "@flaticon/flaticon-uicons/css/all/all.css";
 import { store } from "~/store";
 import { Pages } from "~/pages";
 import { capitaclysmTheme } from "./theme";
-import { colors, spacing } from "~/constants";
+import { COLORS, SPACING } from "~/constants";
 import { PeerProvider } from "./services/p2p";
 import "./App.css";
 
@@ -14,8 +14,8 @@ const generateCSSVariables = (variables: Record<string, string | number>) => Obj
   .join("\n");
 
 const variables = `:root {
-  ${generateCSSVariables(colors)}
-  ${generateCSSVariables(spacing)}
+  ${generateCSSVariables(COLORS)}
+  ${generateCSSVariables(SPACING)}
 }`;
 
 function App() {

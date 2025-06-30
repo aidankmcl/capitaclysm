@@ -1,7 +1,7 @@
 // import { useState } from 'react';
 
 import { Layout } from "~/ui";
-import { Map } from "../game/components/map";
+import { Map } from "../components/map";
 import { actions, useAppDispatch } from "~/store";
 import { useEffect, useRef } from "react";
 

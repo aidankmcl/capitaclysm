@@ -1,5 +1,7 @@
 import { DataConnection } from "peerjs";
+
 import { FORWARD_ACTION_EVENT_NAME, RootState, SYNC_EVENT_NAME } from "~/store";
+
 
 type ConnectionToggleEvent = { connectionID: string };
 type ConnectionEvent = { connection: DataConnection };
