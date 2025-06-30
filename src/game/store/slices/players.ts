@@ -1,11 +1,10 @@
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { generateRadialBackground } from "~/utils";
 
-import { generateRadialBackground } from '~/components';
-
-import { actions as sharedActions } from './sharedActions';
-import { actions as dealActions } from './deals';
-import { locations } from '../../components/map/data/locations';
+import { actions as sharedActions } from "./sharedActions";
+import { actions as stockActions } from "./stocks";
+import { locations } from "../../components/map/data/locations";
 
 export type PlayerData = {
   id: string;
@@ -15,7 +14,7 @@ export type PlayerData = {
   money: number;
   color: string;
   locationIndex: number;
-  icon: 'car' | 'iron' | 'snake';
+  icon: "car" | "iron" | "snake";
   ownedPropertyIndices: number[];
 }
 
@@ -40,7 +39,7 @@ const rollDice = (numDice = 2): number => new Array(numDice)
   .reduce((acc) => acc + Math.ceil(Math.random() * 6), 0);
 
 export const playerSlice = createSlice({
-  name: 'players',
+  name: "players",
   initialState,
   extraReducers: (builder) => {
     builder
@@ -50,23 +49,47 @@ export const playerSlice = createSlice({
           clientPlayerID: state.clientPlayerID
         };
       })
-      .addCase(dealActions.close, (state, action) => {
-        const { locationIndex, owners, status, playerID, price, isRent } = action.payload;
-        if (status !== 'accepted') return;
+      .addCase(sharedActions.finalizeTrade, (state, action) => {
+        const { playerAId, playerBId, playerAItems, playerBItems } = action.payload;
 
-        console.log(state.items[playerID].money, price)
-        state.items[playerID].money -= price;
+        const playerA = state.items[playerAId];
+        const playerB = state.items[playerBId];
 
-        owners.forEach(({ ownerID, percentOwnership }) => {
-          console.log(ownerID);
-          if (!state.items[ownerID].ownedPropertyIndices.includes(locationIndex)) {
-            state.items[ownerID].ownedPropertyIndices.push(locationIndex);
-          }
+        // 1. Handle Money Transfer
+        playerA.money = playerA.money - playerAItems.money + playerBItems.money;
+        playerB.money = playerB.money - playerBItems.money + playerAItems.money;
 
-          if (isRent) {
-            state.items[ownerID].money += Math.floor((percentOwnership / 100) * price);
-          }
-        });
+        // 2. Handle Property Transfer
+        // Remove properties from givers
+        playerA.ownedPropertyIndices = playerA.ownedPropertyIndices.filter(
+          (index) => !playerAItems.propertyIndices.includes(index)
+        );
+        playerB.ownedPropertyIndices = playerB.ownedPropertyIndices.filter(
+          (index) => !playerBItems.propertyIndices.includes(index)
+        );
+
+        // Add properties to receivers
+        playerA.ownedPropertyIndices.push(...playerBItems.propertyIndices);
+        playerB.ownedPropertyIndices.push(...playerAItems.propertyIndices);
+      })
+      .addCase(stockActions.buyStock, (state, action) => {
+        const { playerID, shares, price } = action.payload;
+        const totalCost = shares * price;
+        
+        if (state.items[playerID] && state.items[playerID].money >= totalCost) {
+          state.items[playerID].money -= totalCost;
+          console.log(`Player ${playerID} bought ${shares} shares for $${totalCost}`);
+        }
+      })
+      .addCase(stockActions.sellStock, (state, action) => {
+        const { playerID, symbol, shares, price } = action.payload;
+        
+        const totalProceeds = shares * price;
+        
+        if (state.items[playerID]) {
+          state.items[playerID].money += totalProceeds;
+          console.log(`Player ${playerID} sold ${shares} shares of ${symbol} for $${totalProceeds}`);
+        }
       });
   },
   reducers: {
@@ -78,7 +101,7 @@ export const playerSlice = createSlice({
         created: Date.now(),
         active: true,
         name,
-        icon: Math.random() > 0.5 ? 'car' : 'iron',
+        icon: Math.random() > 0.5 ? "car" : "iron",
         color: generateRadialBackground(),
         money: 1500,
         locationIndex: 0,
@@ -124,7 +147,7 @@ export const playerSlice = createSlice({
       const currentActivePlayerID = state.activePlayerID;
       const activePlayerIndex = state.playerIDs.findIndex(playerID => currentActivePlayerID === playerID);
       const nextPlayerIndex = (activePlayerIndex + 1) % state.playerIDs.length;
-      console.log('next player?', currentActivePlayerID, activePlayerIndex, nextPlayerIndex, state.playerIDs);
+      console.log("next player?", currentActivePlayerID, activePlayerIndex, nextPlayerIndex, state.playerIDs);
       state.activePlayerID = state.playerIDs[nextPlayerIndex];
     }
   },

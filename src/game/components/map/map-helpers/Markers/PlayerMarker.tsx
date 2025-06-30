@@ -1,13 +1,13 @@
-import { FC } from 'react';
-import { renderToStaticMarkup } from 'react-dom/server';
-import { Marker, Popup } from 'react-leaflet';
-import { DivIcon } from 'leaflet';
+import { FC } from "react";
+import { renderToStaticMarkup } from "react-dom/server";
+import { Marker, Popup } from "react-leaflet";
+import { DivIcon } from "leaflet";
 
-import { PlayerData, selectors, useAppSelector } from '~/store';
-import { Avatar } from '~/components';
+import { PlayerData, selectors, useAppSelector } from "~/store";
+import { Avatar } from "~/ui";
 
-import { Coordinate } from '../../data/locations';
-import { scaleFont } from '../utils';
+import { Coordinate } from "../../data/locations";
+import { scaleFont } from "../utils";
 
 
 type PlayerMarkerProps = {

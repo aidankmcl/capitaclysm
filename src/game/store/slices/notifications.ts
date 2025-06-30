@@ -1,12 +1,12 @@
-import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
-import { actions as sharedActions } from './sharedActions';
+import { actions as sharedActions } from "./sharedActions";
 
 type Notification = {
   created: number;
   title: string;
   content: string;
-  type: 'turn' | 'property' | 'payment';
+  type: "turn" | "property" | "payment";
   ownerPlayerID?: string;
   targetPlayerID?: string;
 }
@@ -22,7 +22,7 @@ const initialState: NotificationsState = {
 };
 
 export const notificationsSlice = createSlice({
-  name: 'notificationss',
+  name: "notificationss",
   initialState,
   extraReducers: (builder) => {
     builder

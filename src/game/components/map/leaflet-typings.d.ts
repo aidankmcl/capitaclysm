@@ -1,5 +1,5 @@
-import 'leaflet';
-import { LatLng, Control, ControlOptions, PathOptions } from 'leaflet';
+import "leaflet";
+import { LatLng, Control, ControlOptions, PathOptions } from "leaflet";
 
 type Options = ControlOptions & {
   waypoints: LatLng[];
@@ -16,7 +16,7 @@ type Options = ControlOptions & {
   createMarker: () => void
 }
 
-declare module 'leaflet' {
+declare module "leaflet" {
   const Routing: {
     control: (options: Options) => Control
   };

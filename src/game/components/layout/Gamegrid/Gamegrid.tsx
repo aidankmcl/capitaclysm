@@ -1,10 +1,9 @@
+import { FC, PropsWithChildren } from "react";
+import { Card, Sheet } from "@mui/joy";
 
-import { FC, PropsWithChildren } from 'react';
-import { Card, Sheet } from '@mui/joy';
+import { DealModalProvider } from "../../controls";
 
-import { DealModalProvider } from '../../controls/deals';
-
-import styles from './Gamegrid.module.css';
+import styles from "./Gamegrid.module.css";
 
 type Props = PropsWithChildren<{
   map?: JSX.Element;
@@ -13,7 +12,7 @@ type Props = PropsWithChildren<{
 }>
 
 export const Gamegrid: FC<Props> = (props) => {
-  return <Sheet className={styles.container} sx={{ background: 'var(--joy-palette-primary-500)' }}>
+  return <Sheet className={styles.container} sx={{ background: "var(--joy-palette-primary-500)" }}>
     <DealModalProvider />
 
     {props.children}

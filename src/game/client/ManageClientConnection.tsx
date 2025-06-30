@@ -1,10 +1,10 @@
 
-import { useState } from 'react';
-import { Stack } from '@mui/joy';
+import { useState } from "react";
+import { Stack } from "@mui/joy";
 
-import { selectors, useAppSelector } from '~/store';
-import { usePeer } from '~/services/p2p';
-import { Input, Button } from '~/components';
+import { selectors, useAppSelector } from "~/store";
+import { usePeer } from "~/services/p2p";
+import { Input, Button } from "~/ui";
 
 
 export const ManageClientConnection = () => {
@@ -12,12 +12,12 @@ export const ManageClientConnection = () => {
 
   const { connect, connection, disconnect } = usePeer();
 
-  const [hostIDInput, setHostIDInput] = useState('');
-  const [clientName, setClientName] = useState('');
+  const [hostIDInput, setHostIDInput] = useState("");
+  const [clientName, setClientName] = useState("");
 
   return (!connection ? (
     <Stack direction="column" spacing={2}>
-      <Stack direction={{ xs: 'column', lg: 'row' }} spacing={2} justifyContent="space-between">
+      <Stack direction={{ xs: "column", lg: "row" }} spacing={2} justifyContent="space-between">
         <Input
           label="Host Code"
           placeholder="4 character code"

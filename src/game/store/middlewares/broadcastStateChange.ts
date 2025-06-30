@@ -1,7 +1,7 @@
-import { Middleware } from '@reduxjs/toolkit';
-import { RootState } from '../store';
+import { Middleware } from "@reduxjs/toolkit";
+import { RootState } from "../store";
 
-export const SYNC_EVENT_NAME = 'redux-sync-peers';
+export const SYNC_EVENT_NAME = "redux-sync-peers";
 
 const syncEvent = (state: RootState) => {
   const customEvt = new CustomEvent(SYNC_EVENT_NAME, { detail: state });

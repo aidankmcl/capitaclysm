@@ -1,14 +1,14 @@
-import { FC } from 'react';
-import L, { Map } from 'leaflet';
-import { Polyline } from 'react-leaflet';
+import { FC } from "react";
+import L, { Map } from "leaflet";
+import { Polyline } from "react-leaflet";
 
-import { waypointData } from '~/data/map';
+import { waypointData } from "~/data/map";
 
 type Props = {
   map: Map
 }
 
-const DEFAULT_GRAY = '#666';
+const DEFAULT_GRAY = "#666";
 
 export const Route: FC<Props> = () => {
   let color = DEFAULT_GRAY; // Default gray
@@ -17,9 +17,9 @@ export const Route: FC<Props> = () => {
     const nextSpot = waypointData.lines[(i + 1) % waypointData.lines.length];
     const leapFrogSpot = waypointData.lines[(i + 2) % waypointData.lines.length];
 
-    if (line.type === 'property') {
-      if (nextSpot.type !== 'property') {
-        color = leapFrogSpot && leapFrogSpot.type === 'property' && leapFrogSpot.color === line.color ? line.color : DEFAULT_GRAY;
+    if (line.type === "property") {
+      if (nextSpot.type !== "property") {
+        color = leapFrogSpot && leapFrogSpot.type === "property" && leapFrogSpot.color === line.color ? line.color : DEFAULT_GRAY;
       } else {
         color = line.color;
       }

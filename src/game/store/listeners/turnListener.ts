@@ -1,7 +1,7 @@
 
-import { selectors } from '../selectors';
-import { actions } from '../slices';
-import { AppStartListening } from './listenerMiddleware';
+import { selectors } from "../selectors";
+import { actions } from "../slices";
+import { AppStartListening } from "./listenerMiddleware";
 
 
 export const addTurnListener = (startAppListening: AppStartListening) => {
@@ -17,27 +17,27 @@ export const addTurnListener = (startAppListening: AppStartListening) => {
       const isRent = newLocation.owners.length > 0;
 
       switch (newLocation.type) {
-        case 'event':
-          // something
-          break;
-        case 'utility':
-        case 'railroad':
-        case 'property':
-          // Only pay rent if you're not an owner
-          if (!newLocation.owners.find(({ ownerID }) => ownerID === playerID)) {
-            listenerApi.dispatch(actions.deals.offer({
-              locationIndex: newLocation.locationIndex,
-              price: isRent
-                ? newLocation.type === 'utility'
-                  ? action.payload.steps * newLocation.rentMultiplier
-                  : newLocation.rent || 0
-                : newLocation.price,
-              playerID,
-              isRent
-            }));
+      case "event":
+        // something
+        break;
+      case "utility":
+      case "railroad":
+      case "property":
+        // Only pay rent if you're not an owner
+        if (!newLocation.owners.find(({ ownerID }) => ownerID === playerID)) {
+          listenerApi.dispatch(actions.deals.offer({
+            locationIndex: newLocation.locationIndex,
+            price: isRent
+              ? newLocation.type === "utility"
+                ? action.payload.steps * newLocation.rentMultiplier
+                : newLocation.rent || 0
+              : newLocation.price,
+            playerID,
+            isRent
+          }));
       
-            await listenerApi.take(actions.deals.close.match);
-          }
+          await listenerApi.take(actions.deals.close.match);
+        }
       }
 
       listenerApi.dispatch(actions.player.endTurn());

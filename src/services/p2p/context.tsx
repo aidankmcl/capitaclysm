@@ -1,37 +1,54 @@
-import { DataConnection, Peer } from 'peerjs';
-import { FC, PropsWithChildren, createContext, useState } from 'react';
+import { DataConnection, Peer } from "peerjs";
+import { FC, PropsWithChildren, createContext, useState } from "react";
 
-import { generateCode, getConnectionID } from './utils';
-import { addCallbacks, sendConnectionEvent, sendData as sendDataEvent } from './events';
-import { RootState, SYNC_EVENT_NAME, FORWARD_ACTION_EVENT_NAME } from '~/store';
-import { useOnce } from '~/components';
+import { generateCode, getConnectionID } from "./utils";
+import { addCallbacks, sendConnectionEvent, sendData as sendDataEvent } from "./events";
+import { RootState, SYNC_EVENT_NAME, FORWARD_ACTION_EVENT_NAME } from "~/store";
+import { useOnce } from "~/hooks";
+import { isTradeChannel } from "../../game/services/trades";
 
 
 const addPeerListeners = (peer: Peer) => {
-  peer.on('open', (connectionID) => {
-    sendConnectionEvent('host', 'open', { connectionID });
+  peer.on("open", (connectionID) => {
+    sendConnectionEvent("host", "open", { connectionID });
   
-    peer.on('connection', (connection) => {
-      connection.on('open', () => {  
+    peer.on("connection", (connection) => {
+      if (isTradeChannel(connection)) {
+        connection.on("open", () => {
+          sendConnectionEvent("trade", "open", { connection });
+        });
+        connection.on("data", (data) => {
+          sendConnectionEvent("trade", "data", data);
+        });
+        connection.on("close", () => {
+          sendConnectionEvent("trade", "close", { connection });
+        });
+        connection.on("error", (err) => {
+            sendConnectionEvent("trade", "error", { err });
+        });
+        return;
+      }
+
+      connection.on("open", () => {  
         window.addEventListener(SYNC_EVENT_NAME, (evt) => {
           const customEvent = evt as CustomEvent<RootState>;
           connection.send({ action: SYNC_EVENT_NAME, data: customEvent.detail });
         });
 
-        sendConnectionEvent('child', 'open', { connection });
+        sendConnectionEvent("child", "open", { connection });
       });
     
-      connection.on('data', (data) => {
-        sendConnectionEvent('child', 'data', data);
+      connection.on("data", (data) => {
+        sendConnectionEvent("child", "data", data);
       });
     
-      connection.on('close', () => {
-        sendConnectionEvent('child', 'close', { connection });
+      connection.on("close", () => {
+        sendConnectionEvent("child", "close", { connection });
       });
     });
     
-    peer.on('close', () => {
-      sendConnectionEvent('host', 'close', { connectionID });
+    peer.on("close", () => {
+      sendConnectionEvent("host", "close", { connectionID });
     });
   });
 };
@@ -41,29 +58,29 @@ const connect = (peer: Peer, hostCode: string, name: string) => {
 
   const connection = peer.connect(connectionID, { label: name });
 
-  connection.on('open', () => {
+  connection.on("open", () => {
     window.addEventListener(FORWARD_ACTION_EVENT_NAME, (evt) => {
       const customEvent = evt as CustomEvent;
-      console.log('sending to host', customEvent.detail);
+      console.log("sending to host", customEvent.detail);
       connection.send({ action: FORWARD_ACTION_EVENT_NAME, data: customEvent.detail });
     });
-    sendConnectionEvent('client', 'open', { connectionID });
+    sendConnectionEvent("client", "open", { connectionID });
   });
 
-  connection.on('close', () => {
-    sendConnectionEvent('client', 'close', { connectionID });
+  connection.on("close", () => {
+    sendConnectionEvent("client", "close", { connectionID });
   });
 
-  connection.on('data', (data) => {
-    sendConnectionEvent('client', 'data', data);
+  connection.on("data", (data) => {
+    sendConnectionEvent("client", "data", data);
   });
 
-  connection.on('error', (err) => {
-    sendConnectionEvent('client', 'error', { err });
+  connection.on("error", (err) => {
+    sendConnectionEvent("client", "error", { err });
   });
 
-  connection.on('iceStateChanged', (iceChange) => {
-    sendConnectionEvent('client', 'iceStateChanged', { iceChange });
+  connection.on("iceStateChanged", (iceChange) => {
+    sendConnectionEvent("client", "iceStateChanged", { iceChange });
   });
 
   return connection;
@@ -81,6 +98,7 @@ type PeerControls = {
   addCallbacks: typeof addCallbacks;
   isHost: boolean;
   setHost: (isHost: boolean) => void;
+  peer: Peer | undefined;
 }
 
 export const PeerContext = createContext<PeerControls>({
@@ -92,6 +110,7 @@ export const PeerContext = createContext<PeerControls>({
   addCallbacks,
   isHost: false,
   setHost: () => null,
+  peer: undefined,
 });
 
 
@@ -121,7 +140,7 @@ export const PeerProvider: FC<PropsWithChildren> = (props) => {
 
   const sendData: SendDataWithoutConnectionInput = (action, data) => {
     if (isHost) {
-      sendConnectionEvent('child', 'data', { action, data });
+      sendConnectionEvent("child", "data", { action, data });
     } else if (connection) {
       sendDataEvent(connection, action, data);
     }
@@ -137,14 +156,15 @@ export const PeerProvider: FC<PropsWithChildren> = (props) => {
   return (
     <PeerContext.Provider
       value={{
-        code: code || '',
+        code: code || "",
         connection,
         connect: connectToHost,
         disconnect: disconnectFromHost,
         sendData,
         addCallbacks,
         isHost,
-        setHost
+        setHost,
+        peer,
       }}
     >
       {props.children}

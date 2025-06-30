@@ -8,10 +8,13 @@
     "baseUrl": ".",
     "paths": {
       // Want exports to come from top level
-      "~/components": ["./src/components"],
+      "~/ui": ["./src/ui"],
       "~/game": ["./src/game"],
       "~/pages": ["./src/pages"],
       "~/store": ["./src/game/store"],
+      "~/constants": ["./src/constants"],
+      "~/utils": ["./src/utils"],
+      "~/hooks": ["./src/hooks"],
       "~/data/map": ["./src/game/components/map/data"],
       // Want to allow narrowing via folder
       "~/assets/*": ["./src/assets/*"],

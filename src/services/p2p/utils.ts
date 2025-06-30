@@ -1,4 +1,4 @@
-const CONN_PREFIX = 'capitaclysm-game-unique-id-prefix';
+const CONN_PREFIX = "capitaclysm-game-unique-id-prefix";
 export const getConnectionID = (code: string) => `${CONN_PREFIX}-${code}`;
 
 export const generateCode = (len = 4) => {
@@ -17,5 +17,5 @@ export const generateCode = (len = 4) => {
     code.push(String.fromCharCode(charCode));
   }
 
-  return code.join('').toUpperCase();
+  return code.join("").toUpperCase();
 };

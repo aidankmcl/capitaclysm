@@ -1,12 +1,12 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-import type { RootState } from '~/store';
+import type { RootState } from "~/store";
 
-import { actions as shared } from './sharedActions';
+import { actions as shared } from "./sharedActions";
 
 // Define a type for the slice state
 interface SavesState {
-  items: Record<string, Omit<RootState, 'saves'>>;
+  items: Record<string, Omit<RootState, "saves">>;
   activeSaveID: string | undefined;
 }
 
@@ -17,12 +17,12 @@ const initialState: SavesState = {
 };
 
 export const savesSlice = createSlice({
-  name: 'game',
+  name: "game",
   initialState,
   extraReducers: (builder) => {
     builder
       .addCase(shared.save, (state, action) => {
-        const { saves, ...rest } = action.payload;
+        const { ...rest } = action.payload;
         const gameID = rest.game.id;
 
         if (!gameID) return;

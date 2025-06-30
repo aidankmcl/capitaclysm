@@ -1,9 +1,8 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice } from "@reduxjs/toolkit";
 
-import { actions as gameActions } from './game';
-import { actions as dealActions } from './deals';
-import { actions as sharedActions } from './sharedActions';
-import { locations } from '~/data/map';
+import { actions as gameActions } from "./game";
+import { actions as sharedActions } from "./sharedActions";
+import { locations } from "~/data/map";
 
 type Owner = {
   ownerID: string;
@@ -20,19 +19,19 @@ type LocationBase = {
 }
 
 type Property = LocationBase & {
-  type: 'property' | 'railroad';
+  type: "property" | "railroad";
   rent: number;
   price: number;
 }
 
 type Utility = LocationBase & {
-  type: 'utility';
+  type: "utility";
   rentMultiplier: number;
   price: number;
 }
 
 type Event = LocationBase & {
-  type: 'event';
+  type: "event";
   pay: number;
 }
 
@@ -49,7 +48,7 @@ const initialState: LocationState = {
 };
 
 export const locationSlice = createSlice({
-  name: 'locations',
+  name: "locations",
   initialState,
   extraReducers: (builder) => {
     builder
@@ -64,43 +63,48 @@ export const locationSlice = createSlice({
             color: location.color,
             name: location.name,
             description: location.description,
-            owners: location.type !== 'event' ? [{ ownerID: '123', percentOwnership: 100 }] : []
+            owners: location.type !== "event" ? [{ ownerID: "123", percentOwnership: 100 }] : []
           };
 
           switch (location.type) {
-            case 'event':
-              state.items.push({
-                ...baseData,
-                type: location.type,
-                pay: location.value || 0
-              });
-              break;
-            case 'utility':
-              state.items.push({
-                ...baseData,
-                type: location.type,
-                rentMultiplier: location.rent1Multiplier,
-                price: location.value || 0
-              });
-              break;
-            case 'railroad':
-            case 'property':
-              state.items.push({
-                ...baseData,
-                type: location.type,
-                rent: location.type === 'property' ? location.baseRent : location.rent1,
-                price: location.value || 0
-              });
+          case "event":
+            state.items.push({
+              ...baseData,
+              type: location.type,
+              pay: location.value || 0
+            });
+            break;
+          case "utility":
+            state.items.push({
+              ...baseData,
+              type: location.type,
+              rentMultiplier: location.rent1Multiplier,
+              price: location.value || 0
+            });
+            break;
+          case "railroad":
+          case "property":
+            state.items.push({
+              ...baseData,
+              type: location.type,
+              rent: location.type === "property" ? location.baseRent : location.rent1,
+              price: location.value || 0
+            });
           }
         });
       })
-      .addCase(dealActions.close, (state, action) => {
-        const { locationIndex, owners } = action.payload;
+      .addCase(sharedActions.finalizeTrade, (state, action) => {
+        const { playerAId, playerBId, playerAItems, playerBItems } = action.payload;
 
-        state.items[locationIndex] = {
-          ...state.items[locationIndex],
-          owners
-        };
+        // Transfer properties from Player A to Player B
+        playerAItems.propertyIndices.forEach((index) => {
+          state.items[index].owners = [{ ownerID: playerBId, percentOwnership: 100 }];
+        });
+
+        // Transfer properties from Player B to Player A
+        playerBItems.propertyIndices.forEach((index) => {
+          state.items[index].owners = [{ ownerID: playerAId, percentOwnership: 100 }];
+        });
       });
   },
   reducers: {},

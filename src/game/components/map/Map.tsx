@@ -1,20 +1,16 @@
-import { FC, useEffect, useState } from 'react';
-import { LayerGroup, MapContainer, TileLayer } from 'react-leaflet';
-import { LeafletEvent, Map as LeafletMap } from 'leaflet';
-import { useElementSize } from 'usehooks-ts';
+import { FC, useRef } from "react";
+import { LayerGroup, MapContainer, TileLayer } from "react-leaflet";
+import { useResizeObserver } from "usehooks-ts";
 
-import { selectors, useAppSelector } from '~/store';
-import { waypointData } from '~/data/map';
+import { selectors, useAppSelector } from "~/store";
+import { useGameMap } from "../../hooks";
 
-import { LocationMarkers } from './map-helpers/Markers';
-import { Route } from './map-helpers/Route';
-import { Player } from './map-helpers/Player';
-import { DEFAULT_ZOOM, MAX_ZOOM, MIN_ZOOM } from './map-helpers/constants';
+import { LocationMarkers } from "./map-helpers/Markers";
+import { Route } from "./map-helpers/Route";
+import { Player } from "./map-helpers/Player";
+import { MAX_ZOOM, MIN_ZOOM } from "./map-helpers/constants";
 
-import './leaflet.css';
-import { getPaddedBounds } from './map-helpers/utils';
-
-const paddedBounds = getPaddedBounds(waypointData.bounds.topLeft, waypointData.bounds.bottomRight);
+import "./leaflet.css";
 
 const PlayerMarkers = (props: { zoom: number }) => {
   const players = useAppSelector(selectors.players.selectPlayers);
@@ -23,33 +19,20 @@ const PlayerMarkers = (props: { zoom: number }) => {
 };
 
 export const Map: FC = () => {
-  const [map, setMap] = useState<LeafletMap | null>(null);
-  const [zoom, setZoom] = useState(DEFAULT_ZOOM);
-  const [minZoom, setMinZoom] = useState<number>();
+  const { map, setMap, zoom, paddedBounds } = useGameMap();
+  
+  const ref = useRef<HTMLDivElement>(null);
+  // Default to 0 if the ref is not set
+  const { width = 0, height = 0 } = useResizeObserver({
+    ref: ref as React.RefObject<HTMLElement>,
+    box: 'border-box',
+  });
 
-  useEffect(() => {
-    if (map && !minZoom) {
-      map.fitBounds(paddedBounds);
-      const zoom = map.getZoom();
-      setMinZoom(zoom);
-      map.setMinZoom(zoom);
-    }
-  }, [map, minZoom]);
-
-  useEffect(() => {
-    if (!map) return;
-
-    const zoomCallback = (event: LeafletEvent) => setZoom(event.target._zoom);
-    map.on('zoom', zoomCallback);
-  }, [map]);
-
-  const [containerRef, { width, height }] = useElementSize();
-
-  return <div ref={containerRef} style={{ height: '100%' }}>
+  return <div ref={ref} style={{ height: "100%" }}>
     {height && (
       <div style={{ width, height }}>
         <MapContainer
-          ref={(mapRef) => mapRef && setMap(mapRef)}
+          ref={setMap}
           center={[32.81, -96.75]}
           maxBoundsViscosity={8}
           maxBounds={paddedBounds}
@@ -61,9 +44,6 @@ export const Map: FC = () => {
         >
           <TileLayer
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-            // url="http://services.arcgisonline.com/arcgis/rest/services/NatGeo_World_Map/MapServer/tile/{z}/{y}/{x}" // Nat geo (rusty0)
-            // url="http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png" // Positron
-            // url="http://tile.stamen.com/toner/{z}/{x}/{y}.png" // Toner
             url="http://services.arcgisonline.com/arcgis/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}" // Light Gray
             minNativeZoom={MIN_ZOOM + 1}
             maxNativeZoom={MAX_ZOOM}

@@ -1,1 +1,1 @@
-export { Gamegrid } from './Gamegrid/Gamegrid';
+export { Gamegrid } from "./Gamegrid/Gamegrid";

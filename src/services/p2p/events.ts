@@ -1,5 +1,5 @@
-import { DataConnection } from 'peerjs';
-import { FORWARD_ACTION_EVENT_NAME, RootState, SYNC_EVENT_NAME } from '~/store';
+import { DataConnection } from "peerjs";
+import { FORWARD_ACTION_EVENT_NAME, RootState, SYNC_EVENT_NAME } from "~/store";
 
 type ConnectionToggleEvent = { connectionID: string };
 type ConnectionEvent = { connection: DataConnection };
@@ -24,10 +24,16 @@ type EventData = {
     close: ConnectionToggleEvent;
     error: ErrorEvent;
     iceStateChanged: IceStateEvent;
+  },
+  trade: {
+    open: ConnectionEvent;
+    data: DataEvent;
+    close: ConnectionEvent;
+    error: ErrorEvent;
   }
 };
 
-const WINDOW_EVENT_PREFIX = 'capitaclysm-webrtc-events'; // avoid listener name collisions
+const WINDOW_EVENT_PREFIX = "capitaclysm-webrtc-events"; // avoid listener name collisions
 export const getEventName = (origin: string, action: string) => `${WINDOW_EVENT_PREFIX}-${origin}-${action}`;
 
 export type CallbackObject<
@@ -88,9 +94,9 @@ type MessageData<A extends keyof DataPayloads = keyof DataPayloads, D extends Da
 
 export const createDataCallback = <
   A extends keyof DataPayloads,
-  O extends keyof EventData = 'child' | 'client'
+  O extends keyof EventData = "child" | "client"
 >(origin: O, _: A, callback: (data: DataPayloads[A]) => void): CallbackObject => {
-  const eventType = 'data' as keyof EventData[keyof EventData];
+  const eventType = "data" as keyof EventData[keyof EventData];
 
   return {
     origin: origin as keyof EventData,
@@ -104,6 +110,12 @@ export const createDataCallback = <
 
 export const addCallbacks = (callbacks: CallbackObject[]) => {
   callbacks.forEach((props) => {
-    window.addEventListener(getEventName(props.origin, props.eventType), props.callback);
+    window.addEventListener(getEventName(props.origin, props.eventType as string), props.callback);
   });
+
+  return () => {
+    callbacks.forEach((props) => {
+      window.removeEventListener(getEventName(props.origin, props.eventType as string), props.callback);
+    });
+  };
 };

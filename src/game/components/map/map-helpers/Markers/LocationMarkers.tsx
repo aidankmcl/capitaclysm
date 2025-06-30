@@ -1,10 +1,10 @@
-import { FC } from 'react';
-import { renderToStaticMarkup } from 'react-dom/server';
-import { Marker, Popup } from 'react-leaflet';
-import { DivIcon } from 'leaflet';
+import { FC } from "react";
+import { renderToStaticMarkup } from "react-dom/server";
+import { Marker, Popup } from "react-leaflet";
+import { DivIcon } from "leaflet";
 
-import { locations } from '../../data/locations';
-import { MarkerIcon } from './MarkerIcon';
+import { locations } from "../../data/locations";
+import { MarkerIcon } from "./MarkerIcon";
 
 
 export const LocationMarkers: FC<{ zoom: number }> = (props) => {

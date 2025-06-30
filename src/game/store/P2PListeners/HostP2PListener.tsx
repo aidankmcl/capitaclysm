@@ -1,12 +1,10 @@
+import { useEffect } from "react";
+import { AnyAction } from "@reduxjs/toolkit";
+import { DataConnection } from "peerjs";
 
-import { useEffect } from 'react';
-import { AnyAction } from '@reduxjs/toolkit';
-import { DataConnection } from 'peerjs';
-
-import { createCallback, createDataCallback, usePeer } from '~/services/p2p';
-import { useOnce } from '~/components';
-import { FORWARD_ACTION_EVENT_NAME, actions, selectors, useAppDispatch, useAppSelector } from '..';
-
+import { createCallback, createDataCallback, usePeer } from "~/services/p2p";
+import { useOnce } from "~/hooks";
+import { FORWARD_ACTION_EVENT_NAME, actions, selectors, useAppDispatch, useAppSelector } from "..";
 
 export const HostP2PListener = () => {
   const dispatch = useAppDispatch();
@@ -26,8 +24,8 @@ export const HostP2PListener = () => {
     }
   };
 
-  const childOpenCB = createCallback('child', 'open', onConnection);
-  const childCloseCB = createCallback('child', 'close', onConnection);
+  const childOpenCB = createCallback("child", "open", onConnection);
+  const childCloseCB = createCallback("child", "close", onConnection);
 
   // useOnce waits for undefined values to be defined, regardless of truthiness
   const hostCheck = isHost && isHostRedux ? true : undefined;
@@ -36,19 +34,19 @@ export const HostP2PListener = () => {
     if (code && hostCheck) {
       addCallbacks([childOpenCB, childCloseCB]);
       dispatch(actions.game.newGame()); // TODO: Remove when there's a button to begin game
-      dispatch(actions.player.addPlayer({ connectionID: '123', name: 'Mr. Monopoly' }));
+      dispatch(actions.player.addPlayer({ connectionID: "123", name: "Mr. Monopoly" }));
     }
   }, [dispatch, addCallbacks, code, hostCheck]);
 
   useEffect(() => {
     if (code && !clientPlayerID) {
-      const hostPlayer = players.find(player => player.id === '123');
+      const hostPlayer = players.find((player) => player.id === "123");
       if (hostPlayer) dispatch(actions.player.setClientPlayer(hostPlayer.id));
     }
-  }, [players, code]);
+  }, [dispatch, clientPlayerID, players, code]);
 
-  const childActions = createDataCallback('child', FORWARD_ACTION_EVENT_NAME, (data) => {
-    console.log('received child action', data);
+  const childActions = createDataCallback("child", FORWARD_ACTION_EVENT_NAME, (data) => {
+    console.log("received child action", data);
     dispatch(data as AnyAction); // The origin of this data can only be an action creator
   });
 
@@ -57,6 +55,6 @@ export const HostP2PListener = () => {
     dispatch(actions.game.setHost(true));
     addCallbacks([childActions]);
   }, [dispatch, addCallbacks]);
-  
+
   return <></>;
 };

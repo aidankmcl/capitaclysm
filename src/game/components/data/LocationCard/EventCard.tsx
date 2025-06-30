@@ -16,7 +16,7 @@ export const EventCard: FC<Props> = (props) => {
   return (
     <Stack spacing={1} mx={3}>
       <Divider />
-      <Typography level="body2">{location.description}</Typography>
+      <Typography level="body-sm">{location.description}</Typography>
     </Stack>
-  )
-}
+  );
+};

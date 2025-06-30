@@ -1,1 +1,1 @@
-export { LocationCard } from './LocationCard';
+export { LocationCard } from "./LocationCard";

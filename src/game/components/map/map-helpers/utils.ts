@@ -1,6 +1,6 @@
 
-import { Coordinate } from '../data/locations';
-import { BOUNDS_PADDING, DEFAULT_ZOOM } from './constants';
+import { Coordinate } from "../data/locations";
+import { BOUNDS_PADDING, DEFAULT_ZOOM } from "./constants";
 
 export const getPaddedBounds = (topLeft: number[], bottomRight: number[]): [Coordinate, Coordinate] => {
   if (topLeft.length !== 2 || bottomRight.length !== 2) return [[0, 0], [0, 0]];

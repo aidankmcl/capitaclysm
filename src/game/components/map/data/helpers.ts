@@ -1,6 +1,6 @@
-import { Coordinate } from './locations';
+import { Coordinate } from "./locations";
 
-import waypointData from './route.json';
+import waypointData from "./route.json";
 
 
 export const getCoordsFromLocationIndex = (locationIndex: number): Coordinate => {

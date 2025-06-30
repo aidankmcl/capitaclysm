@@ -1,1 +1,1 @@
-export { listenerMiddleware } from './listenerMiddleware';
+export { listenerMiddleware } from "./listenerMiddleware";

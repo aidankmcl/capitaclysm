@@ -1,11 +1,11 @@
-import { Action, Middleware } from '@reduxjs/toolkit';
-import { RootState } from '../store';
-import { actions } from '../slices';
+import { Action, Middleware } from "@reduxjs/toolkit";
+import { RootState } from "../store";
+import { actions } from "../slices";
 
-export const FORWARD_ACTION_EVENT_NAME = 'redux-send-upstream';
+export const FORWARD_ACTION_EVENT_NAME = "redux-send-upstream";
 
 const sendEventUpstream = (action: Action) => {
-  console.log('send upstream');
+  console.log("send upstream");
   const customEvt = new CustomEvent(FORWARD_ACTION_EVENT_NAME, { detail: action });
   window.dispatchEvent(customEvt);
 };

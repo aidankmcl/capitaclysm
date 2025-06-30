@@ -1,43 +1,22 @@
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import { Provider } from 'react-redux';
-import { CssBaseline, CssVarsProvider } from '@mui/joy';
-import '@flaticon/flaticon-uicons/css/all/all.css';
+import { Provider } from "react-redux";
+import { CssBaseline, CssVarsProvider } from "@mui/joy";
+import "@flaticon/flaticon-uicons/css/all/all.css";
 
-import { store } from '~/store';
-import { GameManager, Player, Test } from '~/pages';
-import { colors, spacing, Layout } from '~/components';
-
-import { capitaclysmTheme } from './theme';
-import { PeerProvider } from './services/p2p';
-import './App.css';
+import { store } from "~/store";
+import { Pages } from "~/pages";
+import { capitaclysmTheme } from "./theme";
+import { colors, spacing } from "~/constants";
+import { PeerProvider } from "./services/p2p";
+import "./App.css";
 
 const generateCSSVariables = (variables: Record<string, string | number>) => Object.entries(variables)
   .map(([colorName, value]) => `--${colorName}: ${value};`)
-  .join('\n');
+  .join("\n");
 
 const variables = `:root {
   ${generateCSSVariables(colors)}
   ${generateCSSVariables(spacing)}
 }`;
-
-const router = createBrowserRouter([
-  {
-    path: '/',
-    Component: Layout
-  },
-  {
-    path: '/game',
-    Component: GameManager
-  },
-  {
-    path: '/player',
-    Component: Player
-  },
-  {
-    path: '/test',
-    Component: Test
-  },
-]);
 
 function App() {
   return (
@@ -53,7 +32,7 @@ function App() {
           <style>
             {variables}
           </style>
-          <RouterProvider router={router} />
+          <Pages />
         </Provider>
       </PeerProvider>
     </CssVarsProvider>

@@ -1,20 +1,18 @@
-import { FC, useCallback, useEffect, useRef, useState} from 'react';
+import { FC, useCallback, useEffect, useRef, useState } from "react";
 
-import { PlayerData } from '~/store';
-import { useAnimationFrame, useOnce } from '~/components';
+import { PlayerData } from "~/store";
+import { useAnimationFrame, useOnce } from "~/hooks";
 
-import { Coordinate } from '../data/locations';
-import { getCoordsFromLocationIndex, getWaypointsBetweenLocations } from '../data/helpers';
-import { PlayerMarker } from './Markers/PlayerMarker';
-
+import { Coordinate } from "../data/locations";
+import { getCoordsFromLocationIndex, getWaypointsBetweenLocations } from "../data/helpers";
+import { PlayerMarker } from "./Markers/PlayerMarker";
 
 type PlayerProps = {
-  player: PlayerData,
-  zoom: number
-}
+  player: PlayerData;
+  zoom: number;
+};
 
 export const Player: FC<PlayerProps> = (props) => {
-
   const prevLocation = useRef(props.player.locationIndex);
 
   const [shouldAnimate, setShouldAnimate] = useState(false);
@@ -26,22 +24,25 @@ export const Player: FC<PlayerProps> = (props) => {
     if (!currentPos) setCurrentPos(getCoordsFromLocationIndex(props.player.locationIndex));
   }, [props.player.locationIndex]);
 
-  const nextAnimationFrameHandler = useCallback((percentComplete: number) => {
-    if (percentComplete >= 1 && targetLocation) {
-      setCurrentPos(remainingWaypoints[remainingWaypoints.length - 1]);
-      prevLocation.current = targetLocation;
-      setTargetLocation(undefined);
-      setShouldAnimate(false);
-    } else {
-      const waypointIndex = Math.round(remainingWaypoints.length * percentComplete);
-      setCurrentPos(remainingWaypoints[waypointIndex]);
-    }
-  }, [remainingWaypoints.length]);
+  const nextAnimationFrameHandler = useCallback(
+    (percentComplete: number) => {
+      if (percentComplete >= 1 && targetLocation) {
+        setCurrentPos(remainingWaypoints[remainingWaypoints.length - 1]);
+        prevLocation.current = targetLocation;
+        setTargetLocation(undefined);
+        setShouldAnimate(false);
+      } else {
+        const waypointIndex = Math.round(remainingWaypoints.length * percentComplete);
+        setCurrentPos(remainingWaypoints[waypointIndex]);
+      }
+    },
+    [remainingWaypoints, targetLocation],
+  );
 
   useAnimationFrame({
     nextAnimationFrameHandler,
     duration: 5000,
-    shouldAnimate
+    shouldAnimate,
   });
 
   useEffect(() => {
@@ -50,18 +51,18 @@ export const Player: FC<PlayerProps> = (props) => {
     }
     setTargetLocation(props.player.locationIndex);
     if (prevLocation.current !== props.player.locationIndex) {
-      const waypoints = getWaypointsBetweenLocations(prevLocation.current, props.player.locationIndex);
+      const waypoints = getWaypointsBetweenLocations(
+        prevLocation.current,
+        props.player.locationIndex,
+      );
       setRemainingWaypoints(waypoints);
       setShouldAnimate(true);
     }
-  }, [props.player.locationIndex]);
+  }, [props.player.locationIndex, targetLocation]);
 
   return currentPos ? (
-    <PlayerMarker
-      position={currentPos}
-      player={props.player}
-      zoom={props.zoom}
-    />
-  ) : <></>;
+    <PlayerMarker position={currentPos} player={props.player} zoom={props.zoom} />
+  ) : (
+    <></>
+  );
 };
-

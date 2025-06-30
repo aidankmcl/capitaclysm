@@ -1,2 +1,1 @@
-export { HostView } from './host';
-export { ClientView } from './client';
+export { GameView } from "./GameView";

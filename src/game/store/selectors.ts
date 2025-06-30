@@ -1,7 +1,6 @@
+import { createSelector } from "@reduxjs/toolkit";
 
-import { createSelector } from '@reduxjs/toolkit';
-
-import { RootState } from '.';
+import { RootState } from ".";
 
 // Player selectors
 const selectPlayerItems = (state: RootState) => state.players.items;
@@ -48,29 +47,9 @@ const gameSelectors = {
   isHost: (state: RootState) => state.game.clientIsHost
 };
 
-// Deals selectors
-const selectPending = (state: RootState) => state.deals.pending;
-
-const selectPendingAugmented = createSelector(
-  selectPending,
-  playersSelectors.selectPlayerItems,
-  locationsSelectors.getLocations,
-  playersSelectors.selectClientPlayerID,
-  (pendingDeals, players, locations, clientPlayerID) => {
-    const pending = Object.values(pendingDeals);
-    return pending.filter(deal => deal.playerID === clientPlayerID)
-      .map(deal => ({
-        ...deal,
-        player: players[deal.playerID],
-        location: locations[deal.locationIndex]
-      }));
-  }
-);
-
-const dealsSelectors = {
-  selectPending: (state: RootState) => state.deals.pending,
-  // add location for full details
-  selectPendingAugmented
+// Trades selectors
+const tradesSelectors = {
+  selectTradeLog: (state: RootState) => state.trades.log,
 };
 
 // Saves selectors
@@ -84,5 +63,5 @@ export const selectors = {
   players: playersSelectors,
   saves: savesSelectors,
   notifications: notificationsSelectors,
-  deals: dealsSelectors
+  trades: tradesSelectors
 };

@@ -1,8 +1,8 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { v4 } from 'uuid';
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { v4 } from "uuid";
 
-import { actions as shared } from './sharedActions';
-import { actions as playerActions } from './players';
+import { actions as shared } from "./sharedActions";
+import { actions as playerActions } from "./players";
 
 
 // Define a type for the slice state
@@ -24,7 +24,7 @@ const initialState: GameState = {
 };
 
 export const gameSlice = createSlice({
-  name: 'game',
+  name: "game",
   initialState,
   extraReducers: (builder) => {
     builder
