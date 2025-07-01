@@ -27,11 +27,13 @@ const stocksSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(sharedActions.syncState, (state, action) => {
-        const payload = action.payload as any;
+        const payload = action.payload as Partial<import("../store").RootState>;
+
         // Handle both full state sync and partial updates
         if (payload.stocks) {
           return payload.stocks;
         }
+
         return state; // No stocks data in partial update
       })
       .addCase(sharedActions.finalizeTrade, (state, action: PayloadAction<FinalizedTradePayload>) => {

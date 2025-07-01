@@ -63,7 +63,7 @@ export const useTransaction = () => {
       default:
         return {
           success: false,
-          error: `Unsupported transaction type: ${(transaction as any).type}`
+          error: "Unsupported transaction type",
         };
     }
   }, [

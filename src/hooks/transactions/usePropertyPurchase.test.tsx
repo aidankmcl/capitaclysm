@@ -32,14 +32,15 @@ const buildMockState = (options: MockOptions = {}) => {
     stocks: {
       holdings: {},
     },
-  } as any;
+  } as Record<string, unknown>;
 };
 
 // Render hook with a lightweight Redux store using the supplied state
-const renderHookWithState = (state: any, hook: () => any) => {
+function renderHookWithState<T>(state: Record<string, unknown>, hook: () => T) {
   const store = configureStore({
-    reducer: (s = state) => s as any,
-    preloadedState: state,
+    // Cast is safe for testing purposes where we only access limited slices
+    reducer: (s: import('~/store').RootState = state as unknown as import('~/store').RootState) => s,
+    preloadedState: state as unknown as import('~/store').RootState,
   });
 
   const dispatchSpy = jest.spyOn(store, 'dispatch');
@@ -49,7 +50,7 @@ const renderHookWithState = (state: any, hook: () => any) => {
   });
 
   return { result: rendered.result, dispatchSpy } as const;
-};
+}
 
 // -----------------------------------------------------------------------------
 

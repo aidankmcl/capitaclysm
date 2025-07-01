@@ -20,7 +20,16 @@ export default tseslint.config(
       ...hooks.configs.recommended.rules,
       ...jsxA11y.configs.recommended.rules,
       'react/react-in-jsx-scope': 'off', // Not needed with the new JSX transform
-      'react/prop-types': 'off' // Not needed for TypeScript projects
+      'react/prop-types': 'off', // Not needed for TypeScript projects,
+      "no-unused-vars": 'off', // We use TypeScript's noUnusedVars rule instead
+      "@typescript-eslint/no-unused-vars": [
+        "error",
+        {
+          "argsIgnorePattern": "^_",
+          "caughtErrorsIgnorePattern": "^_"
+        }
+      ],
+      "no-case-declarations": "off",
     },
     settings: {
       react: {

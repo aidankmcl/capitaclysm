@@ -27,7 +27,7 @@ const shouldBroadcastState = isAnyOf(
   actions.notifications.addNotification
 );
 
-const syncChangedSlices = (changedSlices: Record<string, any>) => {
+const syncChangedSlices = (changedSlices: Record<string, unknown>) => {
   const customEvt = new CustomEvent(SYNC_EVENT_NAME, { detail: changedSlices });
   window.dispatchEvent(customEvt);
 };
@@ -42,14 +42,15 @@ export const broadcastStateChange: Middleware = (store) => {
     // Only broadcast for specific actions and only if host
     if (nextState.game.clientIsHost && shouldBroadcastState(action)) {
       // Use shallow comparison to detect which slices actually changed
-      const changedSlices: Record<string, any> = {};
+      const changedSlices: Record<string, unknown> = {};
       
       // Check each slice for reference equality (Immer/RTK guarantees this)
       const sliceKeys = Object.keys(nextState) as (keyof RootState)[];
       
       for (const sliceKey of sliceKeys) {
         if (nextState[sliceKey] !== previousState[sliceKey]) {
-          changedSlices[sliceKey] = nextState[sliceKey];
+          // Type assertion is safe because we're assigning a known slice.
+          changedSlices[sliceKey as string] = nextState[sliceKey];
         }
       }
       

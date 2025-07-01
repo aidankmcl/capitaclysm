@@ -7,6 +7,7 @@ import { Provider } from 'react-redux';
 import { useTransaction } from './useTransaction';
 import { actions } from '~/store';
 import { locations } from '~/data';
+import { StockHolding } from '~/services/stocks';
 
 // Mock the store
 const createMockStore = (initialState = {}) => {
@@ -40,7 +41,7 @@ const createMockStore = (initialState = {}) => {
         playerIDs: ['player-1', 'player-2'],
         activePlayerID: 'player-1',
         clientPlayerID: 'player-1'
-      }, action: any) => {
+      }, action: import('@reduxjs/toolkit').AnyAction) => {
         switch (action.type) {
           case actions.shared.purchaseProperty.type:
             const { playerID, price } = action.payload;
@@ -109,20 +110,27 @@ const createMockStore = (initialState = {}) => {
             return state;
         }
       },
-      locations: (state = {
-        items: locations.map((location, index) => ({
-          ...location,
-          locationIndex: index,
-          owners: index === 1 || index === 2 ? [{ ownerID: 'player-1', percentOwnership: 100 }] : 
-                  index === 3 || index === 4 ? [{ ownerID: 'player-2', percentOwnership: 100 }] : []
-        }))
-      }, action: any) => {
+      locations: (
+        state = {
+          items: locations.map((location, index) => ({
+            ...location,
+            locationIndex: index,
+            owners:
+              index === 1 || index === 2
+                ? [{ ownerID: 'player-1', percentOwnership: 100 }]
+                : index === 3 || index === 4
+                  ? [{ ownerID: 'player-2', percentOwnership: 100 }]
+                  : [],
+          })),
+        },
+        action: import('@reduxjs/toolkit').AnyAction
+      ) => {
         switch (action.type) {
           case actions.shared.purchaseProperty.type:
             const { playerID, locationIndex } = action.payload;
             return {
               ...state,
-              items: state.items.map((item: any, index: number) => 
+              items: state.items.map((item: Record<string, unknown>, index: number) => 
                 index === locationIndex 
                   ? { ...item, owners: [{ ownerID: playerID, percentOwnership: 100 }] }
                   : item
@@ -132,7 +140,7 @@ const createMockStore = (initialState = {}) => {
             const { playerAItems, playerBItems } = action.payload;
             return {
               ...state,
-              items: state.items.map((item: any, index: number) => {
+              items: state.items.map((item: Record<string, unknown>, index: number) => {
                 if (playerAItems.propertyIndices.includes(index)) {
                   return { ...item, owners: [{ ownerID: 'player-2', percentOwnership: 100 }] };
                 }
@@ -156,7 +164,7 @@ const createMockStore = (initialState = {}) => {
           ]
         },
         transactionHistory: []
-      }, action: any) => {
+      }, action: import('@reduxjs/toolkit').AnyAction) => {
         switch (action.type) {
           case actions.stocks.buyStock.type:
             const { playerID: buyPlayerID, symbol, shares, price: buyPrice, transactionId } = action.payload;
@@ -165,7 +173,7 @@ const createMockStore = (initialState = {}) => {
               buyHoldings[buyPlayerID] = [];
             }
             
-            const existingHoldingIndex = buyHoldings[buyPlayerID].findIndex((h: any) => h.symbol === symbol);
+            const existingHoldingIndex = buyHoldings[buyPlayerID].findIndex((h: StockHolding) => h.symbol === symbol);
             
             if (existingHoldingIndex >= 0) {
               // Update existing holding
@@ -206,14 +214,14 @@ const createMockStore = (initialState = {}) => {
           case actions.stocks.sellStock.type:
             const { playerID: sellPlayerID, symbol: sellSymbol, shares: sellShares, price: sellPrice, transactionId: sellTransactionId } = action.payload;
             const sellHoldings = { ...state.holdings };
-            const holdingIndex = sellHoldings[sellPlayerID]?.findIndex((h: any) => h.symbol === sellSymbol);
+            const holdingIndex = sellHoldings[sellPlayerID]?.findIndex((h: StockHolding) => h.symbol === sellSymbol);
             if (holdingIndex >= 0) {
               const holding = sellHoldings[sellPlayerID][holdingIndex];
               const newShares = holding.shares - sellShares;
               
               if (newShares === 0) {
                 // Remove holding if no shares left
-                sellHoldings[sellPlayerID] = sellHoldings[sellPlayerID].filter((h: any) => h.symbol !== sellSymbol);
+                sellHoldings[sellPlayerID] = sellHoldings[sellPlayerID].filter((h: StockHolding) => h.symbol !== sellSymbol);
               } else {
                 // Update holding with new share count
                 sellHoldings[sellPlayerID] = [...sellHoldings[sellPlayerID]];
@@ -244,7 +252,7 @@ const createMockStore = (initialState = {}) => {
             return state;
         }
       },
-      trades: (state = { log: [] }, action: any) => {
+      trades: (state = { log: [] }, action: import('@reduxjs/toolkit').AnyAction) => {
         switch (action.type) {
           case actions.shared.finalizeTrade.type:
             return {
@@ -261,19 +269,22 @@ const createMockStore = (initialState = {}) => {
 };
 
 // Test wrapper component
-const TestWrapper = ({ children, initialState }: { children: React.ReactNode; initialState?: any }) => {
+const TestWrapper = ({ children, initialState }: { children: React.ReactNode; initialState?: Record<string, unknown> }) => {
   const store = createMockStore(initialState);
   return <Provider store={store}>{children}</Provider>;
 };
 
 // Helper to render hook with store
-const renderHookWithStore = (hook: () => any, initialState?: any) => {
+function renderHookWithStore<T>(
+  hook: () => T,
+  initialState?: Record<string, unknown>
+) {
   return renderHook(hook, {
     wrapper: ({ children }: { children: React.ReactNode }) => (
       <TestWrapper initialState={initialState}>{children}</TestWrapper>
-    )
+    ),
   });
-};
+}
 
 describe('useTransaction', () => {
   beforeEach(() => {

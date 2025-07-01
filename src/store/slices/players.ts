@@ -44,14 +44,16 @@ export const playerSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(sharedActions.syncState, (state, action) => {
-        const payload = action.payload as any;
+        const payload = action.payload as Partial<import("../store").RootState>;
+
         // Handle both full state sync and partial updates
         if (payload.players) {
           return {
             ...payload.players,
-            clientPlayerID: state.clientPlayerID
+            clientPlayerID: state.clientPlayerID,
           };
         }
+
         return state; // No players data in partial update
       })
       .addCase(sharedActions.finalizeTrade, (state, action) => {

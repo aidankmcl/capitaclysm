@@ -78,7 +78,7 @@ export const createCallback = <
 // Data callback handling
 type DataPayloads = {
   move: { playerID: string, steps: number },
-  [SYNC_EVENT_NAME]: RootState,
+  [SYNC_EVENT_NAME]: Partial<RootState>,
   [FORWARD_ACTION_EVENT_NAME]: unknown
 }
 

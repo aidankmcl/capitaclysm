@@ -1,5 +1,10 @@
 import { renderHook, act, waitFor } from '@testing-library/react';
 import { useTradeChannel, TradeMessage } from './useTradeChannel';
+import { usePeer } from '~/services/p2p';
+import type { Peer } from 'peerjs';
+import { initiateTradeChannel } from '~/services/trades';
+import { addCallbacks, createCallback } from '~/services/p2p/events';
+import type { CallbackObject } from '~/services/p2p/events';
 
 // --- Mock helpers ----------------------------------------------------------
 
@@ -46,10 +51,6 @@ jest.mock('~/services/p2p/events', () => ({
   createCallback: jest.fn(),
 }));
 
-import { usePeer } from '~/services/p2p';
-import { initiateTradeChannel } from '~/services/trades';
-import { addCallbacks, createCallback } from '~/services/p2p/events';
-
 const mockUsePeer = usePeer as jest.MockedFunction<typeof usePeer>;
 const mockInitiateTradeChannel = initiateTradeChannel as jest.MockedFunction<typeof initiateTradeChannel>;
 const mockAddCallbacks = addCallbacks as jest.MockedFunction<typeof addCallbacks>;
@@ -66,7 +67,20 @@ describe('useTradeChannel', () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
-    mockUsePeer.mockReturnValue({ peer: { id: peerId } } as any);
+    // Provide a fully-typed mock of the value returned by usePeer
+    const peerControls: ReturnType<typeof usePeer> = {
+      code: undefined,
+      connect: jest.fn(),
+      connection: undefined,
+      disconnect: jest.fn(),
+      sendData: jest.fn(),
+      addCallbacks: jest.fn(),
+      isHost: false,
+      setHost: jest.fn(),
+      peer: { id: peerId } as unknown as Peer,
+    };
+
+    mockUsePeer.mockReturnValue(peerControls);
     mockAddCallbacks.mockImplementation(() => jest.fn()); // return cleanup fn
   });
 
@@ -116,7 +130,7 @@ describe('useTradeChannel', () => {
     let openCallback: (evt: Event) => void = () => {};
     mockCreateCallback.mockImplementation((_origin, _event, cb) => {
       openCallback = cb as unknown as (evt: Event) => void;
-      return { origin: 'trade', eventType: 'open', callback: openCallback } as any;
+      return { origin: 'trade', eventType: 'open', callback: openCallback } as CallbackObject;
     });
 
     mockAddCallbacks.mockImplementation(() => jest.fn());
@@ -143,7 +157,8 @@ describe('useTradeChannel', () => {
 
     // Simulate receiving the connection via the window event
     act(() => {
-      openCallback({ connection: mockConn } as any);
+      const evt = new CustomEvent('trade-open', { detail: { connection: mockConn } });
+      openCallback(evt);
     });
 
     // Wait for the hook to attach listeners on the connection

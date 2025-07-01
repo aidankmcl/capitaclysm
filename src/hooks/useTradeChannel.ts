@@ -47,7 +47,7 @@ export const useTradeChannel = ({
 
     const callbacks = [
       createCallback("trade", "open", ({ connection }) => {
-        if (connection.label.endsWith(tradeId)) {
+        if (connection && connection.label.endsWith(tradeId)) {
           setTradeConnection(connection);
         }
       }),

@@ -38,18 +38,38 @@ describe('broadcastStateChange middleware', () => {
     expect(mockDispatchEvent).not.toHaveBeenCalled();
   });
 
-  it('should dispatch a sync event if client is host', () => {
-    const mockState = createMockState(true);
-    const store = createMockStore(mockState);
-    const action = { type: 'some/action' };
+  it('should dispatch a sync event containing only the changed slices if client is host', () => {
+    const initialState = createMockState(true) as RootState;
+    const updatedState: RootState = {
+      ...initialState,
+      game: {
+        ...initialState.game,
+        turn: initialState.game.turn + 1,
+      },
+    } as RootState;
+
+    // Mock getState to return the initial state first and the updated state after the action is processed
+    const getStateMock = jest
+      .fn()
+      .mockReturnValueOnce(initialState)
+      .mockReturnValueOnce(updatedState);
+
+    const store = {
+      getState: getStateMock,
+      dispatch: jest.fn(),
+    } as unknown as { getState: () => RootState; dispatch: jest.Mock };
+
+    // Use an actual action that should trigger broadcasting
+    const action = { type: 'game/newGame' };
 
     const middleware = broadcastStateChange(store)(next);
     middleware(action);
 
     expect(next).toHaveBeenCalledWith(action);
     expect(mockDispatchEvent).toHaveBeenCalledTimes(1);
+
     const event = mockDispatchEvent.mock.calls[0][0] as CustomEvent;
     expect(event.type).toBe(SYNC_EVENT_NAME);
-    expect(event.detail).toEqual(mockState);
+    expect(event.detail).toEqual({ game: updatedState.game });
   });
 }); 

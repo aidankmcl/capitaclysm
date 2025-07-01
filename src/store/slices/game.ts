@@ -28,11 +28,21 @@ export const gameSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(shared.syncState, (state, action) => {
-        const payload = action.payload as any;
-        return {
-          ...payload.game,
-          clientIsHost: state.clientIsHost
-        };
+        // The syncState action may contain a full or partial state update.
+        // We only care about the `game` slice here, so cast to a partial
+        // RootState to access it safely without using `any`.
+        const payload = action.payload as Partial<import("../store").RootState>;
+
+        // If the payload contains a `game` slice, merge it, otherwise keep the existing state
+        if (payload.game) {
+          return {
+            ...payload.game,
+            // Preserve the current host flag on the client
+            clientIsHost: state.clientIsHost,
+          };
+        }
+
+        return state;
       })
       .addCase(playerActions.endTurn, (state) => {
         state.turn++;
