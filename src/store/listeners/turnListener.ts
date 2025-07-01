@@ -1,4 +1,3 @@
-
 import { selectors } from "../selectors";
 import { actions } from "../slices";
 import { AppStartListening } from "./listenerMiddleware";
@@ -14,30 +13,18 @@ export const addTurnListener = (startAppListening: AppStartListening) => {
       const newLocation = selectors.locations.getPlayerLocation(state, playerID);
       if (!newLocation) return;
 
-      const isRent = newLocation.owners.length > 0;
-
       switch (newLocation.type) {
-      case "event":
-        // something
-        break;
-      case "utility":
-      case "railroad":
-      case "property":
-        // Only pay rent if you're not an owner
-        if (!newLocation.owners.find(({ ownerID }) => ownerID === playerID)) {
-          listenerApi.dispatch(actions.deals.offer({
-            locationIndex: newLocation.locationIndex,
-            price: isRent
-              ? newLocation.type === "utility"
-                ? action.payload.steps * newLocation.rentMultiplier
-                : newLocation.rent || 0
-              : newLocation.price,
-            playerID,
-            isRent
-          }));
-      
-          await listenerApi.take(actions.deals.close.match);
-        }
+        case "event":
+          // TODO: implement event tile behaviour
+          break;
+
+        case "utility":
+        case "railroad":
+        case "property":
+          // TODO: property purchase / rent collection should now be handled via
+          // transaction hooks dispatched from the UI layer or a future
+          // dedicated system. The legacy "deals" flow has been removed.
+          break;
       }
 
       listenerApi.dispatch(actions.player.endTurn());

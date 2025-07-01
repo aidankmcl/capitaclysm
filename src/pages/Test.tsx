@@ -1,7 +1,6 @@
 // import { useState } from 'react';
 
 import { Layout } from "~/ui";
-import { Map } from "../components/map";
 import { actions, useAppDispatch } from "~/store";
 import { useEffect, useRef } from "react";
 
@@ -18,7 +17,7 @@ export const Test = () => {
 
   return <Layout>
     <div style={{ height: "80vh", width: "80vh"}}>
-      <Map />
+      <div>Map placeholder - will be replaced with new mapping solution</div>
     </div>
   </Layout>;
 };

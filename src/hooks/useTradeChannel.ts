@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import { DataConnection } from "peerjs";
 
 import { usePeer } from "~/services/p2p";
-import { initiateTradeChannel } from "../../services/trades/trades";
+import { initiateTradeChannel } from "~/services/trades";
 import { addCallbacks, createCallback } from "~/services/p2p/events";
 
 // Define the shape of a trade negotiation message

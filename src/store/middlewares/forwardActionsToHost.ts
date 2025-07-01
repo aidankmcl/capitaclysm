@@ -1,4 +1,4 @@
-import { Action, Middleware } from "@reduxjs/toolkit";
+import { Action, Middleware, isAnyOf } from "@reduxjs/toolkit";
 import { RootState } from "../store";
 import { actions } from "../slices";
 
@@ -11,23 +11,23 @@ const sendEventUpstream = (action: Action) => {
 };
 
 // Some actions we do want to process locally and not forward
-const localActions = [
+const isLocalAction = isAnyOf(
   actions.game.setHost,
   actions.shared.syncState,
   actions.player.setClientPlayer
-];
+);
 
 /** This middleware comes before redux-sagas middleware to forward all action processing to game host */
-export const forwardActionsToHost: Middleware = store => next => (action: Action<unknown>) => {
+export const forwardActionsToHost: Middleware = store => next => (action: unknown) => {
   const originalState = store.getState() as RootState;
   const isHost = originalState.game.clientIsHost;
   let result;
 
   // If a client, don't act on action
-  if (isHost || localActions.some(localAction => localAction.match(action))) {
+  if (isHost || isLocalAction(action as Action)) {
     result = next(action);
   } else if (!originalState.game.clientIsHost) {
-    sendEventUpstream(action);
+    sendEventUpstream(action as Action);
   }
 
   return result;

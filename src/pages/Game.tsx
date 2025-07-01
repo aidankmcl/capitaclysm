@@ -3,11 +3,10 @@ import { FC } from "react";
 import { HostP2PListener, ClientP2PListener } from "~/store";
 import { usePeer } from "~/services/p2p";
 
-import { Gamegrid } from "../components/layout";
-import { Map } from "../components/map";
-import { Controls } from "../components/controls";
-import { DealModalProvider } from "../components/controls";
-import { ManageClientConnection } from "../components/ManageClientConnection";
+import { Gamegrid } from "~/ui";
+import { Controls } from "~/components/controls";
+import { DealModalProvider } from "~/components/controls";
+import { ManageClientConnection } from "~/components/ManageClientConnection";
 import { useSyncClientPlayer } from "~/hooks";
 import { Layout } from "~/ui";
 
@@ -23,7 +22,7 @@ export const Game: FC = () => {
     <Layout>
       {!isHost && <ClientLogic />}
       <Gamegrid
-        map={<Map />}
+        map={<div>Map placeholder - will be replaced with new mapping solution</div>}
         manage={isHost ? <h2>{code}</h2> : <ManageClientConnection />}
         content={<Controls />}
       >

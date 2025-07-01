@@ -3,6 +3,7 @@ import Box from "@mui/joy/Box";
 
 import { Toaster, toast as sonnerToast } from "sonner";
 import { Alert, IconButton } from "@mui/joy";
+import { JSX } from "react";
 
 type ToasterProps = Parameters<typeof Toaster>[0]
 export const ToastProvider = (props: ToasterProps) => {

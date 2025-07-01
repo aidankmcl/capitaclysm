@@ -1,15 +1,18 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
-import { actions as sharedActions } from "./sharedActions";
+import { v4 as uuid } from "uuid";
 
-type Notification = {
+import { syncState } from "../actions";
+
+export type Notification = {
+  id: string;
   created: number;
   title: string;
   content: string;
   type: "turn" | "property" | "payment";
   ownerPlayerID?: string;
   targetPlayerID?: string;
-}
+};
 
 // Define a type for the slice state
 interface NotificationsState {
@@ -18,22 +21,26 @@ interface NotificationsState {
 
 // Define the initial state using that type
 const initialState: NotificationsState = {
-  list: []
+  list: [],
 };
 
 export const notificationsSlice = createSlice({
-  name: "notificationss",
+  name: "notifications",
   initialState,
   extraReducers: (builder) => {
     builder
-      .addCase(sharedActions.syncState, (_, action) => {
+      .addCase(syncState, (_, action) => {
         return action.payload.notifications;
       });
   },
   reducers: {
-    addNotification: (state, action: PayloadAction<Notification>) => {
-      state.list.push(action.payload);
-    }
+    addNotification: (state, action: PayloadAction<Omit<Notification, "id"> & { id?: string }>) => {
+      const notificationWithID: Notification = {
+        id: action.payload.id ?? uuid(),
+        ...action.payload,
+      } as Notification;
+      state.list.push(notificationWithID);
+    },
   },
 });
 

@@ -1,20 +1,66 @@
-import { Middleware } from "@reduxjs/toolkit";
+import { Middleware, isAnyOf } from "@reduxjs/toolkit";
 import { RootState } from "../store";
+import { actions } from "../slices";
 
 export const SYNC_EVENT_NAME = "redux-sync-peers";
 
-const syncEvent = (state: RootState) => {
-  const customEvt = new CustomEvent(SYNC_EVENT_NAME, { detail: state });
+// Actions that should trigger state broadcasts to peers
+const shouldBroadcastState = isAnyOf(
+  // Game state changes
+  actions.game.newGame,
+  
+  // Player changes
+  actions.player.addPlayer,
+  actions.player.movePlayer,
+  actions.player.endTurn,
+  actions.player.setActivePlayer,
+  
+  // Location/property changes
+  actions.shared.purchaseProperty,
+  actions.shared.finalizeTrade,
+  
+  // Stock transactions
+  actions.stocks.buyStock,
+  actions.stocks.sellStock,
+  
+  // Notifications
+  actions.notifications.addNotification
+);
+
+const syncChangedSlices = (changedSlices: Record<string, any>) => {
+  const customEvt = new CustomEvent(SYNC_EVENT_NAME, { detail: changedSlices });
   window.dispatchEvent(customEvt);
 };
 
-export const broadcastStateChange: Middleware = store => next => action => {
-  const result = next(action);
-  const nextState: RootState = store.getState();
+export const broadcastStateChange: Middleware = (store) => {
+  let previousState: RootState = store.getState();
 
-  if (nextState.game.clientIsHost) {
-    syncEvent(nextState);
-  }
+  return (next) => (action) => {
+    const result = next(action);
+    const nextState: RootState = store.getState();
 
-  return result;
+    // Only broadcast for specific actions and only if host
+    if (nextState.game.clientIsHost && shouldBroadcastState(action)) {
+      // Use shallow comparison to detect which slices actually changed
+      const changedSlices: Record<string, any> = {};
+      
+      // Check each slice for reference equality (Immer/RTK guarantees this)
+      const sliceKeys = Object.keys(nextState) as (keyof RootState)[];
+      
+      for (const sliceKey of sliceKeys) {
+        if (nextState[sliceKey] !== previousState[sliceKey]) {
+          changedSlices[sliceKey] = nextState[sliceKey];
+        }
+      }
+      
+      // Only broadcast if something actually changed
+      if (Object.keys(changedSlices).length > 0) {
+        console.log(`Broadcasting changed slices:`, Object.keys(changedSlices));
+        syncChangedSlices(changedSlices);
+      }
+    }
+
+    previousState = nextState;
+    return result;
+  };
 };

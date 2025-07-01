@@ -8,4 +8,6 @@ export { useSyncClientPlayer } from "./useSyncClientPlayer";
 export { useStockTrading } from "./useStockTrading";
 export { useDealActions, type PropertyDeal } from "./useDealActions";
 export { usePlayerStockData } from "./usePlayerStockData";
-export { useGameMap } from "./useGameMap"; 
+
+// Transaction hooks
+export * from "./transactions";

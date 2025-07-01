@@ -2,7 +2,7 @@ import { FC } from "react";
 import { Divider, Stack, Typography } from "@mui/joy";
 
 import { Money } from "~/ui";
-import { Location } from "~/components/map/data";
+import { Location } from "../../../data/locations";
 
 type Props = {
   price: number;

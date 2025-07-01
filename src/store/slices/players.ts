@@ -1,10 +1,10 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { actions as sharedActions } from "./shared";
 
 import { generateRadialBackground } from "~/utils";
 
-import { actions as sharedActions } from "./sharedActions";
 import { actions as stockActions } from "./stocks";
-import { locations } from "../../components/map/data/locations";
+import { locations } from "../../data/locations";
 
 export type PlayerData = {
   id: string;
@@ -44,10 +44,15 @@ export const playerSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(sharedActions.syncState, (state, action) => {
-        return {
-          ...action.payload.players,
-          clientPlayerID: state.clientPlayerID
-        };
+        const payload = action.payload as any;
+        // Handle both full state sync and partial updates
+        if (payload.players) {
+          return {
+            ...payload.players,
+            clientPlayerID: state.clientPlayerID
+          };
+        }
+        return state; // No players data in partial update
       })
       .addCase(sharedActions.finalizeTrade, (state, action) => {
         const { playerAId, playerBId, playerAItems, playerBItems } = action.payload;

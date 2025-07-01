@@ -1,4 +1,4 @@
-import { FC, useState} from "react";
+import { FC, JSX, useState} from "react";
 
 import { default as JoyTabs } from "@mui/joy/Tabs";
 import Box from "@mui/joy/Box";

@@ -5,7 +5,7 @@ import { useStockData } from "../../hooks/useStockData";
 import { useStockHistory } from "../../hooks/useStockHistory";
 import { formatPrice, formatChange } from "../../services/stocks/stockValidation";
 import { StockGraph } from "./StockGraph";
-import { StockPrice } from "src/game/services";
+import { StockPrice } from "~/services/stocks";
 import { StockErrorFallback } from "./StockErrorFallback";
 
 interface StockListProps {

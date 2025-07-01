@@ -25,10 +25,6 @@ function App() {
 
       <PeerProvider>
         <Provider store={store}>
-          <link
-            rel="stylesheet"
-            href="https://unpkg.com/leaflet/dist/leaflet.css"
-          />
           <style>
             {variables}
           </style>

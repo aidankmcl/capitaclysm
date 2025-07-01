@@ -1,7 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { v4 } from "uuid";
-
-import { actions as shared } from "./sharedActions";
+import { actions as shared } from "./shared";
 import { actions as playerActions } from "./players";
 
 
@@ -29,8 +28,9 @@ export const gameSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(shared.syncState, (state, action) => {
+        const payload = action.payload as any;
         return {
-          ...action.payload.game,
+          ...payload.game,
           clientIsHost: state.clientIsHost
         };
       })

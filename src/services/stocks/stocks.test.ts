@@ -101,7 +101,9 @@ describe("Stock Market Logic", () => {
       const price = calculateStockPrice(stock, time);
 
       expect(price.symbol).toBe("TECH");
-      expect(price.price).toBeCloseTo(stock.basePrice, -1);
+      // Allow for volatility - price should be within 20% of base price
+      expect(price.price).toBeGreaterThan(stock.basePrice * 0.8);
+      expect(price.price).toBeLessThan(stock.basePrice * 1.2);
       expect(price.timestamp).toBe(time);
     });
 

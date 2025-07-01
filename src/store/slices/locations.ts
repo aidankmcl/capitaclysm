@@ -1,7 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
-
+import { actions as sharedActions } from "./shared";
 import { actions as gameActions } from "./game";
-import { actions as sharedActions } from "./sharedActions";
 import { locations, Location } from "../../data/locations/locations";
 
 type Owner = {
@@ -52,8 +51,13 @@ export const locationSlice = createSlice({
   initialState,
   extraReducers: (builder) => {
     builder
-      .addCase(sharedActions.syncState, (_, action) => {
-        return action.payload.locations;
+      .addCase(sharedActions.syncState, (state, action) => {
+        const payload = action.payload as any;
+        // Handle both full state sync and partial updates
+        if (payload.locations) {
+          return payload.locations;
+        }
+        return state; // No locations data in partial update
       })
       .addCase(gameActions.newGame, (state) => {
         locations.forEach((location: Location, i: number) => {

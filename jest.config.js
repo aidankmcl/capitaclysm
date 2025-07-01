@@ -4,7 +4,6 @@ module.exports = {
   setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
   moduleNameMapper: {
     // Handle module aliases from tsconfig.json
-    '^~/assets/(.*)$': '<rootDir>/src/assets/$1',
     "~/components/(.*)$": "<rootDir>/src/components/$1",
     "~/constants$": "<rootDir>/src/constants",
     "~/data$": "<rootDir>/src/data",
@@ -16,16 +15,21 @@ module.exports = {
     "~/ui$": "<rootDir>/src/ui",
     "~/utils$": "<rootDir>/src/utils",
 
-    // Mock CSS imports
+    // Asset imports
+    '^~/assets/(.*?)(?<!\\.svg(?:\\?react)?)$': '<rootDir>/src/assets/$1',
     '\\.css$': 'identity-obj-proxy',
-    '\\.svg$': '<rootDir>/__mocks__/svg.js',
+    '.*\\.svg(\\?react)?$': '<rootDir>/__mocks__/svg.js',
+    
   },
   transform: {
-    '^.+\\.(ts|tsx)$': 'ts-jest',
+    '^.+\\.(ts|tsx)$': ['ts-jest', {
+      tsconfig: 'tsconfig.json',
+    }],
   },
+  extensionsToTreatAsEsm: ['.ts', '.tsx'],
   globals: {
     'ts-jest': {
-      tsconfig: 'tsconfig.json',
+      useESM: true,
     },
   },
 }; 

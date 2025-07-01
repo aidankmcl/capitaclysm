@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, JSX } from "react";
 import { Chip, Typography } from "@mui/joy";
 
 

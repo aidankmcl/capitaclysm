@@ -1,137 +1,165 @@
-import { DataConnection } from 'peerjs';
-import { renderHook, act } from '@testing-library/react';
-
+import { renderHook, act, waitFor } from '@testing-library/react';
 import { useTradeChannel, TradeMessage } from './useTradeChannel';
-import { usePeer } from '~/services/p2p';
-import { initiateTradeChannel } from '~/services/trades/trades';
-import { addCallbacks, createCallback } from '~/services/p2p/events';
 
-// Mock dependencies
-jest.mock('~/services/p2p');
-jest.mock('../services/trades');
-jest.mock('~/services/p2p/events');
+// --- Mock helpers ----------------------------------------------------------
 
-const mockUsePeer = usePeer as jest.Mock;
-const mockInitiateTradeChannel = initiateTradeChannel as jest.Mock;
-const mockAddCallbacks = addCallbacks as jest.Mock;
-const mockCreateCallback = createCallback as jest.Mock;
+// Simple in-memory mock that behaves like a peerjs DataConnection for our tests
+const createMockConnection = (label: string) => {
+  const handlers: Record<string, (data?: unknown) => void> = {};
 
-const mockConnection: Partial<DataConnection> = {
-  on: jest.fn(),
-  send: jest.fn(),
-  close: jest.fn(),
-  removeAllListeners: jest.fn(),
-  label: 'trade-testTradeId',
+  return {
+    label,
+    // peerjs DataConnection methods we rely on
+    on: jest.fn((event: string, cb: (data?: unknown) => void) => {
+      handlers[event] = cb;
+    }),
+    send: jest.fn(),
+    close: jest.fn(),
+    removeAllListeners: jest.fn(() => {
+      Object.keys(handlers).forEach((k) => delete handlers[k]);
+    }),
+    // Test-only helper for triggering events registered through .on()
+    __trigger(event: string, data?: unknown) {
+      handlers[event]?.(data);
+    },
+  } as unknown as import('peerjs').DataConnection & { __trigger: (e: string, d?: unknown) => void };
 };
 
+// ---------------------------------------------------------------------------
+// Jest mocks for external dependencies the hook relies on
+// ---------------------------------------------------------------------------
+
+// services/p2p
+jest.mock('~/services/p2p', () => ({
+  usePeer: jest.fn(),
+}));
+
+// services/trades
+jest.mock('~/services/trades', () => ({
+  initiateTradeChannel: jest.fn(),
+  getTradeChannelLabel: jest.fn((id: string) => `trade_${id}`),
+}));
+
+// services/p2p/events
+jest.mock('~/services/p2p/events', () => ({
+  addCallbacks: jest.fn(),
+  createCallback: jest.fn(),
+}));
+
+import { usePeer } from '~/services/p2p';
+import { initiateTradeChannel } from '~/services/trades';
+import { addCallbacks, createCallback } from '~/services/p2p/events';
+
+const mockUsePeer = usePeer as jest.MockedFunction<typeof usePeer>;
+const mockInitiateTradeChannel = initiateTradeChannel as jest.MockedFunction<typeof initiateTradeChannel>;
+const mockAddCallbacks = addCallbacks as jest.MockedFunction<typeof addCallbacks>;
+const mockCreateCallback = createCallback as jest.MockedFunction<typeof createCallback>;
+
+// ---------------------------------------------------------------------------
+// Tests
+// ---------------------------------------------------------------------------
+
 describe('useTradeChannel', () => {
+  const tradeId = 'test-trade';
+  const peerId = 'local-peer';
+  const targetPeerId = 'remote-peer';
+
   beforeEach(() => {
-    // Reset mocks before each test
     jest.clearAllMocks();
-    mockUsePeer.mockReturnValue({ peer: { id: 'peer-id' } });
-    mockInitiateTradeChannel.mockReturnValue(mockConnection);
+    mockUsePeer.mockReturnValue({ peer: { id: peerId } } as any);
+    mockAddCallbacks.mockImplementation(() => jest.fn()); // return cleanup fn
   });
 
-  it('initiator should create a trade channel', () => {
+  it('initiator should create a trade channel', async () => {
+    const mockConn = createMockConnection(`trade_${tradeId}`);
+    mockInitiateTradeChannel.mockReturnValue(mockConn);
+
+    const onData = jest.fn();
+
     const { result } = renderHook(() =>
       useTradeChannel({
-        tradeId: 'testTradeId',
+        tradeId,
         isInitiator: true,
-        targetPeerId: 'target-peer-id',
-        onData: jest.fn(),
-      }),
+        targetPeerId,
+        onData,
+      })
     );
 
-    expect(mockInitiateTradeChannel).toHaveBeenCalledWith(
-      { id: 'peer-id' },
-      'target-peer-id',
-      'testTradeId',
-    );
-    expect(result.current.send).toBeDefined();
-    expect(result.current.close).toBeDefined();
-  });
+    // initiateTradeChannel should be invoked with correct params
+    expect(mockInitiateTradeChannel).toHaveBeenCalled();
+    const [passedPeer, passedTarget, passedTradeId] = mockInitiateTradeChannel.mock.calls[0];
+    expect(passedPeer).toEqual(expect.objectContaining({ id: peerId }));
+    expect(passedTarget).toBe(targetPeerId);
+    expect(passedTradeId).toBe(tradeId);
 
-  it('receiver should listen for a trade channel', () => {
-    mockUsePeer.mockReturnValue({ peer: { id: 'receiver-peer-id' } });
-    let connectionCallback: (args: { connection: DataConnection }) => void;
-    mockAddCallbacks.mockImplementation((callbacks) => {
-      // Find the 'open' callback for 'trade' and store it
-      const tradeCallback = callbacks.find((cb: { type: string; event: string; callback: (args: { connection: DataConnection }) => void }) => cb.type === 'trade' && cb.event === 'open');
-      if (tradeCallback) {
-        connectionCallback = tradeCallback.callback;
-      }
-      return jest.fn(); // Return a cleanup function
+    // Wait until the hook finishes setting the connection state
+    await waitFor(() => {
+      // .send is defined once the connection is set
+      expect(result.current.send).toBeDefined();
     });
-    mockCreateCallback.mockImplementation((type, event, callback) => ({ type, event, callback }));
 
-
-    const { result } = renderHook(() =>
-      useTradeChannel({
-        tradeId: 'testTradeId',
-        isInitiator: false,
-        onData: jest.fn(),
-      }),
-    );
-
-    // Simulate an incoming connection
+    // Verify send/close delegate to the DataConnection
+    const message: TradeMessage<string> = { type: 'offer', payload: 'foo' };
     act(() => {
-      connectionCallback({ connection: mockConnection as DataConnection });
+      result.current.send(message);
+      result.current.close();
     });
 
-    expect(mockAddCallbacks).toHaveBeenCalled();
-    expect(result.current.send).toBeDefined();
-    expect(result.current.close).toBeDefined();
+    expect(mockConn.send).toHaveBeenCalledWith(message);
+    expect(mockConn.close).toHaveBeenCalled();
   });
-  
-    it('should call onData when data is received', () => {
-        const onData = jest.fn();
-        renderHook(() =>
-            useTradeChannel({
-                tradeId: 'testTradeId',
-                isInitiator: true,
-                targetPeerId: 'target-peer-id',
-                onData,
-            }),
-        );
 
-        const dataCallback = (mockConnection.on as jest.Mock).mock.calls.find(call => call[0] === 'data')[1];
-        const message: TradeMessage = { type: 'offer', payload: 'test' };
+  it('receiver should listen for a trade channel and set up handlers', async () => {
+    const mockConn = createMockConnection(`trade_${tradeId}`);
 
-        act(() => {
-            dataCallback(message);
-        });
-
-        expect(onData).toHaveBeenCalledWith(message);
+    // Capture the callback the hook registers for the window event
+    let openCallback: (evt: Event) => void = () => {};
+    mockCreateCallback.mockImplementation((_origin, _event, cb) => {
+      openCallback = cb as unknown as (evt: Event) => void;
+      return { origin: 'trade', eventType: 'open', callback: openCallback } as any;
     });
 
-    it('should call send on the connection', () => {
-        const { result } = renderHook(() =>
-            useTradeChannel({
-                tradeId: 'testTradeId',
-                isInitiator: true,
-                targetPeerId: 'target-peer-id',
-                onData: jest.fn(),
-            }),
-        );
+    mockAddCallbacks.mockImplementation(() => jest.fn());
 
-        const message: TradeMessage = { type: 'accept', payload: 'ok' };
-        result.current.send(message);
+    const onData = jest.fn();
 
-        expect(mockConnection.send).toHaveBeenCalledWith(message);
+    renderHook(() =>
+      useTradeChannel({
+        tradeId,
+        isInitiator: false,
+        onData,
+      })
+    );
+
+    // Hook should have installed a callback via createCallback
+    expect(mockCreateCallback).toHaveBeenCalledWith(
+      'trade',
+      'open',
+      expect.any(Function)
+    );
+    expect(mockAddCallbacks).toHaveBeenCalledWith([
+      expect.objectContaining({ origin: 'trade', eventType: 'open', callback: openCallback }),
+    ]);
+
+    // Simulate receiving the connection via the window event
+    act(() => {
+      openCallback({ connection: mockConn } as any);
     });
 
-    it('should call close on the connection', () => {
-        const { result } = renderHook(() =>
-            useTradeChannel({
-                tradeId: 'testTradeId',
-                isInitiator: true,
-                targetPeerId: 'target-peer-id',
-                onData: jest.fn(),
-            }),
-        );
+    // Wait for the hook to attach listeners on the connection
+    await waitFor(() => expect(mockConn.on).toHaveBeenCalled());
 
-        result.current.close();
+    // Grab the handler the hook registered for the "data" event
+    const dataHandler = (mockConn.on as jest.Mock).mock.calls.find(
+      ([evt]) => evt === 'data'
+    )[1] as (data: unknown) => void;
 
-        expect(mockConnection.close).toHaveBeenCalled();
+    const payload: TradeMessage<number> = { type: 'accept', payload: 42 };
+
+    act(() => {
+      dataHandler(payload);
     });
+
+    expect(onData).toHaveBeenCalledWith(payload);
+  });
 }); 

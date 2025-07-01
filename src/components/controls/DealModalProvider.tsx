@@ -1,31 +1,15 @@
 import { FC } from "react";
 
-import { selectors, useAppSelector } from "~/store";
-import { useDealActions, PropertyDeal } from "../../hooks";
-
-import { TransactionDialog } from "./TransactionDialog";
-
-const ActiveDeal: FC<{deal: PropertyDeal}> = ({ deal }) => {
-  const { accept, reject } = useDealActions(deal);
-  const title = deal.isRent ? "Pay Rent" : "Trade Property";
-
-  return (
-    <TransactionDialog
-      title={title}
-      location={deal.location}
-      startMoney={deal.player.money}
-      cost={deal.price}
-      accept={accept}
-      reject={!deal.isRent ? reject : undefined}
-    />
-  );
-};
+/**
+ * NOTE:
+ * The deal / trade flow has been re-implemented to use the generic
+ * `useTransaction` hook. The old modal-driven "deal" UX will be rebuilt on top
+ * of the new primitives, but the previous implementation relied on now-removed
+ * `PropertyDeal` structures. To keep the application compiling while that new
+ * UI is in flight, we temporarily render nothing here.
+ */
 
 export const DealModalProvider: FC = () => {
-  const deals = useAppSelector(selectors.trades.selectTradeLog);
-  const activeDeal = deals[0];
-
-  if (!activeDeal) return <></>;
-
-  return <ActiveDeal deal={activeDeal} />;
+  // When the new deal UI is ready, hook it up here.
+  return null;
 }; 

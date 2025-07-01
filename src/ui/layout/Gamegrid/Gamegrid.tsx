@@ -1,7 +1,7 @@
-import { FC, PropsWithChildren } from "react";
+import { FC, JSX, PropsWithChildren } from "react";
 import { Card, Sheet } from "@mui/joy";
 
-import { DealModalProvider } from "../../controls";
+import { DealModalProvider } from "~/components/controls";
 
 import styles from "./Gamegrid.module.css";
 

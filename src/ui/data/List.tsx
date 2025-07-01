@@ -1,5 +1,5 @@
 import { List as JoyList, ListDivider, ListItem, ListItemContent, ListItemDecorator } from "@mui/joy";
-import { FC } from "react";
+import { FC, JSX } from "react";
 
 type DividerProps = Parameters<typeof ListDivider>[0];
 

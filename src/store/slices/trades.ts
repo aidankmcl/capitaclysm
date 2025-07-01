@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { actions as sharedActions } from "./sharedActions";
+
+import { finalizeTrade, syncState } from "../actions";
 
 // --- Action Payloads ---
 
@@ -41,11 +42,11 @@ const tradesSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(sharedActions.syncState, (_, action) => {
+      .addCase(syncState, (_, action) => {
         return action.payload.trades;
       })
       .addCase(
-        sharedActions.finalizeTrade,
+        finalizeTrade,
         (state, action: PayloadAction<FinalizedTradePayload>) => {
           state.log.push(action.payload);
         }
