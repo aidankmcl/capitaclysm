@@ -3,7 +3,7 @@ import { DataConnection } from "peerjs";
 
 import { usePeer } from "~/services/p2p";
 import { initiateTradeChannel } from "~/services/trades";
-import { addCallbacks, createCallback } from "~/services/p2p/events";
+import { addCallbacks, ConnectionEvent, createCallback } from "~/services/p2p/events";
 
 // Define the shape of a trade negotiation message
 export type TradeMessage<T = unknown> = {
@@ -46,7 +46,15 @@ export const useTradeChannel = ({
     if (isInitiator || !peer) return;
 
     const callbacks = [
-      createCallback("trade", "open", ({ connection }) => {
+      // The underlying event dispatched by the p2p layer is a CustomEvent
+      // with the DataConnection passed in under `detail.connection`.
+      // The test suite for this hook triggers the callback with exactly
+      // this shape, so we need to unwrap the connection from the `detail`
+      // object instead of expecting it directly on the first argument.
+      createCallback("trade", "open", (data: CustomEvent<ConnectionEvent>) => {
+        // Support both the typed shape { connection } as well as the
+        // CustomEvent shape used in the test suite { detail: { connection } }
+        const connection = data?.detail?.connection;
         if (connection && connection.label.endsWith(tradeId)) {
           setTradeConnection(connection);
         }

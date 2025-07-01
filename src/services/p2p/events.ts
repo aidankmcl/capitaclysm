@@ -4,7 +4,7 @@ import { FORWARD_ACTION_EVENT_NAME, RootState, SYNC_EVENT_NAME } from "~/store";
 
 
 type ConnectionToggleEvent = { connectionID: string };
-type ConnectionEvent = { connection: DataConnection };
+export type ConnectionEvent = { connection: DataConnection };
 type DataEvent = unknown; // Typed data events handled separately below
 type ErrorEvent = { err: Error };
 type IceStateEvent = { iceChange: RTCIceConnectionState };
@@ -63,7 +63,7 @@ export const createCallback = <
   O extends keyof EventData,
   M extends EventData[O],
   E extends keyof M,
-  D extends M[E]
+  D extends CustomEvent<M[E]>
 >(origin: O, eventType: E, callback: (data: D) => void): CallbackObject<O, M, E> => {
   return {
     origin,

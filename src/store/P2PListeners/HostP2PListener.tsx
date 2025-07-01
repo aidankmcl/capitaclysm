@@ -1,10 +1,10 @@
 import { useEffect } from "react";
 import { AnyAction } from "@reduxjs/toolkit";
-import { DataConnection } from "peerjs";
 
 import { createCallback, createDataCallback, usePeer } from "~/services/p2p";
 import { useOnce } from "~/hooks";
 import { FORWARD_ACTION_EVENT_NAME, actions, selectors, useAppDispatch, useAppSelector } from "..";
+import { ConnectionEvent } from "~/services/p2p/events";
 
 export const HostP2PListener = () => {
   const dispatch = useAppDispatch();
@@ -15,12 +15,12 @@ export const HostP2PListener = () => {
 
   const { code, addCallbacks, isHost, setHost } = usePeer();
 
-  const onConnection = (data: { connection: DataConnection }) => {
-    const connID = data.connection.connectionId;
-    if (!data.connection.open) {
+  const onConnection = (data: CustomEvent<ConnectionEvent>) => {
+    const connID = data.detail.connection.connectionId;
+    if (!data.detail.connection.open) {
       dispatch(actions.player.togglePlayer({ connectionID: connID, active: false }));
     } else {
-      dispatch(actions.player.addPlayer({ connectionID: connID, name: data.connection.label }));
+      dispatch(actions.player.addPlayer({ connectionID: connID, name: data.detail.connection.label }));
     }
   };
 
