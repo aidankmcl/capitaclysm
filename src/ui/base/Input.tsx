@@ -1,14 +1,13 @@
-import { FC, useId, InputHTMLAttributes, CSSProperties } from "react";
+import { FC, useId, InputHTMLAttributes } from "react";
 
 interface Props extends InputHTMLAttributes<HTMLInputElement> {
   label?: string;
-  sx?: CSSProperties;
   slotProps?: {
     input?: React.InputHTMLAttributes<HTMLInputElement>;
   };
 }
 
-export const Input: FC<Props> = ({ label, className, sx, slotProps, style, ...rest }) => {
+export const Input: FC<Props> = ({ label, className, slotProps, style, ...rest }) => {
   const id = useId();
 
   return (
@@ -27,7 +26,7 @@ export const Input: FC<Props> = ({ label, className, sx, slotProps, style, ...re
           "transition-colors",
           className
         ].filter(Boolean).join(" ")}
-        style={{ ...(style || {}), ...(sx || {}) as CSSProperties }}
+        style={style}
         {...(slotProps?.input || {})}
         {...rest}
       />

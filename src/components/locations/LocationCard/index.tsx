@@ -38,7 +38,7 @@ export const LocationCard: FC<Props> = (props) => {
 
   return (
     <div className="flex flex-col">
-      <Typography level="h3" fontWeight="bold" sx={{ textAlign: "center" }}>{location.name}</Typography>
+      <Typography level="h3" fontWeight="bold" className="text-center">{location.name}</Typography>
       <CardInfo {...props} baseLocation={baseLocation} />
       {location.type !== "event" && (
         <div className="flex flex-col gap-2 mx-3 mt-2">

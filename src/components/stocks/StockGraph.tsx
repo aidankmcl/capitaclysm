@@ -59,14 +59,11 @@ export const StockGraph: FC<StockGraphProps> = ({
     return (
       <div 
         ref={containerRef}
+        className="flex items-center justify-center rounded-sm"
         style={{
           width: fillContainer ? "100%" : width,
           height: fillContainer ? "100%" : height,
-          border: `1px solid ${STOCK_COLORS.BORDER}`, 
-          borderRadius: 1,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center"
+          border: `1px solid ${STOCK_COLORS.BORDER}`
         }}
       >
         <div className="text-sm text-neutral-500">No data</div>
@@ -119,11 +116,9 @@ export const StockGraph: FC<StockGraphProps> = ({
       <svg 
         width={finalWidth} 
         height={finalHeight} 
+        className="rounded max-w-full max-h-full"
         style={{ 
-          border: `1px solid ${STOCK_COLORS.BORDER}`, 
-          borderRadius: "4px",
-          maxWidth: "100%",
-          maxHeight: "100%"
+          border: `1px solid ${STOCK_COLORS.BORDER}`
         }}
       >
         {/* Render bars */}

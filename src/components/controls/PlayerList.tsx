@@ -20,7 +20,7 @@ export const PlayerList: FC<Props> = (props) => {
     const location = locations[player.locationIndex];
 
     return {
-      decorator: <Avatar style={{ flexShrink: 0 }} player={player} activePlayerID={activePlayerID} />,
+      decorator: <Avatar className="flex-shrink-0" player={player} activePlayerID={activePlayerID} />,
       content: (
         <div className="flex flex-row gap-2 ml-[15px] items-center" onClick={() => dispatch(actions.player.setActivePlayer(player.id))}>
           <Typography level="body-md" noWrap className="overflow-hidden text-ellipsis">{player.name}</Typography>

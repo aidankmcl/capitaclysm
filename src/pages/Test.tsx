@@ -14,7 +14,7 @@ export const Test = () => {
   }, [initRef, dispatch]);
 
   return <Layout>
-    <div style={{ height: "80vh", width: "80vh"}}>
+    <div className="h-[80vh] w-[80vh]">
       <div>Map placeholder - will be replaced with new mapping solution</div>
     </div>
   </Layout>;

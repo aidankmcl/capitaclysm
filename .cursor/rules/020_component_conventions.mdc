@@ -6,9 +6,11 @@ alwaysApply: false
 
 # Component Conventions
 
-- One component per folder when >1 file: `Feature/Feature.tsx`, `Feature.module.css`, `index.ts`.
-- File names: component `PascalCase.tsx`, styles `Component.module.css`, tests `.test.tsx`.
-- Style with **CSS Modules**; global vars in `src/theme/`.
+- One component per folder when >1 file: `Feature/Feature.tsx`, `index.ts`.
+- File names: component `PascalCase.tsx`, tests `.test.tsx`.
+- Style with **Tailwind CSS**; use contextual color variables (e.g., `bg-background` not `bg-lightGreen`).
+- Only use `style={{ ... }}` when absolutely necessary (dynamic values, complex calculations).
+- Avoid Material-UI patterns: no `sx` props, prefer Tailwind classes over inline styles.
 - Props: minimal, optional `?`, positive booleans, sensible defaults.
 - Accessibility: text/aria-label, keyboard focus, contrast ≥ 4.5:1.
 - Storybook stories required once Storybook added.

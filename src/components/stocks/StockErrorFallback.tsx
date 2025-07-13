@@ -13,11 +13,11 @@ export const StockErrorFallback: FC<StockErrorFallbackProps> = ({
   onClose 
 }) => {
   return (
-    <Card sx={{ padding: 8, textAlign: "center" }}>
-      <Typography level="h4" color="danger" sx={{ marginBottom: 8 }}>
+    <Card className="p-2 text-center">
+      <Typography level="h4" color="danger" className="mb-2">
         Stock Market Error
       </Typography>
-      <Typography level="body-sm" color="neutral" sx={{ marginBottom: 8 }}>
+      <Typography level="body-sm" color="neutral" className="mb-2">
         {error}
       </Typography>
       <div className="flex gap-1 justify-center">

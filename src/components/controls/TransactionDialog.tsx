@@ -32,7 +32,7 @@ export const TransactionDialog: FC<Props> = (props) => {
           </Card>
         )}
         <div className="flex flex-col lg:flex-row gap-3 items-stretch">
-          <Card sx={{ maxWidth: "300px" }}>
+          <Card className="max-w-sm">
             <LocationCard location={location} />
           </Card>
 

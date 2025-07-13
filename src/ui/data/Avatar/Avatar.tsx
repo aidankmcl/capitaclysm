@@ -7,18 +7,14 @@ type Props = {
   center?: boolean;
   activePlayerID?: string;
   style?: CSSProperties;
+  className?: string;
 }
 
 const avatarSizeEm = 2.5;
 
 const stylesContainer: CSSProperties = {
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
   width: avatarSizeEm + "em",
   height: avatarSizeEm + "em",
-  borderRadius: "100%",
-  textAlign: "center",
   verticalAlign: "middle",
 };
 
@@ -30,17 +26,20 @@ const stylesCenteredContainer: CSSProperties = {
 
 // Not using Joy UI because custom Map markers don't work with them correctly
 export const Avatar: FC<Props> = (props) => {
-  const { player, fontSize, center, activePlayerID } = props;
+  const { player, fontSize, center, activePlayerID, className } = props;
   return (
-    <div style={{
-      ...stylesContainer,
-      fontSize,
-      backgroundImage: props.player.color,
-      boxShadow: activePlayerID === props.player.id ? `0px 0px 10px 3px var(--color-primary)` : "",
-      ...(center ? stylesCenteredContainer : {}),
-      ...props.style
-    }}>
-      <span style={{ fontWeight: "bold" }}>{player.name.charAt(0).toUpperCase()}</span>
+    <div 
+      className={`flex items-center justify-center rounded-full text-center ${className || ""}`}
+      style={{
+        ...stylesContainer,
+        fontSize,
+        backgroundImage: props.player.color,
+        boxShadow: activePlayerID === props.player.id ? `0px 0px 10px 3px var(--color-primary)` : "",
+        ...(center ? stylesCenteredContainer : {}),
+        ...props.style
+      }}
+    >
+      <span className="font-bold">{player.name.charAt(0).toUpperCase()}</span>
     </div>
   );
 };

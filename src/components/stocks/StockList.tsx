@@ -19,7 +19,7 @@ const StockItem = ({ price, symbol, referenceTime, onSelectStock }: { price: Sto
   const isPositive = price.change >= 0;
 
   return (
-    <Card key={price.symbol} sx={{ padding: 8 }}>
+    <Card key={price.symbol} className="p-2">
       <div className="flex justify-between items-left flex-col">
         <StockGraph 
           priceHistory={priceHistory}
@@ -40,7 +40,7 @@ const StockItem = ({ price, symbol, referenceTime, onSelectStock }: { price: Sto
                 </Typography>
               </>
             )}
-            <Typography level="h6" sx={{ marginTop: 4 }}>
+            <Typography level="h6" className="mt-1">
               {formatPrice(price.price)}
             </Typography>
           </div>
@@ -87,7 +87,7 @@ export const StockList: FC<StockListProps> = ({ onSelectStock }) => {
 
   return (
     <div className="flex flex-col gap-1">
-      <Typography level="h4" sx={{ marginBottom: 8 }}>
+      <Typography level="h4" className="mb-2">
         Stock Market
       </Typography>
       

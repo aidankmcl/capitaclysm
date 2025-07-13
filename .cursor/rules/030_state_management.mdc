@@ -11,7 +11,7 @@ alwaysApply: false
 - One slice per domain (`src/store/slices/<domain>.ts`); keep state flat & normalised.
 - Export pattern: default `reducer`; named `actions`; selectors inline or in `src/store/selectors.ts` barrel.
 - **Action naming**: `domain/verbNoun` (past tense for events).
-- Use **listener middleware** for async flows; prefer over thunks.
+- Use **listener middleware** for async flows; prefer over thunks and sagas.
 - Intercept all actions (logging, P2P sync) via custom middleware in `src/store/middlewares/`.
 - When adding a slice: update `store.ts`, selectors barrel, tests next to slice.
 - Tests: use `configureStore` + mock services; keep reducers unit-tested.

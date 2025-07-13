@@ -1,13 +1,9 @@
-import { FC } from "react";
+import { FC, useState } from "react";
 
 import { HostP2PListener, ClientP2PListener } from "~/store";
 import { usePeer } from "~/services/p2p";
 
-import { Gamegrid } from "~/ui";
-import { Controls } from "~/components/controls";
-import { DealModalProvider } from "~/components/controls";
-import { ManageClientConnection } from "~/components/ManageClientConnection";
-import { ManageHostConnection } from "~/components/ManageHostConnection";
+import { PhoneScreen, StatusBar, HomeScreen, NavigationBar, AppContainer } from "~/ui";
 import { useSyncClientPlayer } from "~/hooks";
 import { Layout } from "~/ui";
 
@@ -18,18 +14,38 @@ const ClientLogic: FC = () => {
 
 export const Game: FC = () => {
   const { isHost } = usePeer();
+  const [currentApp, setCurrentApp] = useState<string | null>(null);
+  const [isHomeScreen, setIsHomeScreen] = useState(true);
+
+  const handleAppSelect = (appId: string) => {
+    setCurrentApp(appId);
+    setIsHomeScreen(false);
+  };
+
+  const handleCloseApp = () => {
+    setCurrentApp(null);
+    setIsHomeScreen(true);
+  };
 
   return (
     <Layout>
-      <DealModalProvider />
       {!isHost && <ClientLogic />}
-      <Gamegrid
-        map={<div>Map placeholder - will be replaced with new mapping solution</div>}
-        connection={isHost ? <ManageHostConnection /> : <ManageClientConnection />}
-        content={<Controls />}
-      >
-        {isHost ? <HostP2PListener /> : <ClientP2PListener />}
-      </Gamegrid>
+      
+      <div className="flex items-center justify-center min-h-screen p-8">
+        <PhoneScreen>
+          <StatusBar />
+          
+          {isHomeScreen ? (
+            <HomeScreen onAppSelect={handleAppSelect} />
+          ) : (
+            <AppContainer appId={currentApp} onClose={handleCloseApp} />
+          )}
+          
+          <NavigationBar onHomePress={handleCloseApp} />
+        </PhoneScreen>
+      </div>
+      
+      {isHost ? <HostP2PListener /> : <ClientP2PListener />}
     </Layout>
   );
 }; 

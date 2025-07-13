@@ -29,10 +29,56 @@
   --color-stockDown: #306230;
   --color-stockLabel: #0F380F;
 
+  /* Phone-specific colors */
+  --color-phone-bg: #000000;
+  --color-phone-text: #FFFFFF;
+  --color-status-bar: #000000;
+  --color-app-uber: #000000;
+  --color-app-contacts: #007AFF;
+  --color-app-realestate: #006AFF;
+  --color-app-trading: #00C805;
+  --color-app-settings: #8E8E93;
+  
+  /* Phone dimensions */
+  --phone-width: 375px;
+  --phone-height: 812px;
+  --phone-radius: 40px;
+  --status-bar-height: 44px;
+  --nav-bar-height: 83px;
+  --app-icon-size: 60px;
+  --app-icon-radius: 12px;
+  
+  /* Phone spacing */
+  --phone-padding: 20px;
+  --app-grid-gap: 20px;
+  --status-padding: 15px;
+  
+  /* Animation timing */
+  --animation-fast: 0.2s;
+  --animation-medium: 0.3s;
+  --animation-slow: 0.5s;
+
   /* Spacing */
   --space-padS: 5px;
   --space-padM: 15px;
   --space-padL: 25px;
+}
+
+/* Phone-specific animations */
+@keyframes appLaunch {
+  0% { transform: scale(0.8) translateY(50px); opacity: 0; }
+  100% { transform: scale(1) translateY(0); opacity: 1; }
+}
+
+@keyframes appClose {
+  0% { transform: scale(1) translateY(0); opacity: 1; }
+  100% { transform: scale(0.8) translateY(50px); opacity: 0; }
+}
+
+@keyframes iconBounce {
+  0% { transform: scale(1); }
+  50% { transform: scale(0.9); }
+  100% { transform: scale(1); }
 }
 
 /* --------------------------------------------------

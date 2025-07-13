@@ -41,7 +41,7 @@ export const ManageClientConnection = () => {
       {/* Surface the host code next to the inputs so players can double-check
           the ID they are joining. */}
       {hostIDInput && (
-        <Typography level="body-sm" sx={{ fontFamily: "monospace", textAlign: "center" }}>
+        <Typography level="body-sm" className="font-mono text-center">
           Host ID: {hostIDInput}
         </Typography>
       )}

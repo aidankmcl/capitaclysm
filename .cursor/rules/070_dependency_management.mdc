@@ -1,0 +1,16 @@
+---
+description: USE WHEN managing dependencies and package.json updates.
+globs: package.json,pnpm-lock.yaml,yarn.lock
+alwaysApply: false
+---
+
+# Dependency Management Rules
+
+- **Regular cleanup**: Remove unused dependencies from `package.json` (e.g., `redux-saga` if using listener middleware).
+- **Version consistency**: Keep major versions aligned; avoid mixing old/new patterns.
+- **Dev vs Runtime**: Use `devDependencies` for build tools, test frameworks, and type definitions.
+- **Peer dependencies**: Declare peer deps when building reusable components/libraries.
+- **Security audits**: Run `pnpm audit` regularly; fix critical vulnerabilities promptly.
+- **Lock files**: Commit lock files (`pnpm-lock.yaml`) to ensure reproducible builds.
+- **Bundle analysis**: Monitor bundle size; prefer lighter alternatives when possible.
+- **Type definitions**: Prefer packages with built-in TypeScript support over separate `@types/*` packages.

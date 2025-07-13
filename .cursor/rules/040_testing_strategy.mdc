@@ -14,6 +14,6 @@ alwaysApply: false
   3. Integration (multiple slices/hooks)
   4. E2E smoke (happy path)
 - Mock only boundaries (network, randomness); use `__mocks__/` & factories.
-- Use `vi.useFakeTimers()` for time-dependent logic.
+- Use `jest.useFakeTimers()` for time-dependent logic.
 - Coverage targets: ≥80 % for critical services/slices.
 - CI: lint & type-check before tests; `pnpm test --coverage` in pipeline.
