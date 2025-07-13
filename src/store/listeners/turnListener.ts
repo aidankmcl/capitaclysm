@@ -47,7 +47,7 @@ export const addTurnListener = (startAppListening: AppStartListening) => {
       //   // Unwrap the child result in the listener
       //   if (result.status === 'ok') {
       //     // Logs the `42` result value that was returned
-      //     console.log('Child succeeded: ', result.value)
+      //     console.info('Child succeeded: ', result.value)
       //   }
       // }
     },

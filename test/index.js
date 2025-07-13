@@ -1,44 +1,4 @@
 
-
-// function seed(i) {
-// 	const x = i / Math.PI;
-//   return x - Math.floor(x);
-// }
-
-// function pseudorandom(i, volatilityMultiplier = 0) {
-//     const seedValue = seed(i);
-//     const pseudoVal = (seedValue + (seedValue * volatilityMultiplier)) / 2;
-//     // console.log(pseudoVal, seedValue, volatilityMultiplier, seedValue / 2)
-//     return pseudoVal;
-// }
-
-// const start = 1729133842510;
-// const end = start + (10 * 24 * 60 * 60 * 1000);
-// const step = 60 * 60 * 1000;
-
-// const data = [];
-
-// for (let i = start; i < end; i += step) {
-// 	data.push(pseudorandom(i));
-// }
-
-// console.log(data);
-
-// var chart = new Highcharts.Chart({
-//     chart: {
-//         renderTo: 'container',
-//         animation: false,
-//         zoomType: 'x'
-//     },
-//     tooltip: {
-//         yDecimals: 2
-//     },
-//     series: [{
-//         data: data
-//     }]
-// });
-
-
 // http://jsfiddle.net/8spemyab/45/
 
 

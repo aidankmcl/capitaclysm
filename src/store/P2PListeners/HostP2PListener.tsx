@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { AnyAction } from "@reduxjs/toolkit";
+import { Action } from "@reduxjs/toolkit";
 
 import { createCallback, createDataCallback, usePeer } from "~/services/p2p";
 import { useOnce } from "~/hooks";
@@ -46,8 +46,7 @@ export const HostP2PListener = () => {
   }, [dispatch, clientPlayerID, players, code]);
 
   const childActions = createDataCallback("child", FORWARD_ACTION_EVENT_NAME, (data) => {
-    console.log("received child action", data);
-    dispatch(data as AnyAction); // The origin of this data can only be an action creator
+    dispatch(data as Action); // The origin of this data can only be an action creator
   });
 
   useOnce(() => {

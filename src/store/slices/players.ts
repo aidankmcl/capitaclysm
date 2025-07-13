@@ -92,7 +92,7 @@ export const playerSlice = createSlice({
         
         if (state.items[playerID] && state.items[playerID].money >= totalCost) {
           state.items[playerID].money -= totalCost;
-          console.log(`Player ${playerID} bought ${shares} shares for $${totalCost}`);
+          console.info(`Player ${playerID} bought ${shares} shares for $${totalCost}`);
         }
       })
       .addCase(stockActions.sellStock, (state, action) => {
@@ -102,7 +102,7 @@ export const playerSlice = createSlice({
         
         if (state.items[playerID]) {
           state.items[playerID].money += totalProceeds;
-          console.log(`Player ${playerID} sold ${shares} shares of ${symbol} for $${totalProceeds}`);
+          console.info(`Player ${playerID} sold ${shares} shares of ${symbol} for $${totalProceeds}`);
         }
       });
   },
@@ -161,7 +161,6 @@ export const playerSlice = createSlice({
       const currentActivePlayerID = state.activePlayerID;
       const activePlayerIndex = state.playerIDs.findIndex(playerID => currentActivePlayerID === playerID);
       const nextPlayerIndex = (activePlayerIndex + 1) % state.playerIDs.length;
-      console.log("next player?", currentActivePlayerID, activePlayerIndex, nextPlayerIndex, state.playerIDs);
       state.activePlayerID = state.playerIDs[nextPlayerIndex];
     }
   },

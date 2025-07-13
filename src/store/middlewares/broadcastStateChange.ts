@@ -56,7 +56,6 @@ export const broadcastStateChange: Middleware = (store) => {
       
       // Only broadcast if something actually changed
       if (Object.keys(changedSlices).length > 0) {
-        console.log(`Broadcasting changed slices:`, Object.keys(changedSlices));
         syncChangedSlices(changedSlices);
       }
     }

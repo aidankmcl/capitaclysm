@@ -414,7 +414,7 @@ describe('useTransaction', () => {
         );
 
         if (!transactionResult.success) {
-          console.log('Transaction failed:', transactionResult.validation);
+          console.error('Transaction failed:', transactionResult.validation);
         }
 
         expect(transactionResult.success).toBe(true);
