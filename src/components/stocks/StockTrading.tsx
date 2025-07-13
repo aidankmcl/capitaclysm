@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { Box, Card, Typography, Button, Input, Stack } from "~/ui";
+import { Box, Card, Typography, Button, Input } from "~/ui";
 
 import { useStockTrading } from "~/hooks";
 import { formatPrice, formatChange } from "../../services/stocks/stockValidation";
@@ -84,7 +84,7 @@ export const StockTrading: FC<StockTradingProps> = ({ symbol, onClose }) => {
         )}
       </Box>
 
-      <Stack direction="row" spacing={1} className="mb-2">
+      <div className="flex flex-row gap-1 mb-2">
         <Button
           variant={action === "buy" ? "solid" : "outlined"}
           onClick={() => setAction("buy")}
@@ -99,7 +99,7 @@ export const StockTrading: FC<StockTradingProps> = ({ symbol, onClose }) => {
         >
           Sell
         </Button>
-      </Stack>
+      </div>
 
       <Box className="mb-2">
         <Typography level="body-sm" className="mb-1">
@@ -134,7 +134,7 @@ export const StockTrading: FC<StockTradingProps> = ({ symbol, onClose }) => {
         )}
       </Box>
 
-      <Stack direction="row" spacing={1}>
+      <div className="flex flex-row gap-1">
         <Button
           variant="solid"
           onClick={onTrade}
@@ -146,7 +146,7 @@ export const StockTrading: FC<StockTradingProps> = ({ symbol, onClose }) => {
         <Button variant="outlined" onClick={onClose}>
           Cancel
         </Button>
-      </Stack>
+      </div>
     </Card>
   );
 }; 

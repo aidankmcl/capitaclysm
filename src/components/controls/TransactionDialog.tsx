@@ -1,4 +1,4 @@
-import { Box, Card, Divider, Stack, Typography, Button, Modal, Money } from "~/ui";
+import { Card, Divider, Typography, Button, Modal, Money } from "~/ui";
 
 import { LocationData } from "~/store";
 
@@ -25,58 +25,52 @@ export const TransactionDialog: FC<Props> = (props) => {
       onClose={reject}
       className={`p-[${PADDING}px] border-none background-[${location.color}]`}
     >
-      <Stack>
+      <div className="flex flex-col">
         {title && (
           <Card className="m-[-3px] mb-3 rounded-t-none">
             <Typography level="h2">{title}</Typography>
           </Card>
         )}
-        <Stack spacing={PADDING} alignItems="stretch" className="flex-col lg:flex-row">
+        <div className="flex flex-col lg:flex-row gap-3 items-stretch">
           <Card sx={{ maxWidth: "300px" }}>
             <LocationCard location={location} />
           </Card>
 
-          <Stack spacing={PADDING}>
+          <div className="flex flex-col gap-3">
             <Card>
               <Typography className="text-center mb-2" level="h4">Effect on funds</Typography>
 
-              <Stack direction="column" spacing={1} alignItems="end" className="mt-0">
+              <div className="flex flex-col gap-1 items-end mt-0">
                 <Money amount={startMoney} />
                 <Money amount={- cost} />
                 <Divider />
                 <Money amount={startMoney - cost} />
-              </Stack>
+              </div>
             </Card>
 
             <Card>
-              <Box
-                sx={{
-                  m: "calc(-1 * var(--Card-padding))",
-                  p: 2.5,
-                  borderRadius: "var(--joy-radius-md)"
-                }}
-              >
+              <div className="m-[-1rem] p-2.5 rounded-md">
                 {startMoney >= cost ? (
-                  <Stack direction="row" spacing={2}>
-                    <Button color="success" variant="soft" sx={{ flexGrow: 1 }} onClick={accept}>
+                  <div className="flex flex-row gap-2">
+                    <Button color="success" variant="soft" className="flex-grow" onClick={accept}>
                       Accept
                     </Button>
                     {reject && (
-                      <Button color="danger" variant="soft" sx={{ flexGrow: 1 }} onClick={reject}>
+                      <Button color="danger" variant="soft" className="flex-grow" onClick={reject}>
                         Decline 
                       </Button>
                     )}
-                  </Stack>
+                  </div>
                 ) : (
-                  <Button color="danger" variant="soft" sx={{ width: "100%" }} onClick={reject}>
+                  <Button color="danger" variant="soft" className="w-full" onClick={reject}>
                     Decline
                   </Button>
                 )}
-              </Box>
+              </div>
             </Card>
-          </Stack>
-        </Stack>
-      </Stack>
+          </div>
+        </div>
+      </div>
     </Modal>
   );
 }; 

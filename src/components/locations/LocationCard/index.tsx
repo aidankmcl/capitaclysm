@@ -1,4 +1,4 @@
-import { Divider, Stack, Typography } from "~/ui";
+import { Divider, Typography } from "~/ui";
 import { FC } from "react";
 
 import { LocationData } from "~/store";
@@ -37,18 +37,18 @@ export const LocationCard: FC<Props> = (props) => {
   if (!baseLocation) return <></>;
 
   return (
-    <Stack>
+    <div className="flex flex-col">
       <Typography level="h3" fontWeight="bold" sx={{ textAlign: "center" }}>{location.name}</Typography>
       <CardInfo {...props} baseLocation={baseLocation} />
       {location.type !== "event" && (
-        <Stack className="mx-3 mt-2" spacing={2}>
+        <div className="flex flex-col gap-2 mx-3 mt-2">
           <Divider />
-          <Stack direction="row" className="justify-between">
+          <div className="flex flex-row justify-between">
             <Typography level="body-sm">Mortgage value:</Typography>
             <Money variant="outlined" amount={(location.price || 0) / 2} />
-          </Stack>
-        </Stack>
+          </div>
+        </div>
       )}
-    </Stack>
+    </div>
   );
 };

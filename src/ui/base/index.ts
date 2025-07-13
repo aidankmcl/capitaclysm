@@ -1,6 +1,5 @@
 export { Input } from "./Input";
 export { Button } from "./Button";
-export { Stack } from "./Stack";
 export { Typography } from "./Typography";
 export { Divider } from "./Divider";
 export { Card } from "./Card";

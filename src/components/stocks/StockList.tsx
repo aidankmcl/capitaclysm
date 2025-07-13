@@ -1,5 +1,5 @@
 import { FC, useState, useEffect } from "react";
-import { Box, Card, Typography, Button } from "~/ui";
+import { Card, Typography, Button } from "~/ui";
 
 import { useStockData } from "../../hooks/useStockData";
 import { useStockHistory } from "../../hooks/useStockHistory";
@@ -20,13 +20,13 @@ const StockItem = ({ price, symbol, referenceTime, onSelectStock }: { price: Sto
 
   return (
     <Card key={price.symbol} sx={{ padding: 8 }}>
-      <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "left", flexDirection: "column" }}>
+      <div className="flex justify-between items-left flex-col">
         <StockGraph 
           priceHistory={priceHistory}
           fillContainer={true}
         />
-        <Box sx={{ display: "flex", alignItems: "center", gap: 2, flex: 1, flexDirection: "row" }}>
-          <Box>
+        <div className="flex items-center gap-2 flex-1 flex-row">
+          <div>
             <Typography level="h5">
               {price.symbol}
             </Typography>
@@ -43,10 +43,10 @@ const StockItem = ({ price, symbol, referenceTime, onSelectStock }: { price: Sto
             <Typography level="h6" sx={{ marginTop: 4 }}>
               {formatPrice(price.price)}
             </Typography>
-          </Box>
-        </Box>
+          </div>
+        </div>
         
-        <Box sx={{ display: "flex", flexDirection: "row", alignItems: "flex-end", gap: 1 }}>
+        <div className="flex flex-row items-end gap-1">
           <Typography level="body-sm" color={isPositive ? "success" : "danger"}>
             {formatChange(price.change, price.changePercent)}
           </Typography>
@@ -57,8 +57,8 @@ const StockItem = ({ price, symbol, referenceTime, onSelectStock }: { price: Sto
           >
             Trade
           </Button>
-        </Box>
-      </Box>
+        </div>
+      </div>
     </Card>
   )
 };
@@ -86,12 +86,12 @@ export const StockList: FC<StockListProps> = ({ onSelectStock }) => {
   }
 
   return (
-    <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
+    <div className="flex flex-col gap-1">
       <Typography level="h4" sx={{ marginBottom: 8 }}>
         Stock Market
       </Typography>
       
       {allPrices.map((price) => <StockItem key={price.symbol} price={price} symbol={price.symbol} referenceTime={referenceTime} onSelectStock={onSelectStock} />)}
-    </Box>
+    </div>
   );
 }; 

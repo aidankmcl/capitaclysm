@@ -1,11 +1,11 @@
-import { Stack, Typography } from "~/ui";
+import { Typography } from "~/ui";
 import { usePeer } from "~/services/p2p";
 
 export const ManageHostConnection = () => {
   const { code } = usePeer();
 
   return (
-    <Stack direction="column" spacing={2}>
+    <div className="flex flex-col gap-2">
       <Typography level="h4">Host Game</Typography>
       <Typography level="body-md">
         Share this code with other players to let them join:
@@ -19,6 +19,6 @@ export const ManageHostConnection = () => {
       <Typography level="body-sm" color="neutral">
         Waiting for players to connect...
       </Typography>
-    </Stack>
+    </div>
   );
 }; 

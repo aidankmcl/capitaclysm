@@ -1,11 +1,10 @@
-import { FC, PropsWithChildren, ButtonHTMLAttributes, CSSProperties } from "react";
+import { FC, PropsWithChildren, ButtonHTMLAttributes } from "react";
 
 interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: "solid" | "outlined" | "soft";
   size?: "sm" | "md" | "lg";
   color?: "primary" | "neutral" | "success" | "danger";
   fullWidth?: boolean;
-  sx?: CSSProperties;
 }
 
 export const Button: FC<PropsWithChildren<Props>> = ({
@@ -14,8 +13,8 @@ export const Button: FC<PropsWithChildren<Props>> = ({
   color = "primary",
   className,
   fullWidth = false,
-  sx,
   children,
+  style,
   ...rest
 }) => {
   const sizeClasses: Record<string, string> = {
@@ -55,10 +54,8 @@ export const Button: FC<PropsWithChildren<Props>> = ({
     className,
   ].filter(Boolean).join(" ");
 
-  const mergedStyle: CSSProperties = { ...((rest.style as CSSProperties) || {}), ...(sx || {}) };
-
   return (
-    <button className={combined} style={mergedStyle} {...rest}>
+    <button className={combined} style={style} {...rest}>
       {children}
     </button>
   );

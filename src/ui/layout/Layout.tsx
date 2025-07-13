@@ -1,6 +1,6 @@
 import { FC, PropsWithChildren } from "react";
 
-import { Navbar } from "../../navigation";
+import { Navbar } from "../navigation";
 
 import { ToastProvider } from "~/ui";
 

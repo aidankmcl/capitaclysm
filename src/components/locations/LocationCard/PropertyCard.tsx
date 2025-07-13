@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { Divider, Stack, Typography } from "~/ui";
+import { Divider, Typography } from "~/ui";
 
 import { Money } from "~/ui";
 import { Location } from "../../../data/locations";
@@ -15,28 +15,28 @@ export const PropertyCard: FC<Props> = (props) => {
   if (location.type !== "property") return <></>;
 
   return (
-    <Stack spacing={0} className="mx-3">
-      <Stack direction="row" className="justify-center items-center mt-1" spacing={1}>
+    <div className="flex flex-col gap-0 mx-3">
+      <div className="flex flex-row gap-1 justify-center items-center mt-1">
         <Typography level="body-sm">Price</Typography>
         <Money amount={price} />
-      </Stack>
+      </div>
 
       <Divider className="my-1" />
 
-      <Stack direction="row" className="justify-center items-center" spacing={1}>
+      <div className="flex flex-row gap-1 justify-center items-center">
         <Typography level="body-sm">Base rent</Typography>
         <Money variant="outlined" amount={location.baseRent} />
-      </Stack>
+      </div>
       {[location.rent1, location.rent2, location.rent3, location.rent4].map((rent, i) => (
-        <Stack key={i} direction="row" className="justify-between items-center" spacing={1}>
+        <div key={i} className="flex flex-row gap-1 justify-between items-center">
           <Typography level="body-sm">{i + 1} house{i > 0 ? "s" : ""}</Typography>
           <Money variant="outlined" amount={rent} />
-        </Stack>
+        </div>
       ))}
-      <Stack direction="row" className="justify-between items-center" spacing={1}>
+      <div className="flex flex-row gap-1 justify-between items-center">
         <Typography level="body-sm">With hotel</Typography>
         <Money variant="outlined" amount={location.rent5} />
-      </Stack>
-    </Stack>
+      </div>
+    </div>
   );
 };

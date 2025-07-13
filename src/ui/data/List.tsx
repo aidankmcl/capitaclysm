@@ -1,5 +1,4 @@
 import { FC, JSX } from "react";
-import { List as JoyList, ListItem, ListItemContent, ListItemDecorator, ListDivider } from "@mui/joy";
 
 type Props = {
   title?: string;
@@ -12,25 +11,36 @@ type Props = {
 
 export const List: FC<Props> = (props) => {
   return (
-    <JoyList 
+    <ul 
       aria-label={props.title ?? "list"}
-      className="bg-primary rounded-md border border-tertiary"
+      className="bg-primary rounded-md border border-tertiary list-none p-0 m-0"
     >
       {props.items.map((item, i) => (
-        <ListItem 
+        <li 
           key={i}
-          className="text-text hover:bg-tertiary hover:text-textSecondary transition-colors"
+          className="text-text hover:bg-tertiary hover:text-textSecondary transition-colors flex items-center p-3"
         >
-          {item.decorator && <ListItemDecorator>{item.decorator}</ListItemDecorator>}
-          <ListItemContent>{item.content}</ListItemContent>
+          {item.decorator && (
+            <div className="mr-3 flex-shrink-0 flex items-center">
+              {item.decorator}
+            </div>
+          )}
+          <div className="flex-1 min-w-0">
+            {item.content}
+          </div>
           {props.divider && i < props.items.length - 1 && (
-            <ListDivider 
-              inset={props.divider} 
-              className="border-tertiary"
+            <hr 
+              className={`
+                border-tertiary border-t border-0 my-2 w-full
+                ${props.divider === "gutter" ? "mx-0" : ""}
+                ${props.divider === "startDecorator" ? "ml-12" : ""}
+                ${props.divider === "startContent" ? "ml-16" : ""}
+                ${props.divider === "context" ? "mx-4" : ""}
+              `}
             />
           )}
-        </ListItem>
+        </li>
       ))}
-    </JoyList>
+    </ul>
   );
 };

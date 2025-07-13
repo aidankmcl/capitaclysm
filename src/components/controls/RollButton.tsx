@@ -22,5 +22,5 @@ export const RollButton: FC<Props> = (props) => {
     }
   };
 
-  return <Button disabled={!canMoveActively} onClick={sendMove} size="lg" sx={{ width: "100%" }}>Move</Button>;
+  return <Button disabled={!canMoveActively} onClick={sendMove} size="lg" className="w-full">Move</Button>;
 }; 

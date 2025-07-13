@@ -1,5 +1,4 @@
 import { FC, PropsWithChildren } from "react";
-import { Alert, IconButton } from "@mui/joy";
 
 import { Toaster, toast as sonnerToast } from "sonner";
 import { JSX } from "react";
@@ -10,27 +9,20 @@ export const ToastProvider: FC<PropsWithChildren<ToasterProps>> = (props) => <To
 
 export const toast = (jsx: JSX.Element) => {
   return sonnerToast.custom(t => (
-    <Alert
-      variant="solid"
-      color="neutral"
-      className="w-full gap-2 shadow-md bg-mint border-lightGreen text-darkGreen"
-      endDecorator={
-        <IconButton
-          variant="soft"
-          color="warning"
-          onClick={() => sonnerToast.dismiss(t)}
-          className="bg-lightGreen text-darkGreen hover:bg-green hover:text-mint"
-        >
-          X
-        </IconButton>
-      }
-    >
+    <div className="w-full flex items-center gap-2 shadow-md bg-mint border border-lightGreen text-darkGreen p-3 rounded-md">
       <div className="flex-grow">
         Joy UI feat. Sonner is awesome!
         <div className="flex items-center mt-1">
           {jsx}
         </div>
       </div>
-    </Alert>
+      <button
+        onClick={() => sonnerToast.dismiss(t)}
+        className="bg-lightGreen text-darkGreen hover:bg-green hover:text-mint transition-colors duration-200 px-3 py-1 rounded-md font-medium"
+        aria-label="Dismiss notification"
+      >
+        X
+      </button>
+    </div>
   ));
 };

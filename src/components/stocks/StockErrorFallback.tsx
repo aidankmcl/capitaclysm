@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { Box, Card, Typography, Button } from "~/ui";
+import { Card, Typography, Button } from "~/ui";
 
 interface StockErrorFallbackProps {
   error?: string;
@@ -20,7 +20,7 @@ export const StockErrorFallback: FC<StockErrorFallbackProps> = ({
       <Typography level="body-sm" color="neutral" sx={{ marginBottom: 8 }}>
         {error}
       </Typography>
-      <Box sx={{ display: "flex", gap: 1, justifyContent: "center" }}>
+      <div className="flex gap-1 justify-center">
         {onRetry && (
           <Button variant="solid" onClick={onRetry}>
             Retry
@@ -31,7 +31,7 @@ export const StockErrorFallback: FC<StockErrorFallbackProps> = ({
             Close
           </Button>
         )}
-      </Box>
+      </div>
     </Card>
   );
 }; 

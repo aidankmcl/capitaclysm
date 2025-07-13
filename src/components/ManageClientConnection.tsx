@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Stack, Typography, Button, Input } from "~/ui";
+import { Typography, Button, Input } from "~/ui";
 
 import { usePeer } from "~/services/p2p";
 
@@ -19,8 +19,8 @@ export const ManageClientConnection = () => {
     : undefined;
 
   return (!connection ? (
-    <Stack direction="column" spacing={2}>
-      <Stack direction="row" spacing={2} className="flex-col lg:flex-row" justifyContent="between">
+    <div className="flex flex-col gap-2">
+      <div className="flex flex-col lg:flex-row gap-2 justify-between">
         <Input
           label="Host Code"
           placeholder="4 character code"
@@ -36,7 +36,7 @@ export const ManageClientConnection = () => {
           onChange={(evt) => setClientName(evt.target.value)}
           className="flex-1"
         />
-      </Stack>
+      </div>
 
       {/* Surface the host code next to the inputs so players can double-check
           the ID they are joining. */}
@@ -53,19 +53,19 @@ export const ManageClientConnection = () => {
       >
         Connect
       </Button>
-    </Stack>
+    </div>
   ) : (
-    <Stack direction="column" spacing={2} alignItems="center">
+    <div className="flex flex-col gap-2 items-center">
       {/* After a successful connection, we now show the host's ID rather than the
           client's own ID to make it clear who we are connected to. */}
       {connectedHostCode && (
-        <Typography level="h4" sx={{ textAlign: "center", fontFamily: "monospace" }}>
+        <Typography level="h4" className="text-center font-mono">
           Host: {connectedHostCode}
         </Typography>
       )}
       <Button variant="outlined" onClick={disconnect}>
         Disconnect
       </Button>
-    </Stack>
+    </div>
   ));
 };

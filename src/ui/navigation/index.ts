@@ -1,2 +1,2 @@
-export { Navbar } from "./Navbar/Navbar";
+export { Navbar } from "./Navbar";
 export { Tabs } from "./Tabs";

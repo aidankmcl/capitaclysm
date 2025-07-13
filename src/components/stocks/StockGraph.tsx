@@ -1,5 +1,4 @@
 import { FC, useRef, useEffect, useState } from "react";
-import { Box } from "~/ui";
 
 import { STOCK_CONFIG, STOCK_COLORS } from "~/constants";
 import { StockPrice } from "~/services/stocks";
@@ -58,9 +57,9 @@ export const StockGraph: FC<StockGraphProps> = ({
 
   if (priceHistory.length < 2) {
     return (
-      <Box 
+      <div 
         ref={containerRef}
-        sx={{ 
+        style={{
           width: fillContainer ? "100%" : width,
           height: fillContainer ? "100%" : height,
           border: `1px solid ${STOCK_COLORS.BORDER}`, 
@@ -70,8 +69,8 @@ export const StockGraph: FC<StockGraphProps> = ({
           justifyContent: "center"
         }}
       >
-        <Box sx={{ fontSize: "8px", color: "neutral.500" }}>No data</Box>
-      </Box>
+        <div className="text-sm text-neutral-500">No data</div>
+      </div>
     );
   }
 
@@ -109,11 +108,10 @@ export const StockGraph: FC<StockGraphProps> = ({
   });
 
   return (
-    <Box 
+    <div 
       ref={containerRef}
-      sx={{ 
-        display: "flex", 
-        alignItems: "center",
+      className="flex items-center"
+      style={{ 
         width: fillContainer ? "100%" : width,
         height: fillContainer ? "100%" : height
       }}
@@ -151,6 +149,6 @@ export const StockGraph: FC<StockGraphProps> = ({
         </defs>
         <rect width="100%" height="100%" fill="url(#grid)" />
       </svg>
-    </Box>
+    </div>
   );
 }; 
