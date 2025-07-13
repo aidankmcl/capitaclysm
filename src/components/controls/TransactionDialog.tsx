@@ -1,6 +1,5 @@
-import { Box, Card, Divider, Stack, Typography } from "@mui/joy";
+import { Box, Card, Divider, Stack, Typography, Button, Modal, Money } from "~/ui";
 
-import { Button, Modal, Money } from "~/ui";
 import { LocationData } from "~/store";
 
 import { LocationCard } from "../locations";
@@ -24,24 +23,24 @@ export const TransactionDialog: FC<Props> = (props) => {
     <Modal
       forceAnswer={true}
       onClose={reject}
-      sx={{ background: location.color, p: PADDING, border: "none" }}
+      className={`p-[${PADDING}px] border-none background-[${location.color}]`}
     >
       <Stack>
         {title && (
-          <Card sx={{ m: -PADDING, mb: PADDING, borderBottomLeftRadius: 0, borderBottomRightRadius: 0 }}>
+          <Card className="m-[-3px] mb-3 rounded-t-none">
             <Typography level="h2">{title}</Typography>
           </Card>
         )}
-        <Stack spacing={PADDING} alignItems={{ xs: "stretch", lg: "start" }} direction={{ xs: "column", lg: "row" }}>
+        <Stack spacing={PADDING} alignItems="stretch" className="flex-col lg:flex-row">
           <Card sx={{ maxWidth: "300px" }}>
             <LocationCard location={location} />
           </Card>
 
           <Stack spacing={PADDING}>
             <Card>
-              <Typography textAlign="center" level="h4" mb={2}>Effect on funds</Typography>
+              <Typography className="text-center mb-2" level="h4">Effect on funds</Typography>
 
-              <Stack direction="column" spacing={1} alignItems="end" marginTop={0}>
+              <Stack direction="column" spacing={1} alignItems="end" className="mt-0">
                 <Money amount={startMoney} />
                 <Money amount={- cost} />
                 <Divider />

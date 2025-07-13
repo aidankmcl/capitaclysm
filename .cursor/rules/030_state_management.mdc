@@ -1,0 +1,17 @@
+---
+description: USE WHEN modifying Redux store, slices, selectors or middleware.
+globs: src/store/**/*.{ts,tsx}
+alwaysApply: false
+---
+
+# State Management Rules
+
+- **Single source of truth**: global state lives only in Redux store.
+- Reducers must be **pure & synchronous**; side-effects go in listener/custom middleware.
+- One slice per domain (`src/store/slices/<domain>.ts`); keep state flat & normalised.
+- Export pattern: default `reducer`; named `actions`; selectors inline or in `src/store/selectors.ts` barrel.
+- **Action naming**: `domain/verbNoun` (past tense for events).
+- Use **listener middleware** for async flows; prefer over thunks.
+- Intercept all actions (logging, P2P sync) via custom middleware in `src/store/middlewares/`.
+- When adding a slice: update `store.ts`, selectors barrel, tests next to slice.
+- Tests: use `configureStore` + mock services; keep reducers unit-tested.

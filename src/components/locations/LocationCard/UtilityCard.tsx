@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { Divider, Stack, Typography } from "@mui/joy";
+import { Divider, Stack, Typography } from "~/ui";
 
 import { Money } from "~/ui";
 import { Location } from "../../../data/locations";
@@ -15,8 +15,8 @@ export const UtilityCard: FC<Props> = (props) => {
   if (location.type !== "utility") return <></>;
 
   return (
-    <Stack spacing={1} mx={3}>
-      <Stack direction="row" justifyContent="center" alignItems="center" spacing={1} mt={1}>
+    <Stack spacing={1} className="mx-3">
+      <Stack direction="row" className="justify-center items-center mt-1" spacing={1}>
         <Typography level="body-sm">Price</Typography>
         <Money amount={price} />
       </Stack>

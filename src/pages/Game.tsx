@@ -7,6 +7,7 @@ import { Gamegrid } from "~/ui";
 import { Controls } from "~/components/controls";
 import { DealModalProvider } from "~/components/controls";
 import { ManageClientConnection } from "~/components/ManageClientConnection";
+import { ManageHostConnection } from "~/components/ManageHostConnection";
 import { useSyncClientPlayer } from "~/hooks";
 import { Layout } from "~/ui";
 
@@ -16,24 +17,18 @@ const ClientLogic: FC = () => {
 };
 
 export const Game: FC = () => {
-  const { code, isHost } = usePeer();
+  const { isHost } = usePeer();
 
   return (
     <Layout>
+      <DealModalProvider />
       {!isHost && <ClientLogic />}
       <Gamegrid
         map={<div>Map placeholder - will be replaced with new mapping solution</div>}
-        manage={isHost ? <h2>{code}</h2> : <ManageClientConnection />}
+        connection={isHost ? <ManageHostConnection /> : <ManageClientConnection />}
         content={<Controls />}
       >
-        {isHost ? (
-          <>
-            <DealModalProvider />
-            <HostP2PListener />
-          </>
-        ) : (
-          <ClientP2PListener />
-        )}
+        {isHost ? <HostP2PListener /> : <ClientP2PListener />}
       </Gamegrid>
     </Layout>
   );

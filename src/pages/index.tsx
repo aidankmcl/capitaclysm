@@ -1,14 +1,12 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
-import { Layout } from "~/ui";
-
 import { Game } from "./Game";
 import { Test } from "./Test";
 
 export const router = createBrowserRouter([
 {
     path: "/",
-    Component: Layout
+    Component: Game
 },
 {
     path: "/game/:code?",

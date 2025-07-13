@@ -1,5 +1,5 @@
 import { FC, useState, useEffect } from "react";
-import { Box, Card, Typography, Button } from "@mui/joy";
+import { Box, Card, Typography, Button } from "~/ui";
 
 import { useStockData } from "../../hooks/useStockData";
 import { useStockHistory } from "../../hooks/useStockHistory";
@@ -19,7 +19,7 @@ const StockItem = ({ price, symbol, referenceTime, onSelectStock }: { price: Sto
   const isPositive = price.change >= 0;
 
   return (
-    <Card key={price.symbol} sx={{ p: 2 }}>
+    <Card key={price.symbol} sx={{ padding: 8 }}>
       <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "left", flexDirection: "column" }}>
         <StockGraph 
           priceHistory={priceHistory}
@@ -27,7 +27,7 @@ const StockItem = ({ price, symbol, referenceTime, onSelectStock }: { price: Sto
         />
         <Box sx={{ display: "flex", alignItems: "center", gap: 2, flex: 1, flexDirection: "row" }}>
           <Box>
-            <Typography level="title-lg">
+            <Typography level="h5">
               {price.symbol}
             </Typography>
             {stockInfo && (
@@ -40,7 +40,7 @@ const StockItem = ({ price, symbol, referenceTime, onSelectStock }: { price: Sto
                 </Typography>
               </>
             )}
-            <Typography level="title-md" sx={{ mt: 1 }}>
+            <Typography level="h6" sx={{ marginTop: 4 }}>
               {formatPrice(price.price)}
             </Typography>
           </Box>
@@ -87,7 +87,7 @@ export const StockList: FC<StockListProps> = ({ onSelectStock }) => {
 
   return (
     <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
-      <Typography level="h4" sx={{ mb: 2 }}>
+      <Typography level="h4" sx={{ marginBottom: 8 }}>
         Stock Market
       </Typography>
       

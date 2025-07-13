@@ -15,7 +15,6 @@ export const useStockData = (symbol?: string) => {
     return () => clearInterval(interval);
   }, []);
   
-  console.log("allPrices", allPrices);
   return { 
     allPrices,
     stockPrice,

@@ -1,5 +1,5 @@
 import { FC, useState } from "react";
-import { Box } from "@mui/joy";
+import { Box } from "~/ui";
 
 import { StockList } from "./StockList";
 import { StockTrading } from "./StockTrading";

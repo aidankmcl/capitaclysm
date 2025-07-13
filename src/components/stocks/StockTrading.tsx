@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { Box, Card, Typography, Button, Input, Stack } from "@mui/joy";
+import { Box, Card, Typography, Button, Input, Stack } from "~/ui";
 
 import { useStockTrading } from "~/hooks";
 import { formatPrice, formatChange } from "../../services/stocks/stockValidation";
@@ -47,16 +47,16 @@ export const StockTrading: FC<StockTradingProps> = ({ symbol, onClose }) => {
 
   return (
     <Card>
-      <Typography level="h4" sx={{ mb: 2 }}>
+      <Typography level="h4" className="mb-2">
         Trade {symbol}
       </Typography>
       
-      <Typography level="body-sm" color="neutral" sx={{ mb: 2 }}>
+      <Typography level="body-sm" color="neutral" className="mb-2">
         {stockInfo.name} - {stockInfo.sector}
       </Typography>
 
       {/* Stock Graph */}
-      <Box sx={{ mb: 3, bgcolor: "background.level1", borderRadius: 1 }}>
+      <Box className="mb-3 bg-background rounded">
         <StockGraph 
           priceHistory={priceHistory}
           fillContainer={true}
@@ -64,8 +64,8 @@ export const StockTrading: FC<StockTradingProps> = ({ symbol, onClose }) => {
         />
       </Box>
 
-      <Box sx={{ mb: 2 }}>
-        <Typography level="title-lg">
+      <Box className="mb-2">
+        <Typography level="body-lg">
           Current Price: {formatPrice(stockPrice.price)}
         </Typography>
         <Typography level="body-sm" color={stockPrice.change < 0 ? "success" : "danger"}>
@@ -73,7 +73,7 @@ export const StockTrading: FC<StockTradingProps> = ({ symbol, onClose }) => {
         </Typography>
       </Box>
 
-      <Box sx={{ mb: 2, p: 1, bgcolor: "background.level1", borderRadius: 1 }}>
+      <Box className="mb-2 p-1 bg-background rounded">
         <Typography level="body-sm">
           Your Money: {formatPrice(playerMoney)}
         </Typography>
@@ -84,7 +84,7 @@ export const StockTrading: FC<StockTradingProps> = ({ symbol, onClose }) => {
         )}
       </Box>
 
-      <Stack direction="row" spacing={1} sx={{ mb: 2 }}>
+      <Stack direction="row" spacing={1} className="mb-2">
         <Button
           variant={action === "buy" ? "solid" : "outlined"}
           onClick={() => setAction("buy")}
@@ -101,8 +101,8 @@ export const StockTrading: FC<StockTradingProps> = ({ symbol, onClose }) => {
         </Button>
       </Stack>
 
-      <Box sx={{ mb: 2 }}>
-        <Typography level="body-sm" sx={{ mb: 1 }}>
+      <Box className="mb-2">
+        <Typography level="body-sm" className="mb-1">
           Number of shares:
         </Typography>
         <Input
@@ -118,7 +118,7 @@ export const StockTrading: FC<StockTradingProps> = ({ symbol, onClose }) => {
         />
       </Box>
 
-      <Box sx={{ mb: 2 }}>
+      <Box className="mb-2">
         <Typography level="body-sm">
           Total {action === "buy" ? "Cost" : "Proceeds"}: {formatPrice(totalCost)}
         </Typography>
@@ -139,7 +139,7 @@ export const StockTrading: FC<StockTradingProps> = ({ symbol, onClose }) => {
           variant="solid"
           onClick={onTrade}
           disabled={!canExecute}
-          fullWidth
+          fullWidth={true}
         >
           {action === "buy" ? "Buy" : "Sell"} {shares} shares
         </Button>

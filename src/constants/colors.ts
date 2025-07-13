@@ -1,23 +1,30 @@
-const MINT = "#CBE559";
-const LIGHT_GREEN = "#8BAC0F";
-const GREEN = "#306230";
-const DARK_GREEN = "#0F380F";
-
+// CSS variables for use with sx props and Material-UI components
 export const COLORS = {
-    MINT,
-    LIGHT_GREEN,
-    GREEN,
-    DARK_GREEN,
+    // Basic colors
+    MINT: "var(--color-mint)",
+    LIGHT_GREEN: "var(--color-lightGreen)",
+    GREEN: "var(--color-green)",
+    DARK_GREEN: "var(--color-darkGreen)",
+    
+    // App colors
+    PRIMARY: "var(--color-primary)",
+    SECONDARY: "var(--color-secondary)",
+    TERTIARY: "var(--color-tertiary)",
+    BACKGROUND: "var(--color-background)",
+    BACKGROUND_SECONDARY: "var(--color-backgroundSecondary)",
+    TEXT: "var(--color-text)",
+    TEXT_SECONDARY: "var(--color-textSecondary)",
+
     // Map colors
-    WATER: DARK_GREEN,
-    LAND: MINT,
-    ROAD: LIGHT_GREEN,
-    HIGHWAY: GREEN,
-    LABEL: DARK_GREEN,
-    LABEL_OUTLINE: MINT,
+    WATER: "var(--color-water)",
+    LAND: "var(--color-land)",
+    ROAD: "var(--color-road)",
+    HIGHWAY: "var(--color-highway)",
+    LABEL: "var(--color-label)",
+    LABEL_OUTLINE: "var(--color-labelOutline)",
 
     // Stock colors
-    STOCK_UP: MINT,
-    STOCK_DOWN: GREEN,
-    STOCK_LABEL: DARK_GREEN
+    STOCK_UP: "var(--color-stockUp)",
+    STOCK_DOWN: "var(--color-stockDown)",
+    STOCK_LABEL: "var(--color-stockLabel)"
 }

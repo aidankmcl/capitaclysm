@@ -1,0 +1,18 @@
+---
+description: High-level architecture & directory placement for Capitaclysm (always apply)
+globs:
+alwaysApply: true
+---
+
+# Workspace Architecture Rules
+
+- Follow layered approach: **UI → Hooks → Redux Store → Services/Utils → Data**.
+- **Never mutate state** directly in UI; dispatch actions or use hooks.
+- **Hooks** live in `src/hooks/`, orchestrate validation + service calls.
+- **Redux slices** live in `src/store/slices/`; reducers must remain pure & flat.
+- **Services** and algorithms belong in `src/services/`, framework-agnostic.
+- **Utils** for stateless helpers (`src/utils/`).
+- **Static data** (`src/data/`) & **constants** (`src/constants/`).
+- Use `~` alias for internal imports; avoid deep relative paths.
+- Collocate tests (`*.test.ts[x]`) next to implementation.
+- Add new features by: service → hook → UI, wiring store only if global.

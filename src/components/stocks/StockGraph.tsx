@@ -1,5 +1,5 @@
 import { FC, useRef, useEffect, useState } from "react";
-import { Box } from "@mui/joy";
+import { Box } from "~/ui";
 
 import { STOCK_CONFIG, STOCK_COLORS } from "~/constants";
 import { StockPrice } from "~/services/stocks";

@@ -1,38 +1,36 @@
-
-import Box from "@mui/joy/Box";
+import { FC, PropsWithChildren } from "react";
+import { Alert, IconButton } from "@mui/joy";
 
 import { Toaster, toast as sonnerToast } from "sonner";
-import { Alert, IconButton } from "@mui/joy";
 import { JSX } from "react";
 
 type ToasterProps = Parameters<typeof Toaster>[0]
-export const ToastProvider = (props: ToasterProps) => {
-  return <Toaster position="top-right" duration={5000} {...props} />;
-};
 
+export const ToastProvider: FC<PropsWithChildren<ToasterProps>> = (props) => <Toaster {...props} />;
 
 export const toast = (jsx: JSX.Element) => {
   return sonnerToast.custom(t => (
     <Alert
       variant="solid"
       color="neutral"
-      sx={{ width: "var(--width)", gap: 2, boxShadow: "md" }}
+      className="w-full gap-2 shadow-md bg-mint border-lightGreen text-darkGreen"
       endDecorator={
         <IconButton
           variant="soft"
           color="warning"
           onClick={() => sonnerToast.dismiss(t)}
+          className="bg-lightGreen text-darkGreen hover:bg-green hover:text-mint"
         >
           X
         </IconButton>
       }
     >
-      <Box sx={{ flexGrow: 1 }}>
+      <div className="flex-grow">
         Joy UI feat. Sonner is awesome!
-        <Box sx={{ display: "flex", alignItems: "center", mt: 1 }}>
+        <div className="flex items-center mt-1">
           {jsx}
-        </Box>
-      </Box>
+        </div>
+      </div>
     </Alert>
   ));
 };

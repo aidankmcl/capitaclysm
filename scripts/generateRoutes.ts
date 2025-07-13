@@ -4,7 +4,7 @@ import { writeFileSync } from 'fs';
 import axios from 'axios';
 import polyline from '@mapbox/polyline';
 
-import { Coordinate, Location, locations } from '~/data';
+import { Coordinate, Location, locations } from '../src/data';
 
 type Route = Coordinate[];
 

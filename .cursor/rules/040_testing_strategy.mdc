@@ -1,0 +1,19 @@
+---
+description: USE WHEN writing or modifying tests; outlines layers & tools.
+globs: src/**/*.{test.ts,test.tsx},test/**/*
+alwaysApply: false
+---
+
+# Testing Strategy Rules
+
+- Tooling: **Jest** + **React Testing Library**; future E2E via Playwright/Cypress.
+- Collocate tests: `foo.ts → foo.test.ts`; React components `.test.tsx`.
+- Test pyramid:
+  1. Unit (pure funcs, reducers)
+  2. Component (RTL with mocked store)
+  3. Integration (multiple slices/hooks)
+  4. E2E smoke (happy path)
+- Mock only boundaries (network, randomness); use `__mocks__/` & factories.
+- Use `vi.useFakeTimers()` for time-dependent logic.
+- Coverage targets: ≥80 % for critical services/slices.
+- CI: lint & type-check before tests; `pnpm test --coverage` in pipeline.

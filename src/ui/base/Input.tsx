@@ -1,35 +1,36 @@
-import { FC, useId } from "react";
+import { FC, useId, InputHTMLAttributes, CSSProperties } from "react";
 
-import { default as JoyInput } from "@mui/joy/Input";
-import Divider from "@mui/joy/Divider";
-import Typography from "@mui/joy/Typography";
-
-type JoyProps = Parameters<typeof JoyInput>[0];
-
-type Props = {
+interface Props extends InputHTMLAttributes<HTMLInputElement> {
   label?: string;
-  value?: JoyProps["value"];
-  onChange?: JoyProps["onChange"];
-  placeholder?: string;
-  sx?: JoyProps["sx"];
+  sx?: CSSProperties;
+  slotProps?: {
+    input?: React.InputHTMLAttributes<HTMLInputElement>;
+  };
 }
 
-export const Input: FC<Props> = (props) => {
+export const Input: FC<Props> = ({ label, className, sx, slotProps, style, ...rest }) => {
   const id = useId();
 
   return (
-    <JoyInput
-      id={id}
-      value={props.value}
-      onChange={props.onChange}
-      placeholder={props.placeholder}
-      startDecorator={props.label && (<>
-        <label htmlFor={id}>
-          <Typography level="body-xs" sx={{ mr: 1 }}>{props.label}</Typography>
+    <div className="flex items-center gap-2">
+      {label && (
+        <label htmlFor={id} className="text-xs font-semibold text-darkGreen">
+          {label}
         </label>
-        <Divider orientation="vertical" />
-      </>)}
-      sx={props.sx}
-    />
+      )}
+      <input
+        id={id}
+        className={[
+          "border border-lightGreen rounded px-2 py-1 text-sm",
+          "focus:outline-none focus:ring-2 focus:ring-green focus:border-transparent",
+          "bg-mint text-darkGreen placeholder-green",
+          "transition-colors",
+          className
+        ].filter(Boolean).join(" ")}
+        style={{ ...(style || {}), ...(sx || {}) as CSSProperties }}
+        {...(slotProps?.input || {})}
+        {...rest}
+      />
+    </div>
   );
 };

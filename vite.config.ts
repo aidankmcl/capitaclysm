@@ -8,6 +8,8 @@ const __dirname = dirname(__filename);
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react-swc'
 import viteSvgr from 'vite-plugin-svgr';
+import tailwindcss from "@tailwindcss/vite";
+
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -26,5 +28,5 @@ export default defineConfig({
       '~/utils': resolve(__dirname, './src/utils'),
     }
   },
-  plugins: [viteSvgr(), react()],
+  plugins: [react(), tailwindcss(), viteSvgr()],
 })

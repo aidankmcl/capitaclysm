@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { Divider, Stack, Typography } from "@mui/joy";
+import { Divider, Stack, Typography } from "~/ui";
 
 import { Money } from "~/ui";
 import { Location } from "../../../data/locations";
@@ -15,27 +15,27 @@ export const PropertyCard: FC<Props> = (props) => {
   if (location.type !== "property") return <></>;
 
   return (
-    <Stack spacing={0} mx={3}>
-      <Stack direction="row" justifyContent="center" alignItems="center" spacing={1} mt={1}>
+    <Stack spacing={0} className="mx-3">
+      <Stack direction="row" className="justify-center items-center mt-1" spacing={1}>
         <Typography level="body-sm">Price</Typography>
         <Money amount={price} />
       </Stack>
 
-      <Divider sx={{ my: 1 }} />
+      <Divider className="my-1" />
 
-      <Stack direction="row" justifyContent="center" alignItems="center" spacing={1}>
+      <Stack direction="row" className="justify-center items-center" spacing={1}>
         <Typography level="body-sm">Base rent</Typography>
-        <Money variant="plain" amount={location.baseRent} />
+        <Money variant="outlined" amount={location.baseRent} />
       </Stack>
       {[location.rent1, location.rent2, location.rent3, location.rent4].map((rent, i) => (
-        <Stack key={i} direction="row" justifyContent="space-between" alignItems="center" spacing={1}>
+        <Stack key={i} direction="row" className="justify-between items-center" spacing={1}>
           <Typography level="body-sm">{i + 1} house{i > 0 ? "s" : ""}</Typography>
-          <Money variant="plain" amount={rent} />
+          <Money variant="outlined" amount={rent} />
         </Stack>
       ))}
-      <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={1}>
+      <Stack direction="row" className="justify-between items-center" spacing={1}>
         <Typography level="body-sm">With hotel</Typography>
-        <Money variant="plain" amount={location.rent5} />
+        <Money variant="outlined" amount={location.rent5} />
       </Stack>
     </Stack>
   );

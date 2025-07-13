@@ -15,7 +15,6 @@ export const useStockHistory = (symbol: string, referenceTime: number, length: n
       }
     }
 
-    console.log("history", history);
     return history;
   }, [symbol, referenceTime, length]);
 }; 

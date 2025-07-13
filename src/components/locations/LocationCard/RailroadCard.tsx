@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { Divider, Stack, Typography } from "@mui/joy";
+import { Divider, Stack, Typography } from "~/ui";
 
 import { Money } from "~/ui";
 import { Location } from "../../../data/locations";
@@ -15,22 +15,22 @@ export const RailroadCard: FC<Props> = (props) => {
   if (location.type !== "railroad") return <></>;
 
   return (
-    <Stack spacing={1} mx={3}>
-      <Stack direction="row" justifyContent="center" alignItems="center" spacing={1} mt={1}>
+    <Stack spacing={1} className="mx-3">
+      <Stack direction="row" className="justify-center items-center mt-1" spacing={1}>
         <Typography level="body-sm">Price</Typography>
         <Money amount={price} />
       </Stack>
 
       <Divider />
 
-      <Stack direction="row" justifyContent="center" alignItems="center" spacing={1} mt={1}>
+      <Stack direction="row" className="justify-center items-center mt-1" spacing={1}>
         <Typography level="body-sm">Rent</Typography>
-        <Money variant="plain" amount={location.rent1} />
+        <Money variant="outlined" amount={location.rent1} />
       </Stack>
       {[location.rent2, location.rent3, location.rent4].map((rent, i) => (
-        <Stack key={i} direction="row" justifyContent="space-between" alignItems="center" spacing={1} mt={1}>
+        <Stack key={i} direction="row" className="justify-between items-center mt-1" spacing={1}>
           <Typography level="body-sm">With {i + 2} railroads</Typography>
-          <Money variant="plain" amount={rent} />
+          <Money variant="outlined" amount={rent} />
         </Stack>
       ))}
     </Stack>

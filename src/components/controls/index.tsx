@@ -1,5 +1,4 @@
 import { FC } from "react";
-import { Typography } from "@mui/joy";
 
 import { selectors, useAppSelector } from "~/store";
 import { Tabs } from "~/ui";
@@ -14,12 +13,7 @@ export const Controls: FC = () => {
   const clientPlayerID = useAppSelector(selectors.players.selectClientPlayerID);
 
   return <Tabs 
-    tabLabels={[
-      <Typography key="move">Move</Typography>,
-      <Typography key="players">Players</Typography>,
-      <Typography key="properties">Properties</Typography>,
-      <Typography key="gambling">Gambling</Typography>
-    ]}
+    tabLabels={["Move", "Players", "Properties", "Gambling"]}
     tabContents={[
       <Move key="move" activePlayerID={activePlayerID} clientPlayerID={clientPlayerID} />,
       <PlayerList key="players" activePlayerID={activePlayerID} />,

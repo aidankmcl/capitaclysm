@@ -1,6 +1,4 @@
 import { FC, CSSProperties } from "react";
-import { COLORS } from "~/constants";
-
 import { PlayerData } from "~/store";
 
 type Props = {
@@ -38,7 +36,7 @@ export const Avatar: FC<Props> = (props) => {
       ...stylesContainer,
       fontSize,
       backgroundImage: props.player.color,
-      boxShadow: activePlayerID === props.player.id ? `0px 0px 10px 3px ${COLORS.GREEN}` : "",
+      boxShadow: activePlayerID === props.player.id ? `0px 0px 10px 3px var(--color-primary)` : "",
       ...(center ? stylesCenteredContainer : {}),
       ...props.style
     }}>

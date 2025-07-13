@@ -1,5 +1,6 @@
+// CSS variables for spacing values
 export const SPACING = {
-  padS: "5px",
-  padM: "15px",
-  padL: "25px"
-};
+    padS: "var(--space-padS)",
+    padM: "var(--space-padM)", 
+    padL: "var(--space-padL)",
+}

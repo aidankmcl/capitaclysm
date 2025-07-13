@@ -10,8 +10,8 @@ export const STOCK_CONFIG = {
 } as const;
 
 export const STOCK_COLORS = {
-  POSITIVE: "#2e7d32", // Green for gains
-  NEGATIVE: "#d32f2f", // Red for losses
-  NEUTRAL: "#1976d2", // Blue for neutral
-  BORDER: "#e0e0e0", // Light gray for graph borders
+  POSITIVE: "var(--color-primary)", // PRIMARY for gains
+  NEGATIVE: "var(--color-tertiary)", // TERTIARY for losses
+  NEUTRAL: "var(--color-background)", // BACKGROUND for neutral
+  BORDER: "var(--color-secondary)", // SECONDARY for graph borders / accents
 } as const; 

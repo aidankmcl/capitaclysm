@@ -9,6 +9,36 @@ export const capitaclysmTheme = extendTheme({
     body: "Kabel",
     display: "Kabel",
   },
+  colorSchemes: {
+    light: {
+      palette: {
+        primary: {
+          50: "#F5FBD9",
+          100: "#EBF7B3",
+          200: "#E1F28D",
+          300: "#D7ED67",
+          400: "#CBE559", // App PRIMARY
+          500: "#A8C147",
+          600: "#7A8E32",
+          700: "#5B6B26",
+          800: "#3D471A",
+          900: "#1F240D",
+        },
+        neutral: {
+          50: "#F0F7F0",
+          100: "#E1EFE1",
+          200: "#C3DFC3",
+          300: "#A5CFA5",
+          400: "#8BAC0F", // App TERTIARY
+          500: "#306230", // App GREEN
+          600: "#2A542A",
+          700: "#1E3C1E",
+          800: "#0F380F", // App SECONDARY
+          900: "#0A1C0A",
+        },
+      }
+    }
+  },
   components: {
     JoyButton: {
       styleOverrides: {

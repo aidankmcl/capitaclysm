@@ -1,0 +1,62 @@
+@import "tailwindcss";
+
+@theme {
+  /* Custom colors */
+  --color-mint: #CBE559;
+  --color-lightGreen: #8BAC0F;
+  --color-green: #306230;
+  --color-darkGreen: #0F380F;
+  
+  /* App colors */
+  --color-primary: #CBE559;
+  --color-secondary: #0F380F;
+  --color-tertiary: #8BAC0F;
+  --color-background: #8BAC0F;
+  --color-backgroundSecondary: #0F380F;
+  --color-text: #0F380F;
+  --color-textSecondary: #CBE559;
+
+  /* Map colors */
+  --color-water: #0F380F;
+  --color-land: #CBE559;
+  --color-road: #8BAC0F;
+  --color-highway: #306230;
+  --color-label: #0F380F;
+  --color-labelOutline: #CBE559;
+
+  /* Stock colors */
+  --color-stockUp: #CBE559;
+  --color-stockDown: #306230;
+  --color-stockLabel: #0F380F;
+
+  /* Spacing */
+  --space-padS: 5px;
+  --space-padM: 15px;
+  --space-padL: 25px;
+}
+
+/* --------------------------------------------------
+   Custom fonts: Kabel family
+-------------------------------------------------- */
+@font-face {
+  font-family: 'Kabel';
+  font-style: normal;
+  font-weight: 400;
+  src: url('/src/assets/fonts/kabel/normal.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Kabel';
+  font-style: bold;
+  font-weight: 700;
+  src: url('/src/assets/fonts/kabel/bold.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Kabel';
+  font-style: bolder;
+  font-weight: 900;
+  src: url('/src/assets/fonts/kabel/bolder.woff2') format('woff2');
+}
+
+body {
+  font-family: 'Kabel', sans-serif;
+}

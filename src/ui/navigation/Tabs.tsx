@@ -1,30 +1,16 @@
-import { FC, JSX, useState} from "react";
-
-import { default as JoyTabs } from "@mui/joy/Tabs";
-import Box from "@mui/joy/Box";
-import TabList from "@mui/joy/TabList";
-import Tab, { tabClasses } from "@mui/joy/Tab";
-import TabPanel from "@mui/joy/TabPanel";
-import { Divider } from "@mui/joy";
+import { FC, useState, JSX } from "react";
+import { Tabs as JoyTabs, TabList, Tab, TabPanel, tabClasses, Divider } from "@mui/joy";
 
 type Props = {
-  tabLabels: JSX.Element[];
+  tabLabels: string[];
   tabContents: JSX.Element[];
-}
+};
 
 export const Tabs: FC<Props> = (props) => {
   const [index, setIndex] = useState(0);
 
   return (
-    <Box
-      sx={{
-        bgcolor: "background.body",
-        flexGrow: 1,
-        m: -2,
-        overflowX: "hidden",
-        borderRadius: "md",
-      }}
-    >
+    <div className="bg-mint flex-grow -m-2 overflow-x-hidden rounded-md border border-lightGreen">
       <JoyTabs
         aria-label="Pipeline"
         value={index}
@@ -33,22 +19,20 @@ export const Tabs: FC<Props> = (props) => {
       >
         <TabList
           variant="plain"
+          className="w-full max-w-sm mx-auto pt-2 self-start"
           sx={{
-            width: "100%",
-            maxWidth: 400,
-            mx: "auto",
-            pt: 2,
-            alignSelf: "flex-start",
             [`& .${tabClasses.root}`]: {
               bgcolor: "transparent",
               boxShadow: "none",
               outline: "none",
               borderRadius: 0,
+              color: "var(--color-darkGreen)",
               "&:hover": {
-                bgcolor: "primary.100",
+                bgcolor: "var(--color-lightGreen)",
+                color: "var(--color-mint)",
               },
               [`&.${tabClasses.selected}`]: {
-                color: "primary.plainColor",
+                color: "var(--color-green)",
                 fontWeight: "lg",
                 bgcolor: "transparent",
                 "&:before": {
@@ -62,7 +46,7 @@ export const Tabs: FC<Props> = (props) => {
                   height: "3px",
                   borderTopLeftRadius: "3px",
                   borderTopRightRadius: "3px",
-                  bgcolor: "primary.500",
+                  bgcolor: "var(--color-green)",
                 },
               },
             },
@@ -74,25 +58,15 @@ export const Tabs: FC<Props> = (props) => {
             </Tab>
           ))}
         </TabList>
-        <Divider />
-        <Box
-          sx={(theme) => ({
-            "--bg": theme.vars.palette.background.surface,
-            background: "var(--bg)",
-            boxShadow: "0 0 0 100vmax var(--bg)",
-            clipPath: "inset(0 -100vmax)",
-            px: 2,
-            py: 2,
-            overflowY: "auto"
-          })}
-        >
+        <Divider className="border-lightGreen" />
+        <div className="px-2 py-2 overflow-y-auto bg-mint shadow-inner">
           {props.tabContents.map((content, i) => (
-            <TabPanel key={i} value={i} sx={{ overflow: "auto", maxHeight: "100%" }}>
+            <TabPanel key={i} value={i} className="overflow-auto max-h-full">
               {content}
             </TabPanel>
           ))}
-        </Box>
+        </div>
       </JoyTabs>
-    </Box>
+    </div>
   );
 }; 

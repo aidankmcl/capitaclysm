@@ -1,32 +1,32 @@
 import { FC, JSX, PropsWithChildren } from "react";
-import { Card, Sheet } from "@mui/joy";
 
+import { Card } from "~/ui";
 import { DealModalProvider } from "~/components/controls";
-
-import styles from "./Gamegrid.module.css";
 
 type Props = PropsWithChildren<{
   map?: JSX.Element;
-  manage?: JSX.Element;
+  connection?: JSX.Element;
   content?: JSX.Element;
 }>
 
 export const Gamegrid: FC<Props> = (props) => {
-  return <Sheet className={styles.container} sx={{ background: "var(--joy-palette-primary-500)" }}>
-    <DealModalProvider />
+  return (
+    <div className="p-6 flex flex-col h-full box-border gap-4 max-w-3xl mx-auto w-full bg-green">
+      <DealModalProvider />
 
-    {props.children}
+      {props.children}
 
-    <Card className={styles.mapSection}>
-      {props.map}
-    </Card>
+      <Card variant="elevated" className="flex-1 min-h-[300px]">
+        {props.map}
+      </Card>
 
-    <Card className={styles.manageSection}>
-      {props.manage}
-    </Card>
+      <Card variant="elevated" className="p-6 min-h-[200px]">
+        {props.connection}
+      </Card>
 
-    <Card className={styles.contentSection}>
-      {props.content}
-    </Card>
-  </Sheet>;
+      <Card variant="elevated" className="p-6 min-h-[150px]">
+        {props.content}
+      </Card>
+    </div>
+  );
 };

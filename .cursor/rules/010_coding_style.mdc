@@ -1,0 +1,16 @@
+---
+description: USE WHEN editing source files — formatting, naming & TypeScript guidelines.
+globs: src/**/*.{ts,tsx}
+alwaysApply: false
+---
+
+# Coding Style Rules
+
+- Format with ESLint/Prettier: **no semicolons**, 2-space indent.
+- **File/dir names:** `kebab-case`; **components:** `PascalCase`; **hooks:** `useCamel`.
+- **Constants/enums:** `UPPER_SNAKE_CASE`; Redux actions `feature/verbNoun`.
+- Use **arrow function components**; destructure props at top.
+- Enable `strict` TS; avoid `any` & `unknown` (mark `// TODO:ts-unsafe` when unavoidable).
+- Prefer `type` aliases over `interface` (except React props).
+- Import order: external → barrels (`~/`) → relative.
+- Commit messages follow Conventional Commits (`feat`, `fix`, `chore`, etc.).

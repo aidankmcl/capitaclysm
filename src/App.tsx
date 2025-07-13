@@ -5,19 +5,8 @@ import "@flaticon/flaticon-uicons/css/all/all.css";
 import { store } from "~/store";
 import { Pages } from "~/pages";
 import { capitaclysmTheme } from "./theme";
-import { COLORS, SPACING } from "~/constants";
 import { PeerProvider } from "./services/p2p";
 import "./App.css";
-
-const generateCSSVariables = (variables: Record<string, string | number>) => Object.entries(variables)
-  .map(([colorName, value]) => `--${colorName}: ${value};`)
-  .join("\n");
-
-const variables = `:root {
-  ${generateCSSVariables(COLORS)}
-  ${generateCSSVariables(SPACING)}
-}`;
-
 function App() {
   return (
     <CssVarsProvider theme={capitaclysmTheme}>
@@ -25,10 +14,9 @@ function App() {
 
       <PeerProvider>
         <Provider store={store}>
-          <style>
-            {variables}
-          </style>
-          <Pages />
+          <div className="bg-background text-darkGreen w-full h-full">
+            <Pages />
+          </div>
         </Provider>
       </PeerProvider>
     </CssVarsProvider>

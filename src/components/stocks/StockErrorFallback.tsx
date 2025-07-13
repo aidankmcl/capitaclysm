@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { Box, Card, Typography, Button } from "@mui/joy";
+import { Box, Card, Typography, Button } from "~/ui";
 
 interface StockErrorFallbackProps {
   error?: string;
@@ -13,11 +13,11 @@ export const StockErrorFallback: FC<StockErrorFallbackProps> = ({
   onClose 
 }) => {
   return (
-    <Card sx={{ p: 2, textAlign: "center" }}>
-      <Typography level="h4" color="danger" sx={{ mb: 2 }}>
+    <Card sx={{ padding: 8, textAlign: "center" }}>
+      <Typography level="h4" color="danger" sx={{ marginBottom: 8 }}>
         Stock Market Error
       </Typography>
-      <Typography level="body-sm" color="neutral" sx={{ mb: 2 }}>
+      <Typography level="body-sm" color="neutral" sx={{ marginBottom: 8 }}>
         {error}
       </Typography>
       <Box sx={{ display: "flex", gap: 1, justifyContent: "center" }}>

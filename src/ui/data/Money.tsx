@@ -1,25 +1,28 @@
-import { FC, JSX } from "react";
-import { Chip, Typography } from "@mui/joy";
-
-
-type JoyTypographyProps = Parameters<typeof Typography>[0];
-type JoyChipProps = Parameters<typeof Chip>[0];
-
-type Color = JoyTypographyProps["color"];
+import { FC } from "react";
+import { Chip, Typography } from "~/ui";
 
 type Props = {
   amount: number;
-  variant?: JoyChipProps["variant"];
-  size?: JoyChipProps["size"];
-  start?: JSX.Element;
-}
+  variant?: "outlined" | "solid";
+  size?: "sm" | "md" | "lg";
+};
 
 export const Money: FC<Props> = (props) => {
-  const color: Color = props.amount >= 0 ? "success" : "danger";
+  const isPositive = props.amount >= 0;
+  const color = isPositive ? "primary" : "danger";
 
   return (
-    <Chip color={color} variant={props.variant || "soft"} size={props.size} sx={{ borderColor: color }}>
-      <Typography level="body-md" color={color}>${Math.abs(props.amount)}</Typography>
+    <Chip 
+      color={color} 
+      variant={props.variant || "solid"} 
+      size={props.size}
+    >
+      <Typography 
+        level="body-md" 
+        color={isPositive ? "tertiary" : "secondary"}
+      >
+        ${Math.abs(props.amount)}
+      </Typography>
     </Chip>
   );
 };

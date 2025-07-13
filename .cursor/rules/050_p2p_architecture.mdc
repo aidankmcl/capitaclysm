@@ -1,0 +1,16 @@
+---
+description: USE WHEN editing peer-to-peer connection, messages, or listeners.
+globs: src/services/p2p/**/*
+alwaysApply: false
+---
+
+# P2P Architecture Rules
+
+- Roles: **Host** (source of truth) & **Client**; same code, role decided at runtime.
+- WebRTC via `peerjs`; default channel streams Redux actions & snapshots.
+- Message types defined in `src/services/p2p/events.ts`; update both host & client handlers when adding.
+- Maintain deterministic state: clients forward actions, host broadcasts snapshots.
+- Reconnect: clients retry every 2 s (max 5); send `request-sync` on reconnect.
+- Security: validate incoming actions against schema; (future) token handshake.
+- Keep protocol backward-compatible: add `protocolVersion` when breaking changes.
+- Limit in-memory snapshots to last **5** for quick replay.

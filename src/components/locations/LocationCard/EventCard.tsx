@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { Divider, Stack, Typography } from "@mui/joy";
+import { Divider, Stack, Typography } from "~/ui";
 
 import { Location } from "~/data";
 
@@ -14,7 +14,7 @@ export const EventCard: FC<Props> = (props) => {
   if (location.type !== "event") return <></>;
 
   return (
-    <Stack spacing={1} mx={3}>
+    <Stack spacing={1} className="mx-3">
       <Divider />
       <Typography level="body-sm">{location.description}</Typography>
     </Stack>

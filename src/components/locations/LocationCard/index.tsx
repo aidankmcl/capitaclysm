@@ -1,4 +1,4 @@
-import { Divider, Stack, Typography } from "@mui/joy";
+import { Divider, Stack, Typography } from "~/ui";
 import { FC } from "react";
 
 import { LocationData } from "~/store";
@@ -38,14 +38,14 @@ export const LocationCard: FC<Props> = (props) => {
 
   return (
     <Stack>
-      <Typography level="h3" textAlign="center" fontWeight="bold">{location.name}</Typography>
+      <Typography level="h3" fontWeight="bold" sx={{ textAlign: "center" }}>{location.name}</Typography>
       <CardInfo {...props} baseLocation={baseLocation} />
       {location.type !== "event" && (
-        <Stack mx={3} mt={2} spacing={2}>
+        <Stack className="mx-3 mt-2" spacing={2}>
           <Divider />
-          <Stack direction="row" justifyContent="space-between">
+          <Stack direction="row" className="justify-between">
             <Typography level="body-sm">Mortgage value:</Typography>
-            <Money variant="plain" amount={(location.price || 0) / 2} />
+            <Money variant="outlined" amount={(location.price || 0) / 2} />
           </Stack>
         </Stack>
       )}

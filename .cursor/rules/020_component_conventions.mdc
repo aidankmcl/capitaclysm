@@ -1,0 +1,15 @@
+---
+description: USE WHEN creating or modifying React components.
+globs: src/{components,ui}/**/*.tsx
+alwaysApply: false
+---
+
+# Component Conventions
+
+- One component per folder when >1 file: `Feature/Feature.tsx`, `Feature.module.css`, `index.ts`.
+- File names: component `PascalCase.tsx`, styles `Component.module.css`, tests `.test.tsx`.
+- Style with **CSS Modules**; global vars in `src/theme/`.
+- Props: minimal, optional `?`, positive booleans, sensible defaults.
+- Accessibility: text/aria-label, keyboard focus, contrast ≥ 4.5:1.
+- Storybook stories required once Storybook added.
+- Avoid business logic in components; delegate to hooks.
