@@ -2,7 +2,7 @@
 
 ## Current Milestone
 
-Milestone 0: Existing Project Orientation
+Milestone 1: Local Single-Browser Board Sandbox
 
 Status: Complete
 
@@ -14,6 +14,13 @@ Status: Complete
 - Added `src/features` and `src/networking` orientation folders.
 - Added `docs/ARCHITECTURE.md` documenting the `game-core` boundary.
 - Updated Biome configuration and documented the existing inline theme bootstrap lint exception so lint passes.
+- Added a local board definition with start, rest, and purchasable property tiles.
+- Added pure `game-core` state creation, action validation, action application, movement, purchase, turn advancement, and selectors.
+- Added serializable `GameAction` coverage for dice rolls, property purchases, and turn ending.
+- Replaced the starter home page with a local React board sandbox for 2-4 fake players.
+- Added a players panel and action log panel backed by game-core state.
+- Added a dedicated Vitest config so game-core tests run without app server plugins.
+- Added tests for initial state, movement, property buying, and turn advancement.
 
 ## In Progress
 
@@ -21,7 +28,7 @@ Status: Complete
 
 ## Next Task
 
-Begin Milestone 1: local single-browser board sandbox, keeping all rules in `src/game-core`.
+Begin Milestone 2: deterministic action logging and replay.
 
 ## Decisions
 
@@ -29,6 +36,7 @@ Begin Milestone 1: local single-browser board sandbox, keeping all rules in `src
 - Do not convert to a monorepo.
 - MVP networking target is P2P invite-code hosting.
 - Use free STUN/TURN for development and playtesting.
+- Local sandbox dice rolls are serializable actions with dice values in the payload; deterministic RNG/replay belongs to Milestone 2.
 
 ## Blockers
 
@@ -36,13 +44,13 @@ Begin Milestone 1: local single-browser board sandbox, keeping all rules in `src
 
 ## Last Test Run
 
-- `pnpm test` - passed 1 test. The first sandboxed attempt failed with localhost/watch permission errors; rerunning with permission passed, though Vitest reported a delayed Vite server shutdown warning.
+- `pnpm test` - passed 4 tests.
 - `pnpm lint` - passed.
 - `pnpm exec tsc --noEmit` - passed.
 - `pnpm build` - passed.
-- `pnpm dev` - started successfully on `http://localhost:3001/` because port 3000 was already in use, then stopped manually.
+- `pnpm dev` - started successfully on `http://localhost:3000/`, then stopped manually. A separate local `curl` probe from the tool environment could not connect, but Vite reported ready.
 
 ## Notes for Next Agent Session
 
 Read `docs/PRD.md`, `docs/STATUS.md`, and `AGENTS.md`.
-Work on one milestone only. Milestone 1 should not add networking, trades, auctions, or mini-games.
+Work on one milestone only. Milestone 2 should focus on deterministic replay and should not add multiplayer or WebRTC.

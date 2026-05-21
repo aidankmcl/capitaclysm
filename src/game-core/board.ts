@@ -1,0 +1,146 @@
+import type { BoardDefinition } from './types'
+
+export const START_BONUS = 200
+export const STARTING_MONEY = 1500
+
+export const localBoardDefinition = {
+	tiles: [
+		{
+			id: 'start',
+			kind: 'start',
+			name: 'Start',
+			positionIndex: 0,
+		},
+		{
+			id: 'maker-market',
+			kind: 'property',
+			name: 'Maker Market',
+			positionIndex: 1,
+			propertyId: 'maker-market',
+		},
+		{
+			id: 'coffee-row',
+			kind: 'property',
+			name: 'Coffee Row',
+			positionIndex: 2,
+			propertyId: 'coffee-row',
+		},
+		{
+			id: 'reading-room',
+			kind: 'rest',
+			name: 'Reading Room',
+			positionIndex: 3,
+		},
+		{
+			id: 'arcade-alley',
+			kind: 'property',
+			name: 'Arcade Alley',
+			positionIndex: 4,
+			propertyId: 'arcade-alley',
+		},
+		{
+			id: 'transit-plaza',
+			kind: 'rest',
+			name: 'Transit Plaza',
+			positionIndex: 5,
+		},
+		{
+			id: 'neon-bazaar',
+			kind: 'property',
+			name: 'Neon Bazaar',
+			positionIndex: 6,
+			propertyId: 'neon-bazaar',
+		},
+		{
+			id: 'park-corner',
+			kind: 'rest',
+			name: 'Park Corner',
+			positionIndex: 7,
+		},
+		{
+			id: 'harbor-walk',
+			kind: 'property',
+			name: 'Harbor Walk',
+			positionIndex: 8,
+			propertyId: 'harbor-walk',
+		},
+		{
+			id: 'gallery-lane',
+			kind: 'property',
+			name: 'Gallery Lane',
+			positionIndex: 9,
+			propertyId: 'gallery-lane',
+		},
+		{
+			id: 'city-hall',
+			kind: 'rest',
+			name: 'City Hall',
+			positionIndex: 10,
+		},
+		{
+			id: 'skyline-pier',
+			kind: 'property',
+			name: 'Skyline Pier',
+			positionIndex: 11,
+			propertyId: 'skyline-pier',
+		},
+	],
+	properties: [
+		{
+			id: 'maker-market',
+			tileId: 'maker-market',
+			name: 'Maker Market',
+			groupId: 'market',
+			price: 80,
+			baseRent: 8,
+		},
+		{
+			id: 'coffee-row',
+			tileId: 'coffee-row',
+			name: 'Coffee Row',
+			groupId: 'market',
+			price: 100,
+			baseRent: 10,
+		},
+		{
+			id: 'arcade-alley',
+			tileId: 'arcade-alley',
+			name: 'Arcade Alley',
+			groupId: 'nightlife',
+			price: 140,
+			baseRent: 14,
+		},
+		{
+			id: 'neon-bazaar',
+			tileId: 'neon-bazaar',
+			name: 'Neon Bazaar',
+			groupId: 'nightlife',
+			price: 160,
+			baseRent: 16,
+		},
+		{
+			id: 'harbor-walk',
+			tileId: 'harbor-walk',
+			name: 'Harbor Walk',
+			groupId: 'waterfront',
+			price: 200,
+			baseRent: 20,
+		},
+		{
+			id: 'gallery-lane',
+			tileId: 'gallery-lane',
+			name: 'Gallery Lane',
+			groupId: 'arts',
+			price: 220,
+			baseRent: 22,
+		},
+		{
+			id: 'skyline-pier',
+			tileId: 'skyline-pier',
+			name: 'Skyline Pier',
+			groupId: 'waterfront',
+			price: 260,
+			baseRent: 26,
+		},
+	],
+} satisfies BoardDefinition
