@@ -19,6 +19,9 @@ Status: Complete
 - Added serializable `GameAction` coverage for dice rolls, property purchases, and turn ending.
 - Replaced the starter home page with a local React board sandbox for 2-4 fake players.
 - Added a players panel and action log panel backed by game-core state.
+- Split the local board sandbox UI into focused header, turn panel, board grid, players panel, and action log components.
+- Moved local dice and view-formatting helpers out of the sandbox container.
+- Updated local-game Tailwind CSS variable classes to use shorthand parenthesized variable syntax, such as `border-(--lagoon-deep)`.
 - Added a dedicated Vitest config so game-core tests run without app server plugins.
 - Added tests for initial state, movement, property buying, and turn advancement.
 
@@ -48,7 +51,6 @@ Begin Milestone 2: deterministic action logging and replay.
 - `pnpm lint` - passed.
 - `pnpm exec tsc --noEmit` - passed.
 - `pnpm build` - passed.
-- `pnpm dev` - started successfully on `http://localhost:3000/`, then stopped manually. A separate local `curl` probe from the tool environment could not connect, but Vite reported ready.
 
 ## Notes for Next Agent Session
 
