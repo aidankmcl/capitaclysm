@@ -24,6 +24,13 @@ Status: Complete
 - Updated local-game Tailwind CSS variable classes to use shorthand parenthesized variable syntax, such as `border-(--lagoon-deep)`.
 - Added a dedicated Vitest config so game-core tests run without app server plugins.
 - Added tests for initial state, movement, property buying, and turn advancement.
+- Adapted the old `sample-board` prototype data into a local Dallas board definition with 40 tiles.
+- Preserved `sample-board/data/locations.ts` and `sample-board/data/route.json` as the Dallas board/map source data.
+- Replaced the old prototype-specific Leaflet code with app-local map components in the local sandbox.
+- Wired the local sandbox to the Dallas board while keeping rule logic in `src/game-core`.
+- Added tests for Dallas board data conversion and local game loop compatibility.
+- Replaced the SVG projection map with a client-only React Leaflet map using real OpenStreetMap tiles, Dallas lat/lon markers, and the preserved route geometry.
+- Added `@types/leaflet` so React Leaflet props typecheck cleanly.
 
 ## In Progress
 
@@ -40,6 +47,8 @@ Begin Milestone 2: deterministic action logging and replay.
 - MVP networking target is P2P invite-code hosting.
 - Use free STUN/TURN for development and playtesting.
 - Local sandbox dice rolls are serializable actions with dice values in the payload; deterministic RNG/replay belongs to Milestone 2.
+- Railroads and utilities are currently represented as buyable properties for Milestone 1.
+- Dallas event tiles currently behave as rest spaces; event/card effects are deferred.
 
 ## Blockers
 
@@ -47,7 +56,7 @@ Begin Milestone 2: deterministic action logging and replay.
 
 ## Last Test Run
 
-- `pnpm test` - passed 4 tests.
+- `pnpm test` - passed 8 tests.
 - `pnpm lint` - passed.
 - `pnpm exec tsc --noEmit` - passed.
 - `pnpm build` - passed.
@@ -56,3 +65,4 @@ Begin Milestone 2: deterministic action logging and replay.
 
 Read `docs/PRD.md`, `docs/STATUS.md`, and `AGENTS.md`.
 Work on one milestone only. Milestone 2 should focus on deterministic replay and should not add multiplayer or WebRTC.
+The local sandbox now uses the Dallas sample-board data; keep any future map/gameplay changes aligned with `locations.ts` and `route.json`.

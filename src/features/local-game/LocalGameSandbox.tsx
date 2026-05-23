@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useMemo, useState } from "react";
 
 import {
 	applyAction,
@@ -9,81 +9,88 @@ import {
 	getPendingPurchase,
 	type GameAction,
 	type GameState,
-} from '#/game-core'
+} from "#/game-core";
 
-import { ActionLogPanel } from './components/ActionLogPanel'
-import { BoardGrid } from './components/BoardGrid'
-import { PlayerPanel } from './components/PlayerPanel'
-import { SandboxHeader } from './components/SandboxHeader'
-import { TurnPanel } from './components/TurnPanel'
-import { createLocalDiceRoll } from './localDice'
-import type { PlayerCountOption } from './localGameConfig'
-import { groupPlayersByPosition } from './localGameView'
+import { ActionLogPanel } from "./components/ActionLogPanel";
+import { PlayerPanel } from "./components/PlayerPanel";
+import { SandboxHeader } from "./components/SandboxHeader";
+import { TurnPanel } from "./components/TurnPanel";
+import { createLocalDiceRoll } from "./localDice";
+import type { PlayerCountOption } from "./localGameConfig";
+import { groupPlayersByPosition } from "./localGameView";
+import { dallasBoardDefinition } from "./board/data";
+import { Map as DallasBoardMap } from "./board";
 
-const initialPlayerCount: PlayerCountOption = 2
+const initialPlayerCount: PlayerCountOption = 2;
 
 export function LocalGameSandbox() {
 	const [playerCount, setPlayerCount] =
-		useState<PlayerCountOption>(initialPlayerCount)
+		useState<PlayerCountOption>(initialPlayerCount);
 	const [gameState, setGameState] = useState<GameState>(() =>
-		createInitialGame({
-			playerCount: initialPlayerCount,
-		}),
-	)
-	const [lastError, setLastError] = useState<string | null>(null)
-	const currentPlayer = getCurrentPlayer(gameState)
-	const currentTile = getCurrentTile(gameState)
-	const pendingPurchase = getPendingPurchase(gameState)
-	const permissions = getActionPermissions(gameState)
+		createInitialGame(
+			{
+				playerCount: initialPlayerCount,
+			},
+			dallasBoardDefinition,
+		),
+	);
+	const [lastError, setLastError] = useState<string | null>(null);
+	const currentPlayer = getCurrentPlayer(gameState);
+	const currentTile = getCurrentTile(gameState);
+	const pendingPurchase = getPendingPurchase(gameState);
+	const permissions = getActionPermissions(gameState);
 	const playersByPosition = useMemo(
 		() => groupPlayersByPosition(gameState.players),
 		[gameState.players],
-	)
+	);
 
 	function startLocalGame() {
 		setGameState(
-			createInitialGame({
-				playerCount,
-				gameId: `local-${playerCount}-player-sandbox`,
-			}),
-		)
-		setLastError(null)
+			createInitialGame(
+				{
+					playerCount,
+					gameId: `local-${playerCount}-player-sandbox`,
+				},
+				dallasBoardDefinition,
+			),
+		);
+		setLastError(null);
 	}
 
 	function dispatchGameAction(action: GameAction) {
 		try {
-			setGameState(applyAction(gameState, action))
-			setLastError(null)
+			setGameState(applyAction(gameState, action));
+			setLastError(null);
 		} catch (error) {
-			setLastError(error instanceof Error ? error.message : 'Action failed.')
+			setLastError(error instanceof Error ? error.message : "Action failed.");
 		}
 	}
 
 	function rollDice() {
 		dispatchGameAction({
-			type: 'turn/rollDice',
+			type: "turn/rollDice",
 			playerId: currentPlayer.id,
 			dice: createLocalDiceRoll(),
-		})
+		});
 	}
 
 	function buyProperty() {
 		if (!pendingPurchase) {
-			return
+			return;
 		}
 
 		dispatchGameAction({
-			type: 'property/buy',
+			type: "property/buy",
 			playerId: currentPlayer.id,
 			propertyId: pendingPurchase.id,
-		})
+		});
 	}
 
 	function endTurn() {
 		dispatchGameAction({
-			type: 'turn/end',
+			type: "turn/end",
 			playerId: currentPlayer.id,
-		})
+		});
 	}
 
 	return (
@@ -108,7 +115,7 @@ export function LocalGameSandbox() {
 						onBuyProperty={buyProperty}
 						onEndTurn={endTurn}
 					/>
-					<BoardGrid
+					<DallasBoardMap
 						gameState={gameState}
 						currentPlayer={currentPlayer}
 						playersByPosition={playersByPosition}
@@ -124,5 +131,5 @@ export function LocalGameSandbox() {
 				</aside>
 			</section>
 		</main>
-	)
+	);
 }

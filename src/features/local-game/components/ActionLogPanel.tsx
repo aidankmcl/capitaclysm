@@ -10,7 +10,7 @@ export function ActionLogPanel({ actionLog }: ActionLogPanelProps) {
 			<h2 className="m-0 mb-3 text-lg font-extrabold text-(--sea-ink)">
 				Action Log
 			</h2>
-			<div className="max-h-[28rem] space-y-2 overflow-auto pr-1">
+			<div className="max-h-112 space-y-2 overflow-auto pr-1">
 				{actionLog.length === 0 ? (
 					<p className="m-0 text-sm text-(--sea-ink-soft)">
 						No actions yet.
